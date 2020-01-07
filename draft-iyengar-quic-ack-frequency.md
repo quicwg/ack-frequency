@@ -17,7 +17,6 @@ author:
     name: Jana Iyengar
     org: Fastly
     email: jri.ietf@gmail.com
-    role: author
 
 normative:
 
@@ -115,7 +114,7 @@ x (A/B/C) ...:
 : Indicates that x is one of A, B, or C bits long
 
 x (i) ...:
-: Indicates that x uses the variable-length encoding in {{integer-encoding}}
+: Indicates that x uses the variable-length encoding defined in QUIC
 
 x (*) ...:
 : Indicates that x is variable-length
