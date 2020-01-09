@@ -1,10 +1,8 @@
-# Negotiating Acknowledgment Frequency in QUIC
+# A Generalized Mechanism for Delaying Acknowledgements in QUIC
 
-This is the working area for the individual Internet-Draft, "Negotiating Acknowledgment Frequency in QUIC".
-
-* [Editor's Copy](https://janaiyengar.github.io/ack-frequency/#go.draft-iyengar-quic-ack-frequency.html)
-* [Individual Draft](https://tools.ietf.org/html/draft-iyengar-quic-ack-frequency)
-* [Compare Editor's Copy to Individual Draft](https://janaiyengar.github.io/ack-frequency/#go.draft-iyengar-quic-ack-frequency.diff)
+* [Editor's Copy](https://janaiyengar.github.io/ack-frequency/#go.draft-iyengar-quic-delayed-ack.html)
+* [Individual Draft](https://tools.ietf.org/html/draft-iyengar-quic-delayed-ack)
+* [Compare Editor's Copy to Individual Draft](https://janaiyengar.github.io/ack-frequency/#go.draft-iyengar-quic-delayed-ack.diff)
 
 ## Building the Draft
 
