@@ -189,6 +189,8 @@ signals its tolerance to its peer using an ACK-FREQUENCY frame, shown below:
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                      Sequence Number (i)                    ...
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Packet Tolerance (i)                   ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                    Update Max Ack Delay (i)                 ...
@@ -196,6 +198,11 @@ signals its tolerance to its peer using an ACK-FREQUENCY frame, shown below:
 ~~~
 
 ACK-FREQUENCY frames have a type of 0xXX, and contain the following fields:
+
+Sequence Number:
+
+: A variable-length integer representing the sequence number assigned to the
+  ACK-FREQUENCY frame by the sender, see {{multiple-frames}}.
 
 Packet Tolerance:
 
@@ -228,12 +235,21 @@ update this maximum time to the value proposed by the peer in the Update Max Ack
 Delay field.
 
 
-# Sending Acknowledgments
+# Sending Acknowledgments {#sending}
 
-On receiving an ACK-FREQUENCY frame, an endpoint will have an updated maximum
-delay for sending an acknowledgement, and a packet threshold as well. The
-endpoint MUST send an acknowledgement when either of the two thresholds are
-met. {{loss}} and {{batch}} section describes exceptions to this strategy.
+On receiving an ACK-FREQUENCY frame, an endpoint will have an updated
+`max_ack_delay` and a `Packet Tolerance` threshold for sending an
+acknowledgement. The endpoint MUST send an acknowledgement when either of the
+two thresholds are met. That is, an endpoint MUST send an acknowledgement when
+one of the following conditions are met:
+
+- Since the last acknowledgement was sent, the number of received ack-eliciting
+  packets is greater than or equal to `Packet Tolerance`.
+
+- Since the last acknowledgement was sent, `max_ack_delay` amount of time has
+  passed.
+
+{{loss}} and {{batch}} section describes exceptions to this strategy.
 
 An endpoint is expected to bundle acknowledgements when possible. Every time an
 acknowledgement is sent, bundled or otherwise, all counters and timers related
@@ -263,26 +279,33 @@ process all packets in a batch before determining whether a threshold has been
 met and an acknowledgement is to be sent in response.
 
 
-# Multiple ACK-FREQUENCY Frames
+# Multiple ACK-FREQUENCY Frames {#multiple-frames}
 
 An endpoint can send multiple ACK-FREQUENCY frames, and each one of them can
-have different values.
+have different values. An endpoint MUST use a sequence number of 0 for the first
+ACK-FREQUENCY frame it constructs and sends, and a strictly increasing value
+thereafter.
 
-If a received ACK-FREQUENCY frame is the first one in this connection, the
-endpoint MUST immediately record any values from the frame and start using
-them. The endpoint MUST also record the packet number of the enclosing packet.
+An endpoint MUST allow reordered ACK-FREQUENCY frames to be received and
+processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
 
-If a received ACK-FREQUENCY frame is not the first one in this connection, the
-endpoint MUST check if this is a more recent ACK-FREQUENCY frame than any
-previous ones, as follows:
+On the first received ACK-FREQUENCY frame in a connection, an endpoint MUST
+immediately record all values from the frame. The sequence number of the frame
+is recorded as the largest seen sequence number. The new Packet Tolerance and
+Update Max Ack Delay values MUST be immediately used for delaying
+acknowledgements; see {{sending}}.
 
-- If the enclosing packet number is greater than the recorded one, the endpoint
-  MUST immediately replace old recorded state with values received in this
-  frame. The endpoint MUST also replace the value of the recorded packet number
-  with that of the enclosing packet.
+On subsequently received ACK-FREQUENCY frames, the endpoint MUST check if this
+is a more recent frame than any previous ones, as follows:
 
-- If the enclosing packet number is not greater than the recorded one, the
-  endpoint MUST ignore this ACK-FREQUENCY frame.
+- If the enclosing packet number is not greater than the largest one seen so
+  far, the endpoint MUST ignore this frame.
+
+- If the sequence number in the frame is greater than the largest one seen so
+  far, the endpoint MUST immediately replace old recorded state with values
+  received in this frame. The endpoint MUST start using the new values
+  immediately for delaying acknowledgements; see {{sending}}. The endpoint MUST
+  also replace the recorded sequence number.
 
 
 # Computation of Probe Timeout Period
