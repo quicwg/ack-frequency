@@ -212,15 +212,11 @@ Update Max Ack Delay:
   by this endpoint is invalid.
 
 
-Receipt of invalid values in an ACK-FREQUENCY frame MUST be treated as a
-connection error of type PROTOCOL_VIOLATION.
+Receipt of an empty ACK-FREQUENCY frame or invalid values in an ACK-FREQUENCY
+frame MUST be treated as a connection error of type PROTOCOL_VIOLATION.
 
 ACK-FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission.
-
-An endpoint MUST NOT send an empty ACK-FREQUENCY frame. Endpoints MUST treat
-receipt of an empty ACK-FREQUENCY frame as a connection error of type
-PROTOCOL_VIOLATION.
 
 An endpoint MAY send ACK-FREQUENCY frames multiple times during a connection and
 with different values.
@@ -264,6 +260,8 @@ enough packets to cause multiple acknowledgements to be sent.
 To avoid sending multiple acknowledgements in rapid succession, an endpoint MAY
 process all packets in a batch before determining whether a threshold has been
 met and an acknowledgement is to be sent in response.
+
+# Computation of Probe Timeout Period
 
 
 # Multiple ACK-FREQUENCY Frames
