@@ -158,6 +158,25 @@ constraints, which in turn limits what a receiver can do to delay
 acknowledgements and reduce acknowledgement frequency. This extension provides a
 mechanism to solve this problem.
 
+# Negotiating Extension Use
+
+Endpoints advertise their support of the extension described in this document by
+sending the following transport parameter:
+
+min_ack_delay (0xXXXX):
+
+: A variable-length integer representing the minimum amount of time in
+  microseconds by which the endpoint can delay an acknowledgement. Values of
+  2^14 or greater are invalid.
+
+An endpoint's min_ack_delay MUST NOT be greater than the its max_ack_delay.
+Endpoints that support this extension MUST treat receipt of a min_ack_delay that
+is greater than the received max_ack_delay as a connection error of type
+PROTOCOL_VIOLATION. Note that while the endpoint's max_ack_delay transport
+parameter is in milliseconds (Section 18.2 in {{QUIC-TRANSPORT}}), min_ack_delay
+is specified in microseconds.
+
+
 # ACK-FREQUENCY Frame
 
 Delaying acknowledgements as much as possible reduces both work done by the
@@ -169,9 +188,9 @@ signals its tolerance to its peer using an ACK-FREQUENCY frame, shown below:
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                     [Packet Tolerance (i)]                  ...
+|                      Packet Tolerance (i)                   ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                      [Time Tolerance (i)]                   ...
+|                    Update Max Ack Delay (i)                 ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
 
@@ -179,18 +198,16 @@ ACK-FREQUENCY frames have a type of 0xXX, and contain the following fields:
 
 Packet Tolerance:
 
-: An optional variable-length integer representing the maximum number of
-  ack-eliciting packets after which the receiver sends an acknowledgement.
+: A variable-length integer representing the maximum number of ack-eliciting
+  packets after which the receiver sends an acknowledgement.
 
-Time Tolerance:
+Update Max Ack Delay:
 
-: An optional variable-length integer representing the maximum amount of time,
-  in microseconds, after which the receiver sends an acknowledgement. The value
-  of the Time Tolerance field is scaled by multiplying the encoded value by 2 to
-  the power of the value of the `ack_delay_exponent` transport parameter set by
-  the sender of the ACK-FREQUENCY frame (see Section XX in {{QUIC-TRANSPORT}}).
-  Scaling in this fashion allows for a larger range of values with a shorter
-  encoding at the cost of lower resolution.
+: A variable-length integer representing an update to the peer's `max_ack_delay`
+  transport parameter (Section 18.2 in {{QUIC-TRANSPORT}}). The value of this
+  field is in microseconds. Any value smaller than the min_ack_delay advertised
+  by this endpoint is invalid, and MUST be treated as a connection error of type
+  PROTOCOL_VIOLATION.
 
 ACK-FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission.
@@ -202,24 +219,22 @@ PROTOCOL_VIOLATION.
 An endpoint MAY send ACK-FREQUENCY frames multiple times during a connection and
 with different values.
 
+An endpoint will have committed a max_ack_delay value to the peer, which
+specifies the maximum amount of time by which the endpoint will delay sending
+acknowledgments. When the endpoint receives an ACK-FREQUENCY frame, it MUST
+update this maximum time to the value proposed by the peer in the Update Max
+Ack Delay field.
 
 # Sending Acknowledgments
 
-An endpoint could receive an ACK-FREQUENCY frame with either or both Time
-Tolerance and Packet Tolerance values specified. In addition, the endpoint will
-have committed a max_ack_delay value to the peer, which specifies the maximum
-amount of time by which the endpoint will delay sending acknowledgments; see
-Section XX of {{QUIC-TRANSPORT}}.
-
-The endpoint MUST send an acknowledgement when any of the three thresholds are
-met. Doing so results in the fewest acknowledgements possible within the
-sender's tolerance and honors the receiver's commitment. {{loss}} and {{batch}}
-section describes exceptions to this strategy.
+On receiving an ACK-FREQUENCY frame, an endpoint will have an updated maximum
+delay for sending an acknowledgement, and a packet threshold as well. The
+endpoint MUST send an acknowledgement when either of the two thresholds are
+met. {{loss}} and {{batch}} section describes exceptions to this strategy.
 
 An endpoint is expected to bundle acknowledgements when possible. Every time an
 acknowledgement is sent, bundled or otherwise, all counters and timers related
 to delaying of acknowledgments are reset.
-
 
 ## Expediting Loss and Congestion Signals {#loss}
 
@@ -233,7 +248,6 @@ of order.
 Similarly, packets marked with the ECN Congestion Experienced (CE) codepoint in
 the IP header SHOULD be acknowledged immediately, to reduce the peer's response
 time to congestion events.
-
 
 ## Batch Processing of Packets {#batch}
 
@@ -285,4 +299,5 @@ TBD.
 # Acknowledgments
 {:numbered="false"}
 
-Thanks to all the people.
+The following people directly contributed key ideas that shaped this draft:
+Bob Briscoe, Kazuho Oku, Marten Seemann.
