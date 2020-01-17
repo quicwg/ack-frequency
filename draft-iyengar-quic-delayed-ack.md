@@ -166,8 +166,9 @@ sending the following transport parameter:
 min_ack_delay (0xXXXX):
 
 : A variable-length integer representing the minimum amount of time in
-  microseconds by which the endpoint can delay an acknowledgement. Values of
-  2^14 or greater are invalid.
+  microseconds by which the endpoint can delay an acknowledgement. Values of 0
+  and 2^14 or greater are invalid, and receipt of these values MUST be treated
+  as a connection error of type PROTOCOL_VIOLATION.
 
 An endpoint's min_ack_delay MUST NOT be greater than the its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
@@ -199,15 +200,20 @@ ACK-FREQUENCY frames have a type of 0xXX, and contain the following fields:
 Packet Tolerance:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets after which the receiver sends an acknowledgement.
+  packets after which the receiver sends an acknowledgement. A value of 1 will
+  result in an acknowledgement being sent for every ack-eliciting packet
+  received. A value of 0 is invalid.
 
 Update Max Ack Delay:
 
 : A variable-length integer representing an update to the peer's `max_ack_delay`
   transport parameter (Section 18.2 in {{QUIC-TRANSPORT}}). The value of this
   field is in microseconds. Any value smaller than the min_ack_delay advertised
-  by this endpoint is invalid, and MUST be treated as a connection error of type
-  PROTOCOL_VIOLATION.
+  by this endpoint is invalid.
+
+
+Receipt of invalid values in an ACK-FREQUENCY frame MUST be treated as a
+connection error of type PROTOCOL_VIOLATION.
 
 ACK-FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission.
