@@ -235,16 +235,46 @@ update this maximum time to the value proposed by the peer in the Update Max Ack
 Delay field.
 
 
+# Multiple ACK-FREQUENCY Frames {#multiple-frames}
+
+An endpoint can send multiple ACK-FREQUENCY frames, and each one of them can
+have different values. An endpoint MUST use a sequence number of 0 for the first
+ACK-FREQUENCY frame it constructs and sends, and a strictly increasing value
+thereafter.
+
+An endpoint MUST allow reordered ACK-FREQUENCY frames to be received and
+processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
+
+On the first received ACK-FREQUENCY frame in a connection, an endpoint MUST
+immediately record all values from the frame. The sequence number of the frame
+is recorded as the largest seen sequence number. The new Packet Tolerance and
+Update Max Ack Delay values MUST be immediately used for delaying
+acknowledgements; see {{sending}}.
+
+On subsequently received ACK-FREQUENCY frames, the endpoint MUST check if this
+is a more recent frame than any previous ones, as follows:
+
+- If the enclosing packet number is not greater than the largest one seen so
+  far, the endpoint MUST ignore this frame.
+
+- If the sequence number in the frame is greater than the largest one seen so
+  far, the endpoint MUST immediately replace old recorded state with values
+  received in this frame. The endpoint MUST start using the new values
+  immediately for delaying acknowledgements; see {{sending}}. The endpoint MUST
+  also replace the recorded sequence number.
+
+
 # Sending Acknowledgments {#sending}
 
-On receiving an ACK-FREQUENCY frame, an endpoint will have an updated
-`max_ack_delay` and a `Packet Tolerance` threshold for sending an
-acknowledgement. The endpoint MUST send an acknowledgement when either of the
-two thresholds are met. That is, an endpoint MUST send an acknowledgement when
-one of the following conditions are met:
+Prior to receiving an ACK-FREQUENCY frame, endpoints send acknowledgements as
+specified in Section 13.2.1 of {{QUIC-TRANSPORT}}.
+
+On receiving an ACK-FREQUENCY frame and updating its recorded `max_ack_delay`
+and `Packet Tolerance` values ({{multiple-frames}}), the endpoint MUST send an
+acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
-  packets is greater than or equal to `Packet Tolerance`.
+  packets is greater than or equal to the recorded `Packet Tolerance`.
 
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
@@ -277,35 +307,6 @@ enough packets to cause multiple acknowledgements to be sent.
 To avoid sending multiple acknowledgements in rapid succession, an endpoint MAY
 process all packets in a batch before determining whether a threshold has been
 met and an acknowledgement is to be sent in response.
-
-
-# Multiple ACK-FREQUENCY Frames {#multiple-frames}
-
-An endpoint can send multiple ACK-FREQUENCY frames, and each one of them can
-have different values. An endpoint MUST use a sequence number of 0 for the first
-ACK-FREQUENCY frame it constructs and sends, and a strictly increasing value
-thereafter.
-
-An endpoint MUST allow reordered ACK-FREQUENCY frames to be received and
-processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
-
-On the first received ACK-FREQUENCY frame in a connection, an endpoint MUST
-immediately record all values from the frame. The sequence number of the frame
-is recorded as the largest seen sequence number. The new Packet Tolerance and
-Update Max Ack Delay values MUST be immediately used for delaying
-acknowledgements; see {{sending}}.
-
-On subsequently received ACK-FREQUENCY frames, the endpoint MUST check if this
-is a more recent frame than any previous ones, as follows:
-
-- If the enclosing packet number is not greater than the largest one seen so
-  far, the endpoint MUST ignore this frame.
-
-- If the sequence number in the frame is greater than the largest one seen so
-  far, the endpoint MUST immediately replace old recorded state with values
-  received in this frame. The endpoint MUST start using the new values
-  immediately for delaying acknowledgements; see {{sending}}. The endpoint MUST
-  also replace the recorded sequence number.
 
 
 # Computation of Probe Timeout Period
