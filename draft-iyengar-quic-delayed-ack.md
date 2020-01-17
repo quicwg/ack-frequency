@@ -174,7 +174,7 @@ An endpoint's min_ack_delay MUST NOT be greater than the its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
 is greater than the received max_ack_delay as a connection error of type
 PROTOCOL_VIOLATION. Note that while the endpoint's max_ack_delay transport
-parameter is in milliseconds (Section 18.2 in {{QUIC-TRANSPORT}}), min_ack_delay
+parameter is in milliseconds (Section 18.2 of {{QUIC-TRANSPORT}}), min_ack_delay
 is specified in microseconds.
 
 
@@ -207,29 +207,26 @@ Packet Tolerance:
 Update Max Ack Delay:
 
 : A variable-length integer representing an update to the peer's `max_ack_delay`
-  transport parameter (Section 18.2 in {{QUIC-TRANSPORT}}). The value of this
-  field is in microseconds. Any value smaller than the min_ack_delay advertised
-  by this endpoint is invalid.
+  transport parameter (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this
+  field is in microseconds. Any value smaller than the `min_ack_delay`
+  advertised by this endpoint is invalid.
 
 
-Receipt of invalid values in an ACK-FREQUENCY frame MUST be treated as a
-connection error of type PROTOCOL_VIOLATION.
+Receipt of an empty ACK-FREQUENCY frame or invalid values in an ACK-FREQUENCY
+frame MUST be treated as a connection error of type PROTOCOL_VIOLATION.
 
 ACK-FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission.
 
-An endpoint MUST NOT send an empty ACK-FREQUENCY frame. Endpoints MUST treat
-receipt of an empty ACK-FREQUENCY frame as a connection error of type
-PROTOCOL_VIOLATION.
-
 An endpoint MAY send ACK-FREQUENCY frames multiple times during a connection and
 with different values.
 
-An endpoint will have committed a max_ack_delay value to the peer, which
+An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
 acknowledgments. When the endpoint receives an ACK-FREQUENCY frame, it MUST
-update this maximum time to the value proposed by the peer in the Update Max
-Ack Delay field.
+update this maximum time to the value proposed by the peer in the Update Max Ack
+Delay field.
+
 
 # Sending Acknowledgments
 
@@ -286,6 +283,24 @@ previous ones, as follows:
 
 - If the enclosing packet number is not greater than the recorded one, the
   endpoint MUST ignore this ACK-FREQUENCY frame.
+
+
+# Computation of Probe Timeout Period
+
+On sending an update to the peer's `max_ack_delay`, an endpoint can use this new
+value in later computations of its Probe Timeout (PTO) period; see Section 5.2.1
+of {{QUIC-RECOVERY}}. The endpoint MUST however wait until the ACK-FREQUENCY
+frame that carries this new value is acknowledged by the peer.
+
+Until the frame is acknowledged, the endpoint MUST use the greater of the
+current `max_ack_delay` and the value that is in flight when computing the PTO
+period. Doing so avoids spurious PTOs that can be caused by an update that
+increases the peer's `max_ack_delay`.
+
+While it is expected that endpoints will have only one ACK-FREQUENCY frame in
+flight at any given time, this extension does not prohibit having more than one
+in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
+MUST use the maximum of the current value and all those in flight.
 
 
 # Security Considerations
