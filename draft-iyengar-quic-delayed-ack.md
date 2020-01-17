@@ -279,24 +279,34 @@ acknowledgement when one of the following conditions are met:
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
 
-{{loss}} and {{batch}} section describes exceptions to this strategy.
+{{reordering}}, {{congestion}}, and {{batch}} describe exceptions to this
+strategy.
 
 An endpoint is expected to bundle acknowledgements when possible. Every time an
 acknowledgement is sent, bundled or otherwise, all counters and timers related
 to delaying of acknowledgments are reset.
 
-## Expediting Loss and Congestion Signals {#loss}
+## Response to Reordering {#reordering}
 
-To expedite loss detection, endpoints SHOULD send an acknowledgement immediately
-on receiving an ack-eliciting packet that is out of order. Endpoints MAY
-continue sending acknowledgements immediately on each subsequently received
-packet, but they SHOULD return to using delay thresholds as specified above
-within a period of 1/8 x RTT, unless more ack-eliciting packets are received out
-of order.
+As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, endpoints SHOULD send an
+acknowledgement immediately on receiving a reordered ack-eliciting packet,
+unless the peer has sent a `disable_ack_on_reordering` transport parameter,
+described below:
 
-Similarly, packets marked with the ECN Congestion Experienced (CE) codepoint in
-the IP header SHOULD be acknowledged immediately, to reduce the peer's response
-time to congestion events.
+disable_ack_on_reordering (0xXXXX):
+
+: This optional transport parameter is sent by an endpoint that is reordering
+  tolerant or expects reordering in the connection. An endpoint that receives
+  this transport parameter MUST NOT send an immediate acknowledgement when
+  reordering is observed, and MUST continue delaying acknowledgements as per
+  {{sending}}. This parameter is a zero-length value.
+
+## Expediting Congestion Signals {#congestion}
+
+As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, an endpoint SHOULD
+immediately acknowledge packets marked with the ECN Congestion Experienced (CE)
+codepoint in the IP header. Doing so reduces the peer's response time to
+congestion events.
 
 ## Batch Processing of Packets {#batch}
 
