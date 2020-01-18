@@ -296,10 +296,10 @@ described below:
 disable_ack_on_reordering (0xXXXX):
 
 : This optional transport parameter is sent by an endpoint that is reordering
-  tolerant or expects reordering in the connection. An endpoint that receives
-  this transport parameter MUST NOT send an immediate acknowledgement when
-  reordering is observed, and MUST continue delaying acknowledgements as per
-  {{sending}}. This parameter is a zero-length value.
+  tolerant or expects the connection to experience reordering. An endpoint that
+  receives this transport parameter MUST NOT make the exception of sending an
+  immediate acknowledgement when reordering is observed. This parameter is a
+  zero-length value.
 
 ## Expediting Congestion Signals {#congestion}
 
