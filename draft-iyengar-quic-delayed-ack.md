@@ -63,7 +63,7 @@ normative:
 
 --- abstract
 
-This document describes a QUIC extension for an endpoint to influence its peer's
+This document describes a QUIC extension for an endpoint to control its peer's
 delaying of acknowledgements.
 
 --- note_Note_to_Readers
@@ -80,7 +80,7 @@ code and issues list for this draft can be found at
 
 # Introduction
 
-This document describes a QUIC extension for an endpoint to influence its peer's
+This document describes a QUIC extension for an endpoint to control its peer's
 delaying of acknowledgements.
 
 ## Terms and Definitions
