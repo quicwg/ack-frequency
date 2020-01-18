@@ -98,8 +98,10 @@ An "acknowledgement packet" refers to a QUIC packet that contains only an ACK
 frame.
 
 This document uses terms, definitions, and notational conventions described in
-Section XX of {{QUIC-TRANSPORT}}. Frame diagrams in this document use the format
-described in Section XX of {{QUIC-TRANSPORT}}.
+Section 1.2 and Section 1.3 of {{QUIC-TRANSPORT}}. The ACK-FREQUENCY frame
+described in this document follows the QUIC Frame format described in Section
+12.4 of {{QUIC-TRANSPORT}}. QUIC Transport Parameters are described in Section
+7.2 of {{QUIC-TRANSPORT}}.
 
 # Motivation
 
@@ -177,6 +179,7 @@ PROTOCOL_VIOLATION. Note that while the endpoint's max_ack_delay transport
 parameter is in milliseconds (Section 18.2 of {{QUIC-TRANSPORT}}), min_ack_delay
 is specified in microseconds.
 
+This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
 # ACK-FREQUENCY Frame
 
@@ -299,7 +302,8 @@ disable_ack_on_reordering (0xXXXX):
   tolerant or expects the connection to experience reordering. An endpoint that
   receives this transport parameter MUST NOT make the exception of sending an
   immediate acknowledgement when reordering is observed. This parameter is a
-  zero-length value.
+  zero-length value, and is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
+
 
 ## Expediting Congestion Signals {#congestion}
 
