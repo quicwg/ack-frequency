@@ -1,6 +1,6 @@
 ---
-title: "A Generalized Mechanism for Delaying Acknowledgements in QUIC"
-abbrev: Delaying QUIC Acknowledgements
+title: "Sender Control of Acknowledgement Delays in QUIC"
+abbrev: QUIC Delayed Acknowledgements
 docname: draft-iyengar-quic-delayed-ack
 date: {DATE}
 category: std
