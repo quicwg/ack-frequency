@@ -98,8 +98,7 @@ An "acknowledgement packet" refers to a QUIC packet that contains only an ACK
 frame.
 
 This document uses terms, definitions, and notational conventions described in
-Section XX of {{QUIC-TRANSPORT}}. Frame diagrams in this document use the format
-described in Section XX of {{QUIC-TRANSPORT}}.
+Section 1.2 and Section 1.3 of {{QUIC-TRANSPORT}}.
 
 # Motivation
 
@@ -161,7 +160,7 @@ mechanism to solve this problem.
 # Negotiating Extension Use
 
 Endpoints advertise their support of the extension described in this document by
-sending the following transport parameter:
+sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
 
 min_ack_delay (0xXXXX):
 
@@ -177,6 +176,7 @@ PROTOCOL_VIOLATION. Note that while the endpoint's max_ack_delay transport
 parameter is in milliseconds (Section 18.2 of {{QUIC-TRANSPORT}}), min_ack_delay
 is specified in microseconds.
 
+This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
 # ACK-FREQUENCY Frame
 
@@ -189,6 +189,8 @@ signals its tolerance to its peer using an ACK-FREQUENCY frame, shown below:
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            0xXX (i)                         ...
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Sequence Number (i)                    ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Packet Tolerance (i)                   ...
@@ -197,7 +199,9 @@ signals its tolerance to its peer using an ACK-FREQUENCY frame, shown below:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
 
-ACK-FREQUENCY frames have a type of 0xXX, and contain the following fields:
+Following the common frame format described in Section 12.4 of
+{{QUIC-TRANSPORT}}, ACK-FREQUENCY frames have a type of 0xXX, and contain the
+following fields:
 
 Sequence Number:
 
@@ -299,7 +303,8 @@ disable_ack_on_reordering (0xXXXX):
   tolerant or expects the connection to experience reordering. An endpoint that
   receives this transport parameter MUST NOT make the exception of sending an
   immediate acknowledgement when reordering is observed. This parameter is a
-  zero-length value.
+  zero-length value, and is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
+
 
 ## Expediting Congestion Signals {#congestion}
 
