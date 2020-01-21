@@ -258,14 +258,14 @@ acknowledgements; see {{sending}}.
 On a subsequently received ACK-FREQUENCY frame, the endpoint MUST check if this
 frame is more recent than any previous ones, as follows:
 
-- If the sequence number in the frame is not greater than the largest one seen
-  so far, the endpoint MUST ignore this frame.
+- If the frame's sequence number is not greater than the largest one seen so
+  far, the endpoint MUST ignore this frame.
 
-- If the sequence number in the frame is greater than the largest one seen so
-  far, the endpoint MUST immediately replace old recorded state with values
-  received in this frame. The endpoint MUST start using the new values
-  immediately for delaying acknowledgements; see {{sending}}. The endpoint MUST
-  also replace the recorded sequence number.
+- If the frame's sequence number is greater than the largest one seen so far,
+  the endpoint MUST immediately replace old recorded state with values received
+  in this frame. The endpoint MUST start using the new values immediately for
+  delaying acknowledgements; see {{sending}}. The endpoint MUST also replace the
+  recorded sequence number.
 
 
 # Sending Acknowledgments {#sending}
