@@ -116,8 +116,8 @@ endpoint performance in the following ways:
   shows that this cost reduction can be significant for high bandwidth
   connections.
 
-- Similarly, receiving UDP packets can also be CPU intensive, and reducing
-  acknowledgement frequency reduces this cost at a data sender.
+- Similarly, receiving and processing UDP packets can also be CPU intensive,
+  and reducing acknowledgement frequency reduces this cost at a data sender.
 
 - Severely asymmetric link technologies, such as DOCSIS, LTE, and satellite
   links, connection throughput in the data direction becomes constrained when
@@ -151,11 +151,10 @@ acknowledgement frequency, especially to an arbitrary fixed value, as follows:
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
 mechanism that a receiver can use: send an acknowledgement for every other
-packet, and for every packet (for a short while) when reordering is
-observed. This simple mechanism does not allow a sender to signal its
-constraints, which in turn limits what a receiver can do to delay
-acknowledgements and reduce acknowledgement frequency. This extension provides a
-mechanism to solve this problem.
+packet, and for every packet when reordering is observed. This simple mechanism
+does not allow a sender to signal its constraints, which in turn limits what a
+receiver can do to delay acknowledgements and reduce acknowledgement frequency.
+This extension provides a mechanism to solve this problem.
 
 # Negotiating Extension Use
 
@@ -166,7 +165,7 @@ min_ack_delay (0xXXXX):
 
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint can delay an acknowledgement. Values of 0
-  and 2^14 or greater are invalid, and receipt of these values MUST be treated
+  and 2^24 or greater are invalid, and receipt of these values MUST be treated
   as a connection error of type PROTOCOL_VIOLATION.
 
 An endpoint's min_ack_delay MUST NOT be greater than the its max_ack_delay.
@@ -206,7 +205,8 @@ following fields:
 Sequence Number:
 
 : A variable-length integer representing the sequence number assigned to the
-  ACK-FREQUENCY frame by the sender, see {{multiple-frames}}.
+  ACK-FREQUENCY frame by the sender to allow receivers to ignore obsolete
+  frames, see {{multiple-frames}}.
 
 Packet Tolerance:
 
