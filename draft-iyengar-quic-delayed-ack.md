@@ -223,8 +223,8 @@ Update Max Ack Delay:
   advertised by this endpoint is invalid.
 
 
-Receipt of an empty ACK-FREQUENCY frame or invalid values in an ACK-FREQUENCY
-frame MUST be treated as a connection error of type PROTOCOL_VIOLATION.
+Receipt of invalid values in an ACK-FREQUENCY frame MUST be treated as a
+connection error of type FRAME_ENCODING_ERROR.
 
 ACK-FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission.
@@ -257,9 +257,6 @@ acknowledgements; see {{sending}}.
 
 On subsequently received ACK-FREQUENCY frames, the endpoint MUST check if this
 is a more recent frame than any previous ones, as follows:
-
-- If the enclosing packet number is not greater than the largest one seen so
-  far, the endpoint MUST ignore this frame.
 
 - If the sequence number in the frame is greater than the largest one seen so
   far, the endpoint MUST immediately replace old recorded state with values
@@ -310,8 +307,9 @@ disable_ack_on_reordering (0xXXXX):
 
 As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, an endpoint SHOULD
 immediately acknowledge packets marked with the ECN Congestion Experienced (CE)
-codepoint in the IP header. Doing so reduces the peer's response time to
-congestion events.
+codepoint in the IP header, even if the `disable_ack_on_reordering` transport
+parameter is present. Doing so reduces the peer's response time to congestion
+events.
 
 ## Batch Processing of Packets {#batch}
 
@@ -339,7 +337,9 @@ increases the peer's `max_ack_delay`.
 While it is expected that endpoints will have only one ACK-FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
 in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
-MUST use the maximum of the current value and all those in flight.
+MUST use the maximum of the current value and all those in flight.  Once all in
+flight ACK-FREQUENCY frames are acknowledged, the `max_ack_delay` from the frame
+with the largest Sequence Number is used.
 
 
 # Security Considerations
