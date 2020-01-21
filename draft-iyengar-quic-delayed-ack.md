@@ -223,8 +223,8 @@ Update Max Ack Delay:
   advertised by this endpoint is invalid.
 
 
-Receipt of an empty ACK-FREQUENCY frame or invalid values in an ACK-FREQUENCY
-frame MUST be treated as a connection error of type PROTOCOL_VIOLATION.
+Receipt of invalid values in an ACK-FREQUENCY frame MUST be treated as a
+connection error of type FRAME_ENCODING_ERROR.
 
 ACK-FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission.
@@ -257,9 +257,6 @@ acknowledgements; see {{sending}}.
 
 On subsequently received ACK-FREQUENCY frames, the endpoint MUST check if this
 is a more recent frame than any previous ones, as follows:
-
-- If the enclosing packet number is not greater than the largest one seen so
-  far, the endpoint MUST ignore this frame.
 
 - If the sequence number in the frame is greater than the largest one seen so
   far, the endpoint MUST immediately replace old recorded state with values
