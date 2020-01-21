@@ -256,7 +256,7 @@ Update Max Ack Delay values MUST be immediately used for delaying
 acknowledgements; see {{sending}}.
 
 On a subsequently received ACK-FREQUENCY frame, the endpoint MUST check if this
-is more recent than any previous ones, as follows:
+frame is more recent than any previous ones, as follows:
 
 - If the sequence number in the frame is not greater than the largest one seen
   so far, the endpoint MUST ignore this frame.
