@@ -116,8 +116,8 @@ endpoint performance in the following ways:
   shows that this cost reduction can be significant for high bandwidth
   connections.
 
-- Similarly, receiving and processing UDP packets can also be CPU intensive,
-  and reducing acknowledgement frequency reduces this cost at a data sender.
+- Similarly, receiving and processing UDP packets can also be CPU intensive, and
+  reducing acknowledgement frequency reduces this cost at a data sender.
 
 - Severely asymmetric link technologies, such as DOCSIS, LTE, and satellite
   links, connection throughput in the data direction becomes constrained when
@@ -128,13 +128,13 @@ endpoint performance in the following ways:
 Unfortunately, there are undesirable consequences to simply reducing the
 acknowledgement frequency, especially to an arbitrary fixed value, as follows:
 
-- A sender relies on receipt of acknowledgements to determine the amount of data in
-  flight and to detect losses, see {{QUIC-RECOVERY}}. Consequently, how often a
-  receiver sends acknowledgments dictates how long it takes for losses to be
+- A sender relies on receipt of acknowledgements to determine the amount of data
+  in flight and to detect losses, see {{QUIC-RECOVERY}}. Consequently, how often
+  a receiver sends acknowledgments dictates how long it takes for losses to be
   detected at the sender.
 
-- Starting a connection up quickly without inducing excess queue is important for
-  latency reduction, for both short and long flows. The sender often needs
+- Starting a connection up quickly without inducing excess queue is important
+  for latency reduction, for both short and long flows. The sender often needs
   frequent acknowledgments during this phase; see slow start and hystart.
 
 - Congestion controllers that are purely window based and strictly adherent to
@@ -145,8 +145,8 @@ acknowledgement frequency, especially to an arbitrary fixed value, as follows:
   long-running flows, congestion controllers that are not window-based, such as
   BBR, can perform well with very few acknowledgements per RTT.
 
-- New sender startup mechanisms, such as paced chirping, will need a way for
-  the sender to increase the frequency of acknowledgements when fine-grained
+- New sender startup mechanisms, such as paced chirping, will need a way for the
+  sender to increase the frequency of acknowledgements when fine-grained
   feedback is required.
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
@@ -255,8 +255,11 @@ is recorded as the largest seen sequence number. The new Packet Tolerance and
 Update Max Ack Delay values MUST be immediately used for delaying
 acknowledgements; see {{sending}}.
 
-On subsequently received ACK-FREQUENCY frames, the endpoint MUST check if this
-is a more recent frame than any previous ones, as follows:
+On a subsequently received ACK-FREQUENCY frame, the endpoint MUST check if this
+is more recent than any previous ones, as follows:
+
+- If the sequence number in the frame is not greater than the largest one seen
+  so far, the endpoint MUST ignore this frame.
 
 - If the sequence number in the frame is greater than the largest one seen so
   far, the endpoint MUST immediately replace old recorded state with values
