@@ -337,9 +337,7 @@ increases the peer's `max_ack_delay`.
 While it is expected that endpoints will have only one ACK-FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
 in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
-MUST use the maximum of the current value and all those in flight.  If there are
-ACK-FREQUENCY frames in flight, then endpoints MUST use the `max_ack_delay` value
-from the most recent frame (frame with the highest sequence number) that was acknowledged.
+MUST use the maximum of the current value and all those in flight.
 
 
 # Security Considerations
