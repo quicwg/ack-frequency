@@ -307,9 +307,8 @@ disable_ack_on_reordering (0xXXXX):
 
 As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, an endpoint SHOULD
 immediately acknowledge packets marked with the ECN Congestion Experienced (CE)
-codepoint in the IP header, even if the `disable_ack_on_reordering` transport
-parameter is present. Doing so reduces the peer's response time to congestion
-events.
+codepoint in the IP header. Doing so reduces the peer's response time to
+congestion events.
 
 ## Batch Processing of Packets {#batch}
 
