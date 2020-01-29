@@ -135,7 +135,7 @@ acknowledgement frequency, especially to an arbitrary fixed value, as follows:
 
 - Starting a connection up quickly without inducing excess queue is important
   for latency reduction, for both short and long flows. The sender often needs
-  frequent acknowledgments during this phase; see slow start and hystart.
+  more frequent acknowledgments during this phase.
 
 - Congestion controllers that are purely window based and strictly adherent to
   packet conservation, such as the one defined in {{QUIC-RECOVERY}}, rely on
@@ -145,9 +145,8 @@ acknowledgement frequency, especially to an arbitrary fixed value, as follows:
   long-running flows, congestion controllers that are not window-based, such as
   BBR, can perform well with very few acknowledgements per RTT.
 
-- New sender startup mechanisms, such as paced chirping, will need a way for the
-  sender to increase the frequency of acknowledgements when fine-grained
-  feedback is required.
+- New sender startup mechanisms will need a way for the sender to increase
+  the frequency of acknowledgements when fine-grained feedback is required.
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
 mechanism that a receiver can use: send an acknowledgement for every other
