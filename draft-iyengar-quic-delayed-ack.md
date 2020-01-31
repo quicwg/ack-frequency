@@ -161,7 +161,7 @@ This extension provides a mechanism to solve this problem.
 Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
 
-min_ack_delay (0xXXXX):
+min_ack_delay (0xDE1A):
 
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint can delay an acknowledgement. Values of 0
@@ -177,18 +177,18 @@ is specified in microseconds.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
-# ACK-FREQUENCY Frame
+# ACK_FREQUENCY Frame
 
 Delaying acknowledgements as much as possible reduces both work done by the
 endpoints and network load. An endpoint's loss detection and congestion control
 mechanisms however need to be tolerant of this delay at the peer. An endpoint
-signals its tolerance to its peer using an ACK-FREQUENCY frame, shown below:
+signals its tolerance to its peer using an ACK_FREQUENCY frame, shown below:
 
 ~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                            0xXX (i)                         ...
+|                            0xAF (i)                         ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Sequence Number (i)                    ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -199,13 +199,13 @@ signals its tolerance to its peer using an ACK-FREQUENCY frame, shown below:
 ~~~
 
 Following the common frame format described in Section 12.4 of
-{{QUIC-TRANSPORT}}, ACK-FREQUENCY frames have a type of 0xXX, and contain the
+{{QUIC-TRANSPORT}}, ACK_FREQUENCY frames have a type of 0xAF, and contain the
 following fields:
 
 Sequence Number:
 
 : A variable-length integer representing the sequence number assigned to the
-  ACK-FREQUENCY frame by the sender to allow receivers to ignore obsolete
+  ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
   frames, see {{multiple-frames}}.
 
 Packet Tolerance:
@@ -223,39 +223,39 @@ Update Max Ack Delay:
   advertised by this endpoint is invalid.
 
 
-Receipt of invalid values in an ACK-FREQUENCY frame MUST be treated as a
+Receipt of invalid values in an ACK_FREQUENCY frame MUST be treated as a
 connection error of type FRAME_ENCODING_ERROR.
 
-ACK-FREQUENCY frames are ack-eliciting. However, their loss does not require
+ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission.
 
-An endpoint MAY send ACK-FREQUENCY frames multiple times during a connection and
+An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
 with different values.
 
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
-acknowledgments. When the endpoint receives an ACK-FREQUENCY frame, it MUST
+acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
 update this maximum time to the value proposed by the peer in the Update Max Ack
 Delay field.
 
 
-# Multiple ACK-FREQUENCY Frames {#multiple-frames}
+# Multiple ACK_FREQUENCY Frames {#multiple-frames}
 
-An endpoint can send multiple ACK-FREQUENCY frames, and each one of them can
+An endpoint can send multiple ACK_FREQUENCY frames, and each one of them can
 have different values. An endpoint MUST use a sequence number of 0 for the first
-ACK-FREQUENCY frame it constructs and sends, and a strictly increasing value
+ACK_FREQUENCY frame it constructs and sends, and a strictly increasing value
 thereafter.
 
-An endpoint MUST allow reordered ACK-FREQUENCY frames to be received and
+An endpoint MUST allow reordered ACK_FREQUENCY frames to be received and
 processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
 
-On the first received ACK-FREQUENCY frame in a connection, an endpoint MUST
+On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
 immediately record all values from the frame. The sequence number of the frame
 is recorded as the largest seen sequence number. The new Packet Tolerance and
 Update Max Ack Delay values MUST be immediately used for delaying
 acknowledgements; see {{sending}}.
 
-On a subsequently received ACK-FREQUENCY frame, the endpoint MUST check if this
+On a subsequently received ACK_FREQUENCY frame, the endpoint MUST check if this
 frame is more recent than any previous ones, as follows:
 
 - If the frame's sequence number is not greater than the largest one seen so
@@ -270,10 +270,10 @@ frame is more recent than any previous ones, as follows:
 
 # Sending Acknowledgments {#sending}
 
-Prior to receiving an ACK-FREQUENCY frame, endpoints send acknowledgements as
+Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in Section 13.2.1 of {{QUIC-TRANSPORT}}.
 
-On receiving an ACK-FREQUENCY frame and updating its recorded `max_ack_delay`
+On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
 and `Packet Tolerance` values ({{multiple-frames}}), the endpoint MUST send an
 acknowledgement when one of the following conditions are met:
 
@@ -328,7 +328,7 @@ met and an acknowledgement is to be sent in response.
 
 On sending an update to the peer's `max_ack_delay`, an endpoint can use this new
 value in later computations of its Probe Timeout (PTO) period; see Section 5.2.1
-of {{QUIC-RECOVERY}}. The endpoint MUST however wait until the ACK-FREQUENCY
+of {{QUIC-RECOVERY}}. The endpoint MUST however wait until the ACK_FREQUENCY
 frame that carries this new value is acknowledged by the peer.
 
 Until the frame is acknowledged, the endpoint MUST use the greater of the
@@ -336,7 +336,7 @@ current `max_ack_delay` and the value that is in flight when computing the PTO
 period. Doing so avoids spurious PTOs that can be caused by an update that
 increases the peer's `max_ack_delay`.
 
-While it is expected that endpoints will have only one ACK-FREQUENCY frame in
+While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
 in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
 MUST use the maximum of the current value and all those in flight.
