@@ -195,6 +195,8 @@ signals its tolerance to its peer using an ACK_FREQUENCY frame, shown below:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                    Update Max Ack Delay (i)                 ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Ignore Order (8)|
++-+-+-+-+-+-+-+-+-+
 ~~~
 
 Following the common frame format described in Section 12.4 of
@@ -221,6 +223,12 @@ Update Max Ack Delay:
   field is in microseconds. Any value smaller than the `min_ack_delay`
   advertised by this endpoint is invalid.
 
+Ignore Order:
+
+: An 8-bit field representing a boolean truth value. This field MUST have the
+  value 0x00 (representing `false`) or 0x01 (representing `true`). This field
+  can be set to `true` by an endpoint that does not wish to receive an immediate
+  acknowledgement when the peer observes reordering ({{reordering}}).
 
 Receipt of invalid values in an ACK_FREQUENCY frame MUST be treated as a
 connection error of type FRAME_ENCODING_ERROR.
@@ -291,19 +299,17 @@ to delaying of acknowledgments are reset.
 
 ## Response to Reordering {#reordering}
 
-As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, endpoints SHOULD send an
-acknowledgement immediately on receiving a reordered ack-eliciting packet,
-unless the peer has sent a `disable_ack_on_reordering` transport parameter,
-described below:
+As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, endpoints are expected to
+send an acknowledgement immediately on receiving a reordered ack-eliciting
+packet. This extension modifies this behavior.
 
-disable_ack_on_reordering (0xXXXX):
+If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
+Order` value of `true` (0x01), the endpoint MUST NOT make the exception of
+sending an immediate acknowledgement when a packet is received out of order.
 
-: This optional transport parameter is sent by an endpoint that is reordering
-  tolerant or expects the connection to experience reordering. An endpoint that
-  receives this transport parameter MUST NOT make the exception of sending an
-  immediate acknowledgement when reordering is observed. This parameter is a
-  zero-length value, and is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
-
+If the endpoint has not yet received an ACK_FREQUENCY frame or if the most
+recent frame received from the peer has an `Ignore Order` value of `false`
+(0x00), it MUST immediately acknowledge packets that are received out of order.
 
 ## Expediting Congestion Signals {#congestion}
 
