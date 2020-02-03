@@ -249,9 +249,9 @@ Delay field.
 # Multiple ACK_FREQUENCY Frames {#multiple-frames}
 
 An endpoint can send multiple ACK_FREQUENCY frames, and each one of them can
-have different values. An endpoint MUST use a sequence number of 0 for the first
-ACK_FREQUENCY frame it constructs and sends, and a strictly increasing value
-thereafter.
+have different values in all fields. An endpoint MUST use a sequence number of 0
+for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
+increasing value thereafter.
 
 An endpoint MUST allow reordered ACK_FREQUENCY frames to be received and
 processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
@@ -303,13 +303,16 @@ As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
-If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
-Order` value of `true` (0x01), the endpoint MUST NOT make the exception of
-sending an immediate acknowledgement when a packet is received out of order.
-
-If the endpoint has not yet received an ACK_FREQUENCY frame or if the most
+If the endpoint has not yet received an ACK_FREQUENCY frame, or if the most
 recent frame received from the peer has an `Ignore Order` value of `false`
-(0x00), it MUST immediately acknowledge packets that are received out of order.
+(0x00), the endpoint MUST immediately acknowledge any subsequent packets that
+are received out of order.
+
+If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
+Order` value of `true` (0x01), the endpoint does not make this exception. That
+is, the endpoint MUST NOT send an immediate acknowledgement in response to
+packets received out of order, and instead continues to use the peer's `Packet
+Tolerance` and `max_ack_delay` thresholds for sending acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
 
