@@ -125,28 +125,12 @@ endpoint performance in the following ways:
   such links, reducing the number of acknowledgments allows connection
   throughput to scale much further.
 
-Unfortunately, there are undesirable consequences to simply reducing the
-acknowledgement frequency, especially to an arbitrary fixed value, as follows:
+- As discussed in {{implementation}}, there are undesirable consequences to
+  congestion control and loss recovery if a receiver uniltaerally reduces the
+  acknowledgment frequency.  Consequently, a sender needs the ability to express
+  its constraints on the acknowledgement frequency to maximize congestion
+  controller performance.
 
-- A sender relies on receipt of acknowledgements to determine the amount of data
-  in flight and to detect losses, see {{QUIC-RECOVERY}}. Consequently, how often
-  a receiver sends acknowledgments dictates how long it takes for losses to be
-  detected at the sender.
-
-- Starting a connection up quickly without inducing excess queue is important
-  for latency reduction, for both short and long flows. The sender often needs
-  more frequent acknowledgments during this phase.
-
-- Congestion controllers that are purely window based and strictly adherent to
-  packet conservation, such as the one defined in {{QUIC-RECOVERY}}, rely on
-  receipt of acknowledgments to move the congestion window forward and release
-  additional data.  Such controllers suffer performance penalties when
-  acknowledgements are not sent frequently enough.  On the other hand, for
-  long-running flows, congestion controllers that are not window-based, such as
-  BBR, can perform well with very few acknowledgements per RTT.
-
-- New sender startup mechanisms will need a way for the sender to increase
-  the frequency of acknowledgements when fine-grained feedback is required.
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
 mechanism that a receiver can use: send an acknowledgement for every other
@@ -350,6 +334,39 @@ flight at any given time, this extension does not prohibit having more than one
 in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
 MUST use the maximum of the current value and all those in flight.
 
+# Implementation Considerations {#implementation}
+
+There are tradeoffs inherent in a sender sending an ACK_FREQUENCY frame to the
+receiver.  As such it is recommended that implementers experiment with different
+strategies and find those which best suit their applications and congestion
+controllers.  There are, however, noteworthy considerations when devising
+strategies for sending ACK_FREQUENCY frames.
+
+## Loss Detection {#loss}
+A sender relies on receipt of acknowledgements to determine the amount of data
+in flight and to detect losses, e.g. when packets experience reordering, see
+{{QUIC-RECOVERY}}.  Consequently, how often a receiver sends acknowledgments
+determines how long it takes for losses to be detected at the sender.
+
+## New Connections {#new-connections}
+Many congestion control algorithms have a startup mechanism during the beginning
+phases of a connection.  It is typical that in this period the congestion
+controller will quickly increase the amount of data in the network until it is
+signalled to stop.  While the mechanism used to achieve this increase varies,
+acknowledgments by the peer are generally critical during this phase to drive
+the congestion controller's machinery.  A sender can send ACK_FREQUENCY frames
+while its congestion controller is in this state, ensuring that the receiver
+will send acknowledgments at a rate which is optimal for the the sender's
+congestion controller.
+
+## Window-based Congestion Controllers {#window}
+Congestion controllers that are purely window-based and strictly adherent to
+packet conservation, such as the one defined in {{QUIC-RECOVERY}}, rely on
+receipt of acknowledgments to move the congestion window forward and send
+additional data into the network.  Such controllers will suffer degraded
+performance if acknowledgments are delayed excessively.  Similarly, if these
+controllers rely on the timing of peer acknowledgments (an "ACK clock"),
+delaying acknowledgments will cause undesirable bursts of data into the network.
 
 # Security Considerations
 TBD.
