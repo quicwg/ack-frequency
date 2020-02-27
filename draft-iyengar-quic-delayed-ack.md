@@ -234,7 +234,8 @@ Receipt of invalid values in an ACK_FREQUENCY frame MUST be treated as a
 connection error of type FRAME_ENCODING_ERROR.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
-retransmission.
+retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
+has been sent.
 
 An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
 with different values.
