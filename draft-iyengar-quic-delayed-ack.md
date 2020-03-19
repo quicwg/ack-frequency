@@ -125,19 +125,17 @@ endpoint performance in the following ways:
   such links, reducing the number of acknowledgments allows connection
   throughput to scale much further.
 
-- As discussed in {{implementation}}, there are undesirable consequences to
-  congestion control and loss recovery if a receiver uniltaerally reduces the
-  acknowledgment frequency.  Consequently, a sender needs the ability to express
-  its constraints on the acknowledgement frequency to maximize congestion
-  controller performance.
-
+As discussed in {{implementation}} however, there are undesirable consequences
+to congestion control and loss recovery if a receiver uniltaerally reduces the
+acknowledgment frequency. A sender's constraints on the acknowledgement
+frequency need to be taken into account to maximize congestion controller and
+loss recovery performance.
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
 mechanism that a receiver can use: send an acknowledgement for every other
 packet, and for every packet when reordering is observed. This simple mechanism
-does not allow a sender to signal its constraints, which in turn limits what a
-receiver can do to delay acknowledgements and reduce acknowledgement frequency.
-This extension provides a mechanism to solve this problem.
+does not allow a sender to signal its constraints. This extension provides a
+mechanism to solve this problem.
 
 # Negotiating Extension Use
 
