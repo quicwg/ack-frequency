@@ -147,14 +147,14 @@ min_ack_delay (0xDE1A):
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint can delay an acknowledgement. Values of
   2^24 or greater are invalid, and receipt of these values MUST be treated as
-  a connection error of type PROTOCOL_VIOLATION.
+  a connection error of type TRANSPORT_PARAMETER_ERROR.
 
 An endpoint's min_ack_delay MUST NOT be greater than the its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
 is greater than the received max_ack_delay as a connection error of type
-PROTOCOL_VIOLATION. Note that while the endpoint's max_ack_delay transport
-parameter is in milliseconds (Section 18.2 of {{QUIC-TRANSPORT}}), min_ack_delay
-is specified in microseconds.
+TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
+transport parameter is in milliseconds (Section 18.2 of {{QUIC-TRANSPORT}}),
+min_ack_delay is specified in microseconds.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
