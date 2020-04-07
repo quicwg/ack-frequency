@@ -196,24 +196,25 @@ Packet Tolerance:
 : A variable-length integer representing the maximum number of ack-eliciting
   packets after which the receiver sends an acknowledgement. A value of 1 will
   result in an acknowledgement being sent for every ack-eliciting packet
-  received. A value of 0 is invalid.
+  received. A value of 0 is invalid. Receipt of an invalid value MUST be
+  treated as a connection error of type FRAME_ENCODING_ERROR.
 
 Update Max Ack Delay:
 
 : A variable-length integer representing an update to the peer's `max_ack_delay`
   transport parameter (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this
   field is in microseconds. Any value smaller than the `min_ack_delay`
-  advertised by this endpoint is invalid.
+  advertised by this endpoint is invalid. Receipt of an invalid value MUST be
+  treated as a connection error of type PROTOCOL_VIOLATION.
 
 Ignore Order:
 
 : An 8-bit field representing a boolean truth value. This field MUST have the
   value 0x00 (representing `false`) or 0x01 (representing `true`). This field
   can be set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer observes reordering ({{reordering}}).
-
-Receipt of invalid values in an ACK_FREQUENCY frame MUST be treated as a
-connection error of type FRAME_ENCODING_ERROR.
+  acknowledgement when the peer observes reordering ({{reordering}}). Receipt
+  of any other value MUST be treated as a connection error of type
+  FRAME_ENCODING_ERROR.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
