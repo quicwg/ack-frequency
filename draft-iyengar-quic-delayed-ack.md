@@ -177,8 +177,8 @@ signals its tolerance to its peer using an ACK_FREQUENCY frame, shown below:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                    Update Max Ack Delay (i)                 ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Ignore Order (8)|
-+-+-+-+-+-+-+-+-+-+
+|                    Packet Loss Threshold (i)                ...
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
 
 Following the common frame format described in Section 12.4 of
@@ -207,14 +207,13 @@ Update Max Ack Delay:
   advertised by this endpoint is invalid. Receipt of an invalid value MUST be
   treated as a connection error of type PROTOCOL_VIOLATION.
 
-Ignore Order:
+Packet Loss Threshold:
 
-: An 8-bit field representing a boolean truth value. This field MUST have the
-  value 0x00 (representing `false`) or 0x01 (representing `true`). This field
-  can be set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer observes reordering ({{reordering}}). Receipt
-  of any other value MUST be treated as a connection error of type
-  FRAME_ENCODING_ERROR.
+: A variable-length integer representing the sender's packet threshold before
+  loss is declared.  The value indicates the threshold for packet reordering
+  ({{reordering}}) before an immediate acknowledgement is sent.
+  A value of 0 indicates an endpoint never wants to receive an immediate
+  acknowledgement as a result of receiving reordered packets.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
@@ -288,15 +287,23 @@ send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
 If the endpoint has not yet received an ACK_FREQUENCY frame, or if the most
-recent frame received from the peer has an `Ignore Order` value of `false`
-(0x00), the endpoint MUST immediately acknowledge any subsequent packets that
-are received out of order.
+recently processed ACK_FREQUENCY frame has a `Packet Loss Threshold` value of 1,
+the endpoint MUST immediately acknowledge any subsequent packets that are
+received out of order.
 
-If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
-Order` value of `true` (0x01), the endpoint does not make this exception. That
-is, the endpoint MUST NOT send an immediate acknowledgement in response to
-packets received out of order, and instead continues to use the peer's `Packet
-Tolerance` and `max_ack_delay` thresholds for sending acknowledgements.
+If the most recently processed ACK_FREQUENCY frame has a 'Packet Loss Threshold'
+larger than 1, implementations MUST still immediately acknowledge any received
+packets with packet numbers smaller than the largest 'Largest Acked' value
+previously sent in an ACK frame.  If the packet number is larger than the largest
+'Largest Acked' and there are missing packets that are at least
+'Packet Loss Threshold' smaller than the largest received packet, an
+immediate acknowledgement MUST be sent.
+
+If the most recently processed ACK_FREQUENCY frame has a `Packet Loss Threhold`
+value of 0, the endpoint does not make this exception. That is, the endpoint
+MUST NOT send an immediate acknowledgement solely in response to packets
+received out of order, and instead continues to use the peer's
+`Packet Tolerance` and `max_ack_delay` thresholds for sending acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
 
