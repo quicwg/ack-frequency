@@ -283,7 +283,7 @@ to delaying of acknowledgments are reset.
 
 ## Response to Reordering {#reordering}
 
-As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, endpoints are expected to
+As specified in Section 13.2.1 of {{QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
@@ -300,7 +300,7 @@ Tolerance` and `max_ack_delay` thresholds for sending acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
 
-As specified in Section 13.3.1 of {{QUIC-TRANSPORT}}, an endpoint SHOULD
+As specified in Section 13.2.1 of {{QUIC-TRANSPORT}}, an endpoint SHOULD
 immediately acknowledge packets marked with the ECN Congestion Experienced (CE)
 codepoint in the IP header. Doing so reduces the peer's response time to
 congestion events.
