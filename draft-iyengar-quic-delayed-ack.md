@@ -169,7 +169,7 @@ signals its tolerance to its peer using an ACK_FREQUENCY frame, shown below:
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                            0xff02af (i)                     ...
+|                            0xaf (i)                         ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Sequence Number (i)                    ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -182,8 +182,8 @@ signals its tolerance to its peer using an ACK_FREQUENCY frame, shown below:
 ~~~
 
 Following the common frame format described in Section 12.4 of
-{{QUIC-TRANSPORT}}, ACK_FREQUENCY frames have a type of 0xff02af, and contain
-the following fields:
+{{QUIC-TRANSPORT}}, ACK_FREQUENCY frames have a type of 0xaf, and contain the
+following fields:
 
 Sequence Number:
 
