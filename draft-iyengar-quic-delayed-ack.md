@@ -156,6 +156,11 @@ TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
 transport parameter is in milliseconds (Section 18.2 of {{QUIC-TRANSPORT}}),
 min_ack_delay is specified in microseconds.
 
+The min_ack_delay transport parameter is a unilateral indication of support for
+receiving ACK_FREQUENCY frames.  If an endpoint sends the transport parameter,
+the peer is allowed to send ACK_FREQUENCY frames independent of whether it also
+sends the min_ack_delay transport parameter or not.
+
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
 # ACK_FREQUENCY Frame
