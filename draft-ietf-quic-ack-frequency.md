@@ -17,14 +17,11 @@ author:
     name: Jana Iyengar
     org: Fastly
     email: jri.ietf@gmail.com
-    role: editor
-
   -
     ins: I. Swett
     name: Ian Swett
     org: Google
     email: ian.swett@google.com
-    role: editor
 
 normative:
 
