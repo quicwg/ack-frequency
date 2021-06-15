@@ -1,9 +1,9 @@
 ---
-title: "Sender Control of Acknowledgement Delays in QUIC"
-abbrev: QUIC Delayed Acknowledgements
-docname: draft-iyengar-quic-delayed-ack
+title: "QUIC Acknowledgement Frequency"
+docname: draft-ietf-quic-ack-frequency-00
 date: {DATE}
 category: std
+consensus: true
 ipr: trust200902
 area: Transport
 workgroup: QUIC
@@ -17,7 +17,6 @@ author:
     name: Jana Iyengar
     org: Fastly
     email: jri.ietf@gmail.com
-
   -
     ins: I. Swett
     name: Ian Swett
@@ -28,9 +27,10 @@ normative:
 
   QUIC-TRANSPORT:
     title: "QUIC: A UDP-Based Multiplexed and Secure Transport"
-    date: {DATE}
+    date: 2021-05
     seriesinfo:
-      Internet-Draft: draft-ietf-quic-transport-latest
+      RFC: 9000
+      DOI: 10.17487/RFC9000
     author:
       -
         ins: J. Iyengar
@@ -45,9 +45,10 @@ normative:
 
   QUIC-RECOVERY:
     title: "QUIC Loss Detection and Congestion Control"
-    date: {DATE}
+    date: 2021-05
     seriesinfo:
-      Internet-Draft: draft-ietf-quic-recovery-latest
+      RFC: 9002
+      DOI: 10.17487/RFC9002
     author:
       -
         ins: J. Iyengar
