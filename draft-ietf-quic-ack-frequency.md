@@ -1,6 +1,6 @@
 ---
 title: "QUIC Acknowledgement Frequency"
-docname: draft-ietf-quic-ack-frequency-00
+docname: draft-ietf-quic-ack-frequency-latest
 date: {DATE}
 category: std
 consensus: true
