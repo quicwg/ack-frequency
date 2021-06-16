@@ -1,8 +1,8 @@
 # QUIC Acknowledgement Frequency
 
-* [Editor's Copy](https://janaiyengar.github.io/ack-frequency/#go.draft-iyengar-quic-delayed-ack.html)
-* [Individual Draft](https://tools.ietf.org/html/draft-iyengar-quic-delayed-ack)
-* [Compare Editor's Copy to Individual Draft](https://janaiyengar.github.io/ack-frequency/#go.draft-iyengar-quic-delayed-ack.diff)
+* [Editor's Copy](https://quicwg.github.io/ack-frequency/#go.draft-ietf-quic-ack-frequency.html)
+* [Individual Draft](https://tools.ietf.org/html/draft-ietf-quic-ack-frequency)
+* [Compare Editor's Copy to Individual Draft](https://quicwg.github.io/ack-frequency/#go.draft-ietf-quic-ack-frequency.diff)
 
 ## Building the Draft
 
@@ -19,4 +19,4 @@ This requires that you have the necessary software installed.  See
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/janaiyengar/ack-frequency/blob/master/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/quicwg/base-drafts/blob/main/CONTRIBUTING.md).
