@@ -1,4 +1,4 @@
-# Sender Control of Acknowledgement Delays in QUIC
+# QUIC Acknowledgement Frequency
 
 * [Editor's Copy](https://janaiyengar.github.io/ack-frequency/#go.draft-iyengar-quic-delayed-ack.html)
 * [Individual Draft](https://tools.ietf.org/html/draft-iyengar-quic-delayed-ack)
