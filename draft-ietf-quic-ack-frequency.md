@@ -71,11 +71,11 @@ delaying of acknowledgements.
 
 Discussion of this draft takes place on the QUIC working group mailing list
 (quic@ietf.org), which is archived at
-\<https://mailarchive.ietf.org/arch/search/?email_list=quic\>.
-
-Working Group information can be found at \<https://github.com/quicwg\>; source
+<https://mailarchive.ietf.org/arch/search/?email_list=quic>. Source
 code and issues list for this draft can be found at
-\<https://github.com/quicwg/base-drafts/labels/-transport\>.
+<https://github.com/quicwg/ack-frequency>.
+
+Working Group information can be found at <https://github.com/quicwg>;
 
 --- middle
 
