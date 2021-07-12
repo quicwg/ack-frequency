@@ -150,7 +150,7 @@ min_ack_delay (0xff02de1a):
   2^24 or greater are invalid, and receipt of these values MUST be treated as
   a connection error of type TRANSPORT_PARAMETER_ERROR.
 
-An endpoint's min_ack_delay MUST NOT be greater than the its max_ack_delay.
+An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
 is greater than the received max_ack_delay as a connection error of type
 TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
