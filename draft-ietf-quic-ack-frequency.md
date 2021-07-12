@@ -169,7 +169,8 @@ This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 Delaying acknowledgements as much as possible reduces both work done by the
 endpoints and network load. An endpoint's loss detection and congestion control
 mechanisms however need to be tolerant of this delay at the peer. An endpoint
-signals its tolerance to its peer using an ACK_FREQUENCY frame, shown below:
+signals the frequency it wants to receive ACK frames to its peer using an
+ACK_FREQUENCY frame, shown below:
 
 ~~~
  0                   1                   2                   3
@@ -179,7 +180,7 @@ signals its tolerance to its peer using an ACK_FREQUENCY frame, shown below:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Sequence Number (i)                    ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                      Packet Tolerance (i)                   ...
+|                  ACK-eliciting threshold (i)                ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                    Update Max Ack Delay (i)                 ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -197,7 +198,7 @@ Sequence Number:
   ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
   frames, see {{multiple-frames}}.
 
-Packet Tolerance:
+ACK-eliciting threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
   packets after which the receiver sends an acknowledgement. A value of 1 will
@@ -248,8 +249,8 @@ processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
 
 On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
 immediately record all values from the frame. The sequence number of the frame
-is recorded as the largest seen sequence number. The new Packet Tolerance and
-Update Max Ack Delay values MUST be immediately used for delaying
+is recorded as the largest seen sequence number. The new ACK-eliciting Threshold
+and Update Max Ack Delay values MUST be immediately used for delaying
 acknowledgements; see {{sending}}.
 
 On a subsequently received ACK_FREQUENCY frame, the endpoint MUST check if this
@@ -271,11 +272,11 @@ Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in Section 13.2.1 of {{QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `Packet Tolerance` values ({{multiple-frames}}), the endpoint MUST send an
+and `ACK-eliciting threshold` values ({{multiple-frames}}), the endpoint MUST send an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
-  packets is greater than or equal to the recorded `Packet Tolerance`.
+  packets is greater than or equal to the recorded `ACK-eliciting threshold`.
 
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
@@ -301,8 +302,9 @@ are received out of order.
 If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
 Order` value of `true` (0x01), the endpoint does not make this exception. That
 is, the endpoint MUST NOT send an immediate acknowledgement in response to
-packets received out of order, and instead continues to use the peer's `Packet
-Tolerance` and `max_ack_delay` thresholds for sending acknowledgements.
+packets received out of order, and instead continues to use the peer's
+`ACK-eliciting threshold` and `max_ack_delay` thresholds for sending
+acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
 
