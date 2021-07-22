@@ -146,9 +146,7 @@ sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
 min_ack_delay (0xff02de1a):
 
 : A variable-length integer representing the minimum amount of time in
-  microseconds by which the endpoint can delay an acknowledgement. Values of
-  2^24 or greater are invalid, and receipt of these values MUST be treated as
-  a connection error of type TRANSPORT_PARAMETER_ERROR.
+  microseconds by which the endpoint can delay an acknowledgement.
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
@@ -210,9 +208,11 @@ Update Max Ack Delay:
 
 : A variable-length integer representing an update to the peer's `max_ack_delay`
   transport parameter (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this
-  field is in microseconds. Any value smaller than the `min_ack_delay`
-  advertised by this endpoint is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type PROTOCOL_VIOLATION.
+  field is in microseconds. Any value larger than 16,383,000 microseconds is
+  invalid, as specified for the `max_ack_delay` transport parameter. Any value
+  smaller than the `min_ack_delay` advertised by this endpoint is
+  invalid. Receipt of an invalid value MUST be treated as a connection error of
+  type PROTOCOL_VIOLATION.
 
 Ignore Order:
 
