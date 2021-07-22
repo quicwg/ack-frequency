@@ -182,7 +182,7 @@ ACK_FREQUENCY frame, shown below:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                  ACK-eliciting threshold (i)                ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    Update Max Ack Delay (i)                 ...
+|                    Request Max Ack Delay (i)                ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | Ignore Order (8)|
 +-+-+-+-+-+-+-+-+-+
@@ -206,13 +206,14 @@ ACK-eliciting threshold:
   received. A value of 0 is invalid. Receipt of an invalid value MUST be
   treated as a connection error of type FRAME_ENCODING_ERROR.
 
-Update Max Ack Delay:
+Request Max Ack Delay:
 
-: A variable-length integer representing an update to the peer's `max_ack_delay`
-  transport parameter (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this
-  field is in microseconds. Any value smaller than the `min_ack_delay`
-  advertised by this endpoint is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type PROTOCOL_VIOLATION.
+: A variable-length integer representing a request to update to the peer's
+  `max_ack_delay` transport parameter (Section 18.2 of {{QUIC-TRANSPORT}}).
+  The value of this field is in microseconds, unlike the 'max_ack_delay'
+  transport parameter, which is in milliseconds. Sending a value smaller than
+  the `min_ack_delay` advertised by the peer is invalid. Receipt of an invalid
+  value MUST be treated as a connection error of type PROTOCOL_VIOLATION.
 
 Ignore Order:
 
@@ -233,8 +234,8 @@ with different values.
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
 acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
-update this maximum time to the value proposed by the peer in the Update Max Ack
-Delay field.
+update this maximum time to the value proposed by the peer in the Request Max
+Ack Delay field.
 
 
 # Multiple ACK_FREQUENCY Frames {#multiple-frames}
@@ -250,7 +251,7 @@ processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
 On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
 immediately record all values from the frame. The sequence number of the frame
 is recorded as the largest seen sequence number. The new ACK-eliciting Threshold
-and Update Max Ack Delay values MUST be immediately used for delaying
+and Request Max Ack Delay values MUST be immediately used for delaying
 acknowledgements; see {{sending}}.
 
 On a subsequently received ACK_FREQUENCY frame, the endpoint MUST check if this
