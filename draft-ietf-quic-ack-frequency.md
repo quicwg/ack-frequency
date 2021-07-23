@@ -143,7 +143,7 @@ mechanism to solve this problem.
 Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
 
-min_ack_delay (0xff02de1a):
+min_ack_delay (0xff02de1b):
 
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint can delay an acknowledgement. Values of
