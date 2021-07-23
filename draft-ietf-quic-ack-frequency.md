@@ -341,6 +341,10 @@ flight at any given time, this extension does not prohibit having more than one
 in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
 MUST use the maximum of the current value and all those in flight.
 
+When the number of in-flight ack-eliciting packets is larger than the
+ACK-Eliciting Threshold, implementations MAY choose to not include the peer's
+'max_ack_delay' in the probe timeout calculation.
+
 # Implementation Considerations {#implementation}
 
 There are tradeoffs inherent in a sender sending an ACK_FREQUENCY frame to the
