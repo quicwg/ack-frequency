@@ -204,7 +204,10 @@ ACK-eliciting threshold:
   packets after which the receiver sends an acknowledgement. A value of 1 will
   result in an acknowledgement being sent for every ack-eliciting packet
   received. A value of 0 is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type FRAME_ENCODING_ERROR.
+  treated as a connection error of type FRAME_ENCODING_ERROR.  If an endpoint
+  receives an ACK-eliciting threshold value that is larger than the maximum
+  value it can represent, the endpoint MUST use the largest representable
+  maximum value instead.
 
 Update Max Ack Delay:
 
