@@ -201,9 +201,9 @@ Sequence Number:
 ACK-eliciting threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  you can receive without sending an immediate acknowledgment. A value of 0
-  will result in an acknowledgement being sent for every ack-eliciting packet
-  received.
+  packets you can receive without sending an immediate acknowledgment. A value
+  of 0 will result in an acknowledgement being sent for every ack-eliciting
+  packet received.
 
 Update Max Ack Delay:
 
