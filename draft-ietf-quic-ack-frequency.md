@@ -201,10 +201,9 @@ Sequence Number:
 ACK-eliciting threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets after which the receiver sends an acknowledgement. A value of 1 will
-  result in an acknowledgement being sent for every ack-eliciting packet
-  received. A value of 0 is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type FRAME_ENCODING_ERROR.
+  you can receive without sending an immediate acknowledgment. A value of 0
+  will result in an acknowledgement being sent for every ack-eliciting packet
+  received.
 
 Update Max Ack Delay:
 
