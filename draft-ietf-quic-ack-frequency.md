@@ -164,7 +164,7 @@ sends the min_ack_delay transport parameter or not.
 
 Receiving a min_ack_delay transport parameter indicates that the peer might send
 ACK_FREQUENCY frames in the future. Until an ACK_FREQUENCY frame is received,
-receiving this transport parameter should not cause the endpoint to immediately
+receiving this transport parameter does not cause the endpoint to
 change its acknowledgement behavior.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
