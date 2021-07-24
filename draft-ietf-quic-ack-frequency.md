@@ -207,7 +207,7 @@ ACK-eliciting threshold:
   treated as a connection error of type FRAME_ENCODING_ERROR.  If an endpoint
   receives an ACK-eliciting threshold value that is larger than the maximum
   value it can represent, the endpoint MUST use the largest representable
-  maximum value instead.
+  value instead.
 
 Update Max Ack Delay:
 
