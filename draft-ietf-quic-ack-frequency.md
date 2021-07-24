@@ -208,12 +208,13 @@ ACK-eliciting threshold:
 
 Request Max Ack Delay:
 
-: A variable-length integer representing a request to update to the peer's
-  `max_ack_delay` transport parameter (Section 18.2 of {{QUIC-TRANSPORT}}).
-  The value of this field is in microseconds, unlike the 'max_ack_delay'
-  transport parameter, which is in milliseconds. Sending a value smaller than
-  the `min_ack_delay` advertised by the peer is invalid. Receipt of an invalid
-  value MUST be treated as a connection error of type PROTOCOL_VIOLATION.
+: A variable-length integer representing the value to which the endpoint
+  requests the peer update its `max_ack_delay`
+  (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this field is in
+  microseconds, unlike the 'max_ack_delay' transport parameter, which is in
+  milliseconds. Sending a value smaller than the `min_ack_delay` advertised
+  by the peer is invalid. Receipt of an invalid value MUST be treated as a
+  connection error of type PROTOCOL_VIOLATION.
 
 Ignore Order:
 
