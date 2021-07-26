@@ -201,9 +201,9 @@ Sequence Number:
 ACK-eliciting threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets you can receive without sending an immediate acknowledgment. A value
-  of 0 will result in an acknowledgement being sent for every ack-eliciting
-  packet received.
+  packets the recipient of this frame can receive before sending an immediate
+  acknowledgment. A value of 0 will result in an immediate acknowledgement
+  whenever an ack-eliciting packet received.
 
 Update Max Ack Delay:
 
@@ -286,6 +286,10 @@ strategy.
 An endpoint is expected to bundle acknowledgements when possible. Every time an
 acknowledgement is sent, bundled or otherwise, all counters and timers related
 to delaying of acknowledgments are reset.
+
+The receiver of an ACK_FREQUENCY frame can continue to process multiple available
+packets before determining whether to send an ACK frame in response, as stated in
+Section 13.2.2 of {{QUIC-TRANSPORT}.
 
 ## Response to Reordering {#reordering}
 
