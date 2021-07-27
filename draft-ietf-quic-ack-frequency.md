@@ -342,11 +342,11 @@ in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
 MUST use the maximum of the current value and all those in flight.
 
 When the number of in-flight ack-eliciting packets is larger than the
-ACK-Eliciting Threshold, an endpoint can expect that the peer
-will not need to wait for its `max_ack_delay` period before
-sending an acknowledgement. In such cases, the endpoint MAY
-therefore exclude the peer's 'max_ack_delay' from its PTO
-calculation.
+ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
+wait for its `max_ack_delay` period before sending an acknowledgement. In such
+cases, the endpoint MAY therefore exclude the peer's 'max_ack_delay' from its PTO
+calculation.  If `ignore_order` is enabled and packet(s) are lost, this
+optimization can cause premature PTOs, so requires extra caution.
 
 # Implementation Considerations {#implementation}
 
