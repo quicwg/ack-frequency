@@ -180,7 +180,7 @@ ACK_FREQUENCY frame, shown below:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Sequence Number (i)                    ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                  ACK-eliciting threshold (i)                ...
+|                  Ack-Eliciting Threshold (i)                ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                    Update Max Ack Delay (i)                 ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -198,7 +198,7 @@ Sequence Number:
   ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
   frames, see {{multiple-frames}}.
 
-ACK-eliciting threshold:
+Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
   packets after which the receiver sends an acknowledgement. A value of 1 will
@@ -249,7 +249,7 @@ processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
 
 On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
 immediately record all values from the frame. The sequence number of the frame
-is recorded as the largest seen sequence number. The new ACK-eliciting Threshold
+is recorded as the largest seen sequence number. The new Ack-Eliciting Threshold
 and Update Max Ack Delay values MUST be immediately used for delaying
 acknowledgements; see {{sending}}.
 
@@ -272,11 +272,11 @@ Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in Section 13.2.1 of {{QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `ACK-eliciting threshold` values ({{multiple-frames}}), the endpoint MUST send an
+and `Ack-Eliciting Threshold` values ({{multiple-frames}}), the endpoint MUST send an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
-  packets is greater than or equal to the recorded `ACK-eliciting threshold`.
+  packets is greater than or equal to the recorded `Ack-Eliciting Threshold`.
 
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
@@ -303,7 +303,7 @@ If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
 Order` value of `true` (0x01), the endpoint does not make this exception. That
 is, the endpoint MUST NOT send an immediate acknowledgement in response to
 packets received out of order, and instead continues to use the peer's
-`ACK-eliciting threshold` and `max_ack_delay` thresholds for sending
+`Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
 acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
