@@ -146,9 +146,7 @@ sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
 min_ack_delay (0xff02de1a):
 
 : A variable-length integer representing the minimum amount of time in
-  microseconds by which the endpoint can delay an acknowledgement. Values of
-  2^24 or greater are invalid, and receipt of these values MUST be treated as
-  a connection error of type TRANSPORT_PARAMETER_ERROR.
+  microseconds by which the endpoint can delay an acknowledgement.
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
@@ -204,7 +202,10 @@ Ack-Eliciting Threshold:
   packets after which the receiver sends an acknowledgement. A value of 1 will
   result in an acknowledgement being sent for every ack-eliciting packet
   received. A value of 0 is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type FRAME_ENCODING_ERROR.
+  treated as a connection error of type FRAME_ENCODING_ERROR.  If an endpoint
+  receives an ACK-eliciting threshold value that is larger than the maximum
+  value it can represent, the endpoint MUST use the largest representable
+  value instead.
 
 Request Max Ack Delay:
 
