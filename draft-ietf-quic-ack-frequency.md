@@ -143,7 +143,7 @@ mechanism to solve this problem.
 Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
 
-min_ack_delay (0xff02de1a):
+min_ack_delay (0xff03de1a):
 
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint can delay an acknowledgement.
@@ -199,10 +199,9 @@ Sequence Number:
 Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets after which the receiver sends an acknowledgement. A value of 1 will
-  result in an acknowledgement being sent for every ack-eliciting packet
-  received. A value of 0 is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type FRAME_ENCODING_ERROR.  If an endpoint
+  packets the recipient of this frame can receive before sending an immediate
+  acknowledgment. A value of 0 will result in an immediate acknowledgement
+  whenever an ack-eliciting packet received. If an endpoint
   receives an ACK-eliciting threshold value that is larger than the maximum
   value it can represent, the endpoint MUST use the largest representable
   value instead.
@@ -290,6 +289,10 @@ strategy.
 An endpoint is expected to bundle acknowledgements when possible. Every time an
 acknowledgement is sent, bundled or otherwise, all counters and timers related
 to delaying of acknowledgments are reset.
+
+The receiver of an ACK_FREQUENCY frame can continue to process multiple available
+packets before determining whether to send an ACK frame in response, as stated in
+Section 13.2.2 of {{QUIC-TRANSPORT}.
 
 ## Response to Reordering {#reordering}
 
