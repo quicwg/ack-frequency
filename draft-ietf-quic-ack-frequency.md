@@ -160,6 +160,10 @@ receiving ACK_FREQUENCY frames.  If an endpoint sends the transport parameter,
 the peer is allowed to send ACK_FREQUENCY frames independent of whether it also
 sends the min_ack_delay transport parameter or not.
 
+Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
+they received. Consequently, ACK_FREQUENCY frames cannot be sent in 0-RTT
+packets, as per Section 7.4.1 of {{QUIC-TRANSPORT}}.
+
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
 # ACK_FREQUENCY Frame
