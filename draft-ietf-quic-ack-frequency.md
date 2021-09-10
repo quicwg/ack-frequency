@@ -164,7 +164,7 @@ sends the min_ack_delay transport parameter or not.
 
 Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
 they received. Due to this, ACK_FREQUENCY frames MUST NOT be sent in 0-RTT
-packets.
+packets, as per Section 7.4.1 of {{QUIC-TRANSPORT}}.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
