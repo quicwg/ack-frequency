@@ -143,12 +143,10 @@ mechanism to solve this problem.
 Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
 
-min_ack_delay (0xff02de1a):
+min_ack_delay (0xff03de1a):
 
 : A variable-length integer representing the minimum amount of time in
-  microseconds by which the endpoint can delay an acknowledgement. Values of
-  2^24 or greater are invalid, and receipt of these values MUST be treated as
-  a connection error of type TRANSPORT_PARAMETER_ERROR.
+  microseconds by which the endpoint can delay an acknowledgement.
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
@@ -162,10 +160,11 @@ receiving ACK_FREQUENCY frames.  If an endpoint sends the transport parameter,
 the peer is allowed to send ACK_FREQUENCY frames independent of whether it also
 sends the min_ack_delay transport parameter or not.
 
-Receiving a min_ack_delay transport parameter indicates that the peer might send
-ACK_FREQUENCY frames in the future. Until an ACK_FREQUENCY frame is received,
-receiving this transport parameter does not cause the endpoint to
-change its acknowledgement behavior.
+Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
+they received. Consequently, ACK_FREQUENCY frames cannot be sent in 0-RTT
+packets, as per Section 7.4.1 of {{QUIC-TRANSPORT}}. Until an ACK_FREQUENCY
+frame is received, receiving this transport parameter does not cause the
+endpoint to change its acknowledgement behavior.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
@@ -185,9 +184,9 @@ ACK_FREQUENCY frame, shown below:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      Sequence Number (i)                    ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                  ACK-eliciting threshold (i)                ...
+|                  Ack-Eliciting Threshold (i)                ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    Update Max Ack Delay (i)                 ...
+|                    Request Max Ack Delay (i)                ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | Ignore Order (8)|
 +-+-+-+-+-+-+-+-+-+
@@ -203,21 +202,25 @@ Sequence Number:
   ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
   frames, see {{multiple-frames}}.
 
-ACK-eliciting threshold:
+Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets after which the receiver sends an acknowledgement. A value of 1 will
-  result in an acknowledgement being sent for every ack-eliciting packet
-  received. A value of 0 is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type FRAME_ENCODING_ERROR.
+  packets the recipient of this frame can receive before sending an immediate
+  acknowledgment. A value of 0 will result in an immediate acknowledgement
+  whenever an ack-eliciting packet received. If an endpoint
+  receives an ACK-eliciting threshold value that is larger than the maximum
+  value it can represent, the endpoint MUST use the largest representable
+  value instead.
 
-Update Max Ack Delay:
+Request Max Ack Delay:
 
-: A variable-length integer representing an update to the peer's `max_ack_delay`
-  transport parameter (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this
-  field is in microseconds. Any value smaller than the `min_ack_delay`
-  advertised by this endpoint is invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type PROTOCOL_VIOLATION.
+: A variable-length integer representing the value to which the endpoint
+  requests the peer update its `max_ack_delay`
+  (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this field is in
+  microseconds, unlike the 'max_ack_delay' transport parameter, which is in
+  milliseconds. Sending a value smaller than the `min_ack_delay` advertised
+  by the peer is invalid. Receipt of an invalid value MUST be treated as a
+  connection error of type PROTOCOL_VIOLATION.
 
 Ignore Order:
 
@@ -238,8 +241,8 @@ with different values.
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
 acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
-update this maximum time to the value proposed by the peer in the Update Max Ack
-Delay field.
+update this maximum time to the value proposed by the peer in the Request Max
+Ack Delay field.
 
 
 # Multiple ACK_FREQUENCY Frames {#multiple-frames}
@@ -254,8 +257,8 @@ processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
 
 On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
 immediately record all values from the frame. The sequence number of the frame
-is recorded as the largest seen sequence number. The new ACK-eliciting Threshold
-and Update Max Ack Delay values MUST be immediately used for delaying
+is recorded as the largest seen sequence number. The new Ack-Eliciting Threshold
+and Request Max Ack Delay values MUST be immediately used for delaying
 acknowledgements; see {{sending}}.
 
 On a subsequently received ACK_FREQUENCY frame, the endpoint MUST check if this
@@ -277,11 +280,11 @@ Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in Section 13.2.1 of {{QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `ACK-eliciting threshold` values ({{multiple-frames}}), the endpoint MUST send an
+and `Ack-Eliciting Threshold` values ({{multiple-frames}}), the endpoint MUST send an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
-  packets is greater than or equal to the recorded `ACK-eliciting threshold`.
+  packets is greater than or equal to the recorded `Ack-Eliciting Threshold`.
 
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
@@ -292,6 +295,10 @@ strategy.
 An endpoint is expected to bundle acknowledgements when possible. Every time an
 acknowledgement is sent, bundled or otherwise, all counters and timers related
 to delaying of acknowledgments are reset.
+
+The receiver of an ACK_FREQUENCY frame can continue to process multiple available
+packets before determining whether to send an ACK frame in response, as stated in
+Section 13.2.2 of {{QUIC-TRANSPORT}.
 
 ## Response to Reordering {#reordering}
 
@@ -308,7 +315,7 @@ If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
 Order` value of `true` (0x01), the endpoint does not make this exception. That
 is, the endpoint MUST NOT send an immediate acknowledgement in response to
 packets received out of order, and instead continues to use the peer's
-`ACK-eliciting threshold` and `max_ack_delay` thresholds for sending
+`Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
 acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
@@ -345,6 +352,13 @@ While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
 in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
 MUST use the maximum of the current value and all those in flight.
+
+When the number of in-flight ack-eliciting packets is larger than the
+ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
+wait for its `max_ack_delay` period before sending an acknowledgement. In such
+cases, the endpoint MAY therefore exclude the peer's 'max_ack_delay' from its PTO
+calculation. Note that this optimization requires some care in implementation, since
+it can cause premature PTOs under packet loss when `ignore_order` is enabled.
 
 # Implementation Considerations {#implementation}
 
