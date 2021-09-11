@@ -171,6 +171,25 @@ packets, as per Section 7.4.1 of {{QUIC-TRANSPORT}}.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
+# NO_ACK Frame
+
+The NO_ACK Frame is a frame which causes the receiver to treat a packet as
+not ack-eliciting.
+
+Receivers SHOULD treat the receipt of a QUIC packet containing one or more
+NO_ACK frames as not ack-eliciting, even if there is an IMMEDIATE_ACK frame
+in the packet. This creates a packet similar to a packet that only
+contains PADDING frames in that the packet counts towards the sender's
+bytes in flight, but does not elicit an acknowledgement.
+
+~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            0x0a (i)                         ...
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~
+
 # ACK_FREQUENCY Frame
 
 Delaying acknowledgements as much as possible reduces both work done by the
