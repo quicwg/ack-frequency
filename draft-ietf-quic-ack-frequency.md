@@ -323,8 +323,12 @@ acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
 
-An endpoint SHOULD send an immediate acknowledgement when at least
-max(2, Ack-Eliciting Threshold)/2 packets marked with the ECN Congestion
+And endpoing SHOULD send an immediate acknowledgement when a packet marked
+with the ECN Congestion Experienced (CE) codepoint in the IP header is
+received after the previous packet was not marked CE.
+
+An endpoint SHOULD also send an immediate acknowledgement when at least
+max(2, Ack-Eliciting Threshold) packets marked with the ECN Congestion
 Experienced (CE) codepoint in the IP header are received. Doing so reduces the
 peer's response time to congestion events, while also reducing the ACK rate
 compared to Section 13.2.1 of {{QUIC-TRANSPORT}} when peers are using
