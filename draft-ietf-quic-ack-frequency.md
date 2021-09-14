@@ -171,21 +171,20 @@ packets, as per Section 7.4.1 of {{QUIC-TRANSPORT}}.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
-# NO_ACK Frame
+# DELAY_ACK Frame
 
-The NO_ACK Frame causes the receiver to treat a packet as not ack-eliciting.
+The DELAY_ACK Frame causes the receiver to send an immediate acknowledgement,
+for example due to exceeding the 'Ack-Eliciting Threshold' or due to the packet
+arriving out of order.
 
-Receivers SHOULD treat the receipt of a QUIC packet containing one or more
-NO_ACK frames as not ack-eliciting, even if there is an IMMEDIATE_ACK frame
-in the packet. The addition of the NO_ACK frame creates a packet similar to
-a packet that only contains PADDING frames in that the packet counts towards
-the sender's bytes in flight, but does not elicit an acknowledgement.
+Senders MUST NOT send a packet containing both DELAY_ACK and IMMEDIATE_ACK,
+given their response directly conflicts with each other.
 
 ~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                            0xad (i)                         ...
+|                            0xda (i)                         ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
 
