@@ -331,9 +331,9 @@ An endpoint SHOULD also send an immediate acknowledgement when at least
 max(2, Ack-Eliciting Threshold) packets marked with the ECN Congestion
 Experienced (CE) codepoint in the IP header are received. Doing so reduces the
 peer's response time to congestion events, while also reducing the ACK rate
-compared to {{Section 13.2.1 of QUIC-TRANSPORT}} when peers are using
-DCTCP {{?RFC8257}} or other congestion controllers that mark much more
-frequently than classic ECN {{?RFC3168}}.
+compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during extreme congestion or
+when peers are using DCTCP {{?RFC8257}} or other congestion controllers that
+mark much more frequently than classic ECN {{?RFC3168}}.
 
 ## Batch Processing of Packets {#batch}
 
