@@ -162,26 +162,6 @@ sends the min_ack_delay transport parameter or not.
 
 This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
 
-# IMMEDIATE_ACK Frame
-
-The IMMEDIATE_ACK Frame is a frame which causes the peer to send a
-packet containing an ACK frame immediately, similar to the receipt of Initial
-and Handshake packets during the QUIC handshake.
-
-Receivers of the IMMEDIATE_ACK frame MAY choose to delay sending the ACK
-if the vast majority of received packets contain an IMMEDIATE_ACK or the
-receiver is under heavy load.  Senders MAY include multiple IMMEDIATE_ACK
-frames in a single QUIC packet, but the behavior is identical to a single
-IMMEDIATE_ACK frame.
-
-~~~
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                            0xac (i)                         ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~
-
 # ACK_FREQUENCY Frame
 
 Delaying acknowledgements as much as possible reduces both work done by the
@@ -288,6 +268,25 @@ frame is more recent than any previous ones, as follows:
   delaying acknowledgements; see {{sending}}. The endpoint MUST also replace the
   recorded sequence number.
 
+# IMMEDIATE_ACK Frame
+
+The IMMEDIATE_ACK Frame is a frame which causes the peer to send a
+packet containing an ACK frame immediately, similar to the receipt of Initial
+and Handshake packets during the QUIC handshake.
+
+Receivers of the IMMEDIATE_ACK frame MAY choose to delay sending the ACK
+if the vast majority of received packets contain an IMMEDIATE_ACK or the
+receiver is under heavy load.  Senders MAY include multiple IMMEDIATE_ACK
+frames in a single QUIC packet, but the behavior is identical to a single
+IMMEDIATE_ACK frame.
+
+~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            0xac (i)                         ...
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~
 
 # Sending Acknowledgments {#sending}
 
