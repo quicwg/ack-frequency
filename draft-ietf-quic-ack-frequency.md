@@ -327,13 +327,16 @@ An endpoint SHOULD send an immediate acknowledgement when a packet marked
 with the ECN Congestion Experienced (CE) codepoint in the IP header is
 received and the previous packet was not marked CE.
 
-An endpoint SHOULD also send an immediate acknowledgement when at least
-max(2, Ack-Eliciting Threshold) packets marked with the ECN Congestion
-Experienced (CE) codepoint in the IP header are received. Doing so reduces the
-peer's response time to congestion events, while also reducing the ACK rate
-compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during extreme congestion or
-when peers are using DCTCP {{?RFC8257}} or other congestion controllers that
-mark much more frequently than classic ECN {{?RFC3168}}.
+And endpount SHOULD also treat packets received with a CE mark as though
+they were ack-eliciting, even if they are not ack-eliciting.  This ensures
+feedback on CE is received in a timely manner when most packets being sent
+are not ack-eliciting.
+
+Doing this reduces the peer's response time to congestion events, while also
+reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
+extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
+congestion controllers that mark much more frequently than
+classic ECN {{?RFC3168}}.
 
 ## Batch Processing of Packets {#batch}
 
