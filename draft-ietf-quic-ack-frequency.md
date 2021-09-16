@@ -335,8 +335,7 @@ not ack-eliciting.
 Doing this reduces the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
-congestion controllers that mark much more frequently than
-classic ECN {{?RFC3168}}.
+congestion controllers that mark much more frequently than classic ECN {{?RFC3168}}.
 
 ## Batch Processing of Packets {#batch}
 
