@@ -283,7 +283,7 @@ frames in a single QUIC packet, but the behavior is identical to a single
 IMMEDIATE_ACK frame.
 
 ~~~
-ACK_FREQUENCY Frame {
+IMMEDIATE_ACK Frame {
   Type (i) = 0xac,
 }
 ~~~
