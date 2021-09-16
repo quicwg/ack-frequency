@@ -180,19 +180,13 @@ signals the frequency it wants to receive ACK frames to its peer using an
 ACK_FREQUENCY frame, shown below:
 
 ~~~
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                            0xaf (i)                         ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                      Sequence Number (i)                    ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                  Ack-Eliciting Threshold (i)                ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    Request Max Ack Delay (i)                ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Ignore Order (8)|
-+-+-+-+-+-+-+-+-+-+
+ACK_FREQUENCY Frame {
+  Type (i) = 0xaf,
+  Sequence Number (i),
+  Ack-Eliciting Threshold (i),
+  Request Max Ack Delay (i),
+  Ignore Order (8),
+}
 ~~~
 
 Following the common frame format described in Section 12.4 of
@@ -289,11 +283,9 @@ frames in a single QUIC packet, but the behavior is identical to a single
 IMMEDIATE_ACK frame.
 
 ~~~
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                            0xac (i)                         ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ACK_FREQUENCY Frame {
+  Type (i) = 0xac,
+}
 ~~~
 
 # Sending Acknowledgments {#sending}
