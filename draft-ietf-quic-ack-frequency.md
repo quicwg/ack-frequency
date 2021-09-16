@@ -329,8 +329,8 @@ received and the previously received packet was not marked CE.
 
 An endpount SHOULD also acknowledge packets received with a CE mark as though
 they were ack-eliciting, even if they are not ack-eliciting.  This ensures
-feedback on CE is received in a timely manner when most packets being sent
-are not ack-eliciting.
+feedback on CE is received in a timely manner when most packets are
+not ack-eliciting.
 
 Doing this reduces the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
