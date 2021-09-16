@@ -327,7 +327,7 @@ An endpoint SHOULD send an immediate acknowledgement when a packet marked
 with the ECN Congestion Experienced (CE) codepoint in the IP header is
 received and the previously received packet was not marked CE.
 
-And endpount SHOULD also treat packets received with a CE mark as though
+An endpount SHOULD also acknowledge packets received with a CE mark as though
 they were ack-eliciting, even if they are not ack-eliciting.  This ensures
 feedback on CE is received in a timely manner when most packets being sent
 are not ack-eliciting.
