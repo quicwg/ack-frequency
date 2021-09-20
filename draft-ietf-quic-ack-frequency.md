@@ -312,7 +312,7 @@ to delaying of acknowledgments are reset.
 
 The receiver of an ACK_FREQUENCY frame can continue to process multiple available
 packets before determining whether to send an ACK frame in response, as stated in
-Section 13.2.2 of {{QUIC-TRANSPORT}.
+Section 13.2.2 of {{QUIC-TRANSPORT}}.
 
 ## Response to Reordering {#reordering}
 
@@ -394,7 +394,7 @@ to be detected at the sender.
 An ACK_Frequency frame allows a sender to reduce the periodicity
 of RTT measuments and could also postpone reporting loss. 
 
-## Congestion Response {#congestion}
+## Congestion Response {#congestion-res}
 A sender needs to be responsive to congestion notification (e.g., loss or ECN marking), to 
 enable it to reduce the rate  of transmission when there is potential congestion.
 
@@ -429,7 +429,7 @@ A QUIC ACK Frame usually allows a sender to release new packets into the network
 If a sender is designed to rely on the timing of peer acknowledgments 
 (an "ACK clock"), delaying acknowledgments will cause undesirable bursts 
 of data into the network.
-Section 7.7 of{{?RFC9002}} states
+Section 7.7 of {{QUIC-RECOVERY}}, states
   "Senders SHOULD limit bursts to the initial congestion window; see
    Section 7.2.  A sender with knowledge that the network path to the
    receiver can absorb larger bursts MAY use a higher limit."
