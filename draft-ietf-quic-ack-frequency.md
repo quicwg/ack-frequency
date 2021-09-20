@@ -385,8 +385,21 @@ strategies for sending ACK_FREQUENCY frames.
 ## Loss Detection {#loss}
 A sender relies on receipt of acknowledgements to determine the amount of data
 in flight and to detect losses, e.g. when packets experience reordering, see
-{{QUIC-RECOVERY}}.  Consequently, how often a receiver sends acknowledgments
-determines how long it takes for losses to be detected at the sender.
+{{QUIC-RECOVERY}}. Packet loss can also be detected by timer expiry,
+but this requires the sender to estimate an appropriate timeout, which
+is typically derived from continuous monitoring of the path RTT.
+
+When a receiver delays acknowledgments it also increase the time for losses 
+to be detected at the sender. 
+An ACK_Frequency frame allows a sender to reduce the periodicity
+of RTT measuments and could also postpone reporting loss. 
+
+## Congestion Response {#congestion}
+A sender needs to be responsive to congestion notification (e.g., loss or ECN marking), to 
+enable it to reduce the rate  of transmission when there is potential congestion.
+
+Excessive delay (e.g., by multiple RTTs) could increase the level 
+of congestion and needs to be avoided. 
 
 ## New Connections {#new-connections}
 Many congestion control algorithms have a startup mechanism during the beginning
@@ -394,19 +407,35 @@ phases of a connection.  It is typical that in this period the congestion
 controller will quickly increase the amount of data in the network until it is
 signalled to stop.  While the mechanism used to achieve this increase varies,
 acknowledgments by the peer are generally critical during this phase to drive
-the congestion controller's machinery.  A sender can send ACK_FREQUENCY frames
+the congestion controller's machinery.  
+
+A sender can send ACK_FREQUENCY frames
 while its congestion controller is in this state, ensuring that the receiver
-will send acknowledgments at a rate which is optimal for the the sender's
+will send acknowledgments at a rate that is optimal for the sender's
 congestion controller.
 
 ## Window-based Congestion Controllers {#window}
 Congestion controllers that are purely window-based and strictly adherent to
 packet conservation, such as the one defined in {{QUIC-RECOVERY}}, rely on
-receipt of acknowledgments to move the congestion window forward and send
-additional data into the network.  Such controllers will suffer degraded
-performance if acknowledgments are delayed excessively.  Similarly, if these
-controllers rely on the timing of peer acknowledgments (an "ACK clock"),
-delaying acknowledgments will cause undesirable bursts of data into the network.
+prompt receipt of acknowledgments to move the congestion window forward and send
+additional data into the network.  
+
+Since a QUIC ACK Frame operates culmulatively, in a similar manner as the accurate 
+byte counting style in TCP. An appropriate mitigation might be to request that 
+an ACK Frame is sent at least several times (e.g., 4) per RTT.
+
+## ACK Clocking or Burst Mitigation {#burst}
+A QUIC ACK Frame usually allows a sender to release new packets into the network. 
+If a sender is designed to rely on the timing of peer acknowledgments 
+(an "ACK clock"), delaying acknowledgments will cause undesirable bursts 
+of data into the network.
+Section 7.7 of{{?RFC9002}} states
+  "Senders SHOULD limit bursts to the initial congestion window; see
+   Section 7.2.  A sender with knowledge that the network path to the
+   receiver can absorb larger bursts MAY use a higher limit."
+
+An appropriate mitigation might therefore be to send an ACK Frame for at least 
+each initial congestion window of received data, or/and to implement pacing at the sender.
 
 # Security Considerations
 TBD.
