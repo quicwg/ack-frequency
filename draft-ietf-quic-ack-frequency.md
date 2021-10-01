@@ -347,7 +347,9 @@ enough packets to cause multiple acknowledgements to be sent.
 
 To avoid sending multiple acknowledgements in rapid succession, an endpoint MAY
 process all packets in a batch before determining whether a threshold has been
-met and an acknowledgement is to be sent in response.
+met and an acknowledgement is to be sent in response.  An endpoint MAY
+send less acknowledgements due to processing packets in a batch than
+it would if the packets were processed separately.
 
 
 # Computation of Probe Timeout Period
