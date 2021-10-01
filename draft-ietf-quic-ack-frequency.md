@@ -221,12 +221,12 @@ Request Max Ack Delay:
 
 Ignore Order:
 
-: An 8-bit field representing a boolean truth value. This field MUST have the
-  value 0x00 (representing `false`) or 0x01 (representing `true`). This field
-  can be set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer observes reordering ({{reordering}}). Receipt
-  of any other value MUST be treated as a connection error of type
-  FRAME_ENCODING_ERROR.
+: An 8-bit field representing a boolean truth value. This field can be
+  set to `true` by an endpoint that does not wish to receive an immediate
+  acknowledgement when the peer observes reordering ({{reordering}}).
+  The value of this field MUST be 0x00 (representing `false`) or 0x01 
+  (representing `true`).  Receipt of any other value MUST be treated
+  as a connection error of type FRAME_ENCODING_ERROR.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
