@@ -221,7 +221,7 @@ Request Max Ack Delay:
 
 Ignore Order:
 
-: An 8-bit field representing a boolean truth value. This field can be
+: An 8-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
   acknowledgement when the peer observes reordering ({{reordering}}).
   The value of this field MUST be 0x00 (representing `false`) or 0x01 
