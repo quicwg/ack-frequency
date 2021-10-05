@@ -75,7 +75,7 @@ Discussion of this draft takes place on the QUIC working group mailing list
 code and issues list for this draft can be found at
 [](https://github.com/quicwg/ack-frequency).
 
-Working Group information can be found at [](https://github.com/quicwg);
+Working Group information can be found at [](https://github.com/quicwg).
 
 --- middle
 
