@@ -71,11 +71,11 @@ delaying of acknowledgements.
 
 Discussion of this draft takes place on the QUIC working group mailing list
 (quic@ietf.org), which is archived at
-<https://mailarchive.ietf.org/arch/search/?email_list=quic>. Source
+[](https://mailarchive.ietf.org/arch/search/?email_list=quic). Source
 code and issues list for this draft can be found at
-<https://github.com/quicwg/ack-frequency>.
+[](https://github.com/quicwg/ack-frequency).
 
-Working Group information can be found at <https://github.com/quicwg>;
+Working Group information can be found at [](https://github.com/quicwg).
 
 --- middle
 
@@ -99,7 +99,7 @@ An "acknowledgement packet" refers to a QUIC packet that contains only an ACK
 frame.
 
 This document uses terms, definitions, and notational conventions described in
-Section 1.2 and Section 1.3 of {{QUIC-TRANSPORT}}.
+{{Section 1.2 and Section 1.3 of QUIC-TRANSPORT}}.
 
 # Motivation
 
@@ -141,7 +141,7 @@ mechanism to solve this problem.
 # Negotiating Extension Use
 
 Endpoints advertise their support of the extension described in this document by
-sending the following transport parameter (Section 7.2 of {{QUIC-TRANSPORT}}):
+sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
 
 min_ack_delay (0xff03de1a):
 
@@ -152,7 +152,7 @@ An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
 is greater than the received max_ack_delay as a connection error of type
 TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
-transport parameter is in milliseconds (Section 18.2 of {{QUIC-TRANSPORT}}),
+transport parameter is in milliseconds ({{Section 18.2 of QUIC-TRANSPORT}}),
 min_ack_delay is specified in microseconds.
 
 The min_ack_delay transport parameter is a unilateral indication of support for
@@ -167,9 +167,9 @@ change its acknowledgement behavior.
 
 Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
 they received. Consequently, ACK_FREQUENCY frames cannot be sent in 0-RTT
-packets, as per Section 7.4.1 of {{QUIC-TRANSPORT}}.
+packets, as per {{Section 7.4.1 of QUIC-TRANSPORT}}.
 
-This Transport Parameter is encoded as per Section 18 of {{QUIC-TRANSPORT}}.
+This Transport Parameter is encoded as per {{Section 18 of QUIC-TRANSPORT}}.
 
 # ACK_FREQUENCY Frame
 
@@ -180,23 +180,17 @@ signals the frequency it wants to receive ACK frames to its peer using an
 ACK_FREQUENCY frame, shown below:
 
 ~~~
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                            0xaf (i)                         ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                      Sequence Number (i)                    ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                  Ack-Eliciting Threshold (i)                ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    Request Max Ack Delay (i)                ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| Ignore Order (8)|
-+-+-+-+-+-+-+-+-+-+
+ACK_FREQUENCY Frame {
+  Type (i) = 0xaf,
+  Sequence Number (i),
+  Ack-Eliciting Threshold (i),
+  Request Max Ack Delay (i),
+  Ignore Order (8),
+}
 ~~~
 
-Following the common frame format described in Section 12.4 of
-{{QUIC-TRANSPORT}}, ACK_FREQUENCY frames have a type of 0xaf, and contain the
+Following the common frame format described in {{Section 12.4 of
+QUIC-TRANSPORT}}, ACK_FREQUENCY frames have a type of 0xaf, and contain the
 following fields:
 
 Sequence Number:
@@ -219,7 +213,7 @@ Request Max Ack Delay:
 
 : A variable-length integer representing the value to which the endpoint
   requests the peer update its `max_ack_delay`
-  (Section 18.2 of {{QUIC-TRANSPORT}}). The value of this field is in
+  ({{Section 18.2 of QUIC-TRANSPORT}}). The value of this field is in
   microseconds, unlike the 'max_ack_delay' transport parameter, which is in
   milliseconds. Sending a value smaller than the `min_ack_delay` advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
@@ -227,12 +221,12 @@ Request Max Ack Delay:
 
 Ignore Order:
 
-: An 8-bit field representing a boolean truth value. This field MUST have the
-  value 0x00 (representing `false`) or 0x01 (representing `true`). This field
-  can be set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer observes reordering ({{reordering}}). Receipt
-  of any other value MUST be treated as a connection error of type
-  FRAME_ENCODING_ERROR.
+: An 8-bit field representing a boolean truth value. This field is
+  set to `true` by an endpoint that does not wish to receive an immediate
+  acknowledgement when the peer observes reordering ({{reordering}}).
+  The value of this field MUST be 0x00 (representing `false`) or 0x01 
+  (representing `true`).  Receipt of any other value MUST be treated
+  as a connection error of type FRAME_ENCODING_ERROR.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
@@ -256,7 +250,7 @@ for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
 increasing value thereafter.
 
 An endpoint MUST allow reordered ACK_FREQUENCY frames to be received and
-processed, see Section 13.3 of {{QUIC-TRANSPORT}}.
+processed, see {{Section 13.3 of QUIC-TRANSPORT}}.
 
 On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
 immediately record all values from the frame. The sequence number of the frame
@@ -276,11 +270,28 @@ frame is more recent than any previous ones, as follows:
   delaying acknowledgements; see {{sending}}. The endpoint MUST also replace the
   recorded sequence number.
 
+# IMMEDIATE_ACK Frame
+
+The IMMEDIATE_ACK Frame is a frame which causes the peer to send a
+packet containing an ACK frame immediately, similar to the receipt of Initial
+and Handshake packets during the QUIC handshake.
+
+Receivers of the IMMEDIATE_ACK frame MAY choose to delay sending the ACK
+if the vast majority of received packets contain an IMMEDIATE_ACK or the
+receiver is under heavy load.  Senders MAY include multiple IMMEDIATE_ACK
+frames in a single QUIC packet, but the behavior is identical to a single
+IMMEDIATE_ACK frame.
+
+~~~
+IMMEDIATE_ACK Frame {
+  Type (i) = 0xac,
+}
+~~~
 
 # Sending Acknowledgments {#sending}
 
 Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
-specified in Section 13.2.1 of {{QUIC-TRANSPORT}}.
+specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
 and `Ack-Eliciting Threshold` values ({{multiple-frames}}), the endpoint MUST send an
@@ -301,11 +312,11 @@ to delaying of acknowledgments are reset.
 
 The receiver of an ACK_FREQUENCY frame can continue to process multiple available
 packets before determining whether to send an ACK frame in response, as stated in
-Section 13.2.2 of {{QUIC-TRANSPORT}.
+{{Section 13.2.2 of QUIC-TRANSPORT}}.
 
 ## Response to Reordering {#reordering}
 
-As specified in Section 13.2.1 of {{QUIC-TRANSPORT}}, endpoints are expected to
+As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
@@ -351,8 +362,8 @@ met and an acknowledgement is to be sent in response.
 # Computation of Probe Timeout Period
 
 On sending an update to the peer's `max_ack_delay`, an endpoint can use this new
-value in later computations of its Probe Timeout (PTO) period; see Section 5.2.1
-of {{QUIC-RECOVERY}}. The endpoint MUST however wait until the ACK_FREQUENCY
+value in later computations of its Probe Timeout (PTO) period; see {{Section 5.2.1
+of QUIC-RECOVERY}}. The endpoint MUST however wait until the ACK_FREQUENCY
 frame that carries this new value is acknowledged by the peer.
 
 Until the frame is acknowledged, the endpoint MUST use the greater of the
