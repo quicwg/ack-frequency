@@ -9,7 +9,6 @@ area: Transport
 workgroup: QUIC
 
 stand_alone: yes
-pi: [toc, sortrefs, symrefs, docmapping]
 
 author:
   -
@@ -334,10 +333,14 @@ acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
 
-As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, an endpoint SHOULD
-immediately acknowledge packets marked with the ECN Congestion Experienced (CE)
-codepoint in the IP header. Doing so reduces the peer's response time to
-congestion events.
+An endpoint SHOULD send an immediate acknowledgement when a packet marked
+with the ECN Congestion Experienced (CE) codepoint in the IP header is
+received and the previously received packet was not marked CE.
+
+Doing this maintains the peer's response time to congestion events, while also
+reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
+extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
+congestion controllers that mark more frequently than classic ECN {{?RFC3168}}.
 
 ## Batch Processing of Packets {#batch}
 
