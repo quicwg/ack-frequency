@@ -206,7 +206,7 @@ Ack-Eliciting Threshold:
   acknowledgment. An immediate acknowledgement is sent when more than this
   number of ack-eliciting packets have been received, so value of 0 results in
   an immediate acknowledgement. If an endpoint receives an ACK-Eliciting
-  Threshold value that is larger than the maximum value it can represent, the
+  Threshold value that is larger than the maximum value the endpoint can represent, the
   endpoint MUST use the largest representable value instead.
 
 Request Max Ack Delay:
