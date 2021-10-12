@@ -394,7 +394,7 @@ to be detected at the sender.
 An ACK_Frequency frame allows a sender to reduce the periodicity
 of RTT measuments and could also postpone reporting loss. 
 
-## Congestion Response {#congestion-res}
+## Congestion Response {#congestion-response}
 A sender needs to be responsive to congestion notification (e.g., loss or ECN marking), to 
 enable it to reduce the rate  of transmission when there is potential congestion.
 
