@@ -126,7 +126,7 @@ endpoint performance in the following ways:
   such links, reducing the number of acknowledgments allows connection
   throughput to scale much further.
 
-As discussed in {{implementation}} however, there are undesirable consequences
+As discussed in {{implementation}} however, there can be undesirable consequences
 to congestion control and loss recovery if a receiver uniltaerally reduces the
 acknowledgment frequency. A sender's constraints on the acknowledgement
 frequency need to be taken into account to maximize congestion controller and
