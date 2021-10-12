@@ -9,7 +9,6 @@ area: Transport
 workgroup: QUIC
 
 stand_alone: yes
-pi: [toc, sortrefs, symrefs, docmapping]
 
 author:
   -
@@ -337,11 +336,6 @@ acknowledgements.
 An endpoint SHOULD send an immediate acknowledgement when a packet marked
 with the ECN Congestion Experienced (CE) codepoint in the IP header is
 received and the previously received packet was not marked CE.
-
-An endpoint SHOULD also acknowledge packets received with a CE mark as though
-they were ack-eliciting, even if they are not ack-eliciting.  This ensures
-feedback on CE is received in a timely manner when most packets are
-not ack-eliciting.
 
 Doing this reduces the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
