@@ -202,12 +202,12 @@ Sequence Number:
 Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets the recipient of this frame can receive before sending an immediate
-  acknowledgment. A value of 0 will result in an immediate acknowledgement
-  whenever an ack-eliciting packet received. If an endpoint
-  receives an ACK-eliciting threshold value that is larger than the maximum
-  value it can represent, the endpoint MUST use the largest representable
-  value instead.
+  packets the recipient of this frame can receive without sending an immediate
+  acknowledgment. An immediate acknowledgement is sent when more than this
+  number of ack-eliciting packets have been received, so value of 0 results in
+  an immediate acknowledgement. If an endpoint receives an ACK-Eliciting
+  Threshold value that is larger than the maximum value the endpoint can represent, the
+  endpoint MUST use the largest representable value instead.
 
 Request Max Ack Delay:
 
