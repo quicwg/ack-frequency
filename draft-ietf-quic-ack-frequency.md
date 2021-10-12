@@ -337,7 +337,7 @@ An endpoint SHOULD send an immediate acknowledgement when a packet marked
 with the ECN Congestion Experienced (CE) codepoint in the IP header is
 received and the previously received packet was not marked CE.
 
-Doing this reduces the peer's response time to congestion events, while also
+Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
 congestion controllers that mark much more frequently than classic ECN {{?RFC3168}}.
