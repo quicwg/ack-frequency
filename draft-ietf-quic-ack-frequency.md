@@ -231,7 +231,7 @@ Ignore ECN:
 
 : A single bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer observes ECN marking ({{reordering}}).
+  acknowledgement when the peer receives CE-marked packets ({{reordering}}).
   0 represenets 'false' and 1 represents 'true'.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
