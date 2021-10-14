@@ -411,6 +411,27 @@ performance if acknowledgments are delayed excessively.  Similarly, if these
 controllers rely on the timing of peer acknowledgments (an "ACK clock"),
 delaying acknowledgments will cause undesirable bursts of data into the network.
 
+## Connection Migration {#migration}
+To ensure confirmation of connection migration is not delayed,
+clients can bundle an IMMEDIATE_ACK frame with the first non-probing
+frame ({{Section 9.2 of QUIC-TRANSPORT}}) they send or they can send
+simply send an IMMEDIATE_ACK frame, which is a non-probing frame.
+
+Endpoints who wish to migrate need to consider the effects of the
+current ACK_FREQUENCY parameters and how they affect the connection
+after migration.  It's common for an implementation to reset its
+congestion controller when a connection is migrated, which may lead to
+undesirable performance if the acknowledgement behavior isn't reset
+by the peer with a new ACK_FREQUENCY frame.
+
+## Path MTU Discovery {#path-mtu-discovery}
+An endpoint performing path MTU discovery will need to consider the
+currently acknowledged value of Request Max Ack Delay to avoid
+erroneously declaring a PMTUD probe packet lost.  The sender can
+bundle IMMEDIATE_ACK with its PTMUD probe to make sure an
+acknowledgement isn't delayed by Max Ack Delay.
+
+
 # Security Considerations
 TBD.
 
