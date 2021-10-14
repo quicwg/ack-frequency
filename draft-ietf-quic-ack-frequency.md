@@ -227,7 +227,7 @@ Ignore Order:
   acknowledgement when the peer observes reordering ({{reordering}}).
   0 represents 'false' and 1 represents 'true'.
   
-Ignore ECN:
+Ignore CE:
 
 : A single bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
