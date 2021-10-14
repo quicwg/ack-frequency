@@ -229,7 +229,7 @@ Ignore Order:
   
 Ignore ECN:
 
-: An single bit field representing a boolean truth value. This field is
+: A single bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
   acknowledgement when the peer observes ECN marking ({{reordering}}).
   0 represenets 'false' and 1 represents 'true'.
