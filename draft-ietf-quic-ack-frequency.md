@@ -419,8 +419,7 @@ simply send an IMMEDIATE_ACK frame, which is a non-probing frame.
 
 Endpoints who wish to migrate need to consider the effects of the
 current ACK_FREQUENCY parameters and how they affect the connection
-after migration.  It's common for an implementation to reset its
-congestion controller when a connection is migrated, which may lead to
+after migration.  The congestion controller and rtt estimator are reset upon migration ({{Section 9.4 of QUIC-TRANSPORT}}), which may lead to
 undesirable performance if the acknowledgement behavior isn't updated
 by the peer with a new ACK_FREQUENCY frame.
 
