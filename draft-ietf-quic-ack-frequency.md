@@ -421,7 +421,7 @@ Endpoints who wish to migrate need to consider the effects of the
 current ACK_FREQUENCY parameters and how they affect the connection
 after migration.  It's common for an implementation to reset its
 congestion controller when a connection is migrated, which may lead to
-undesirable performance if the acknowledgement behavior isn't reset
+undesirable performance if the acknowledgement behavior isn't updated
 by the peer with a new ACK_FREQUENCY frame.
 
 ## Path MTU Discovery {#path-mtu-discovery}
