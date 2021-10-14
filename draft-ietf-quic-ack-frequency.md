@@ -412,7 +412,7 @@ controllers rely on the timing of peer acknowledgments (an "ACK clock"),
 delaying acknowledgments will cause undesirable bursts of data into the network.
 
 ## Connection Migration {#migration}
-To ensure confirmation of connection migration is not delayed,
+To avoid additional delays to connection migration confirmation when using this extension,
 clients can bundle an IMMEDIATE_ACK frame with the first non-probing
 frame ({{Section 9.2 of QUIC-TRANSPORT}}) they send or they can
 simply send an IMMEDIATE_ACK frame, which is a non-probing frame.
