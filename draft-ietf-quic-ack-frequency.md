@@ -185,6 +185,7 @@ ACK_FREQUENCY Frame {
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
   Request Max Ack Delay (i),
+  Reserved (6),
   Ignore Order (1),
   Ignore ECN (1),
 }
