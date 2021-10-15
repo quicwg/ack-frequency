@@ -417,9 +417,12 @@ clients can bundle an IMMEDIATE_ACK frame with the first non-probing
 frame ({{Section 9.2 of QUIC-TRANSPORT}}) they send or they can
 simply send an IMMEDIATE_ACK frame, which is a non-probing frame.
 
-Endpoints who wish to migrate need to consider the effects of the
-current ACK_FREQUENCY parameters and how they affect the connection
-after migration.  Once the congestion controller and rtt estimator are reset upon migration ({{Section 9.4 of QUIC-TRANSPORT}}), an updated ACK_FREQUENCY frame SHOULD be sent to reflect the new rtt and congestion control parameters.
+An endpoint's congestion controller and RTT estimator are reset upon
+confirmation of migration ({{Section 9.4 of QUIC-TRANSPORT}}), which can have
+adverse impact on the number of acknowledgements received after migration. An
+endpoint that has sent an ACK_FREQUENCY frame earlier in the connection SHOULD
+update and send a new ACK_FREQUENCY frame immediately upon confirmation of
+connection migration.
 
 ## Path MTU Discovery {#path-mtu-discovery}
 An endpoint performing path MTU discovery will need to consider the
