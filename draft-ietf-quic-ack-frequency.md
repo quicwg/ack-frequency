@@ -425,11 +425,9 @@ update and send a new ACK_FREQUENCY frame immediately upon confirmation of
 connection migration.
 
 ## Path MTU Discovery {#path-mtu-discovery}
-An endpoint performing path MTU discovery will need to consider the
-currently acknowledged value of Request Max Ack Delay to avoid
-erroneously declaring a PMTUD probe packet lost.  The sender can
-bundle IMMEDIATE_ACK with its PTMUD probe to make sure an
-acknowledgement isn't delayed by Max Ack Delay.
+A sender might use timers to detect loss of PMTUD probe packets. A sender
+SHOULD bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering
+such timers.
 
 
 # Security Considerations
