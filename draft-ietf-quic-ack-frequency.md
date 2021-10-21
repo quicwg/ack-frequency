@@ -411,6 +411,25 @@ performance if acknowledgments are delayed excessively.  Similarly, if these
 controllers rely on the timing of peer acknowledgments (an "ACK clock"),
 delaying acknowledgments will cause undesirable bursts of data into the network.
 
+## Connection Migration {#migration}
+To avoid additional delays to connection migration confirmation when using this
+extension, a client can bundle an IMMEDIATE_ACK frame with the first non-probing
+frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can simply send an
+IMMEDIATE_ACK frame, which is a non-probing frame.
+
+An endpoint's congestion controller and RTT estimator are reset upon
+confirmation of migration ({{Section 9.4 of QUIC-TRANSPORT}}), which can
+impact the number of acknowledgements received after migration. An
+endpoint that has sent an ACK_FREQUENCY frame earlier in the connection SHOULD
+update and send a new ACK_FREQUENCY frame immediately upon confirmation of
+connection migration.
+
+## Path MTU Discovery {#path-mtu-discovery}
+A sender might use timers to detect loss of PMTUD probe packets. A sender
+SHOULD bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering
+such timers.
+
+
 # Security Considerations
 TBD.
 
