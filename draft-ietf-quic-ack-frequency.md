@@ -220,6 +220,12 @@ Request Max Ack Delay:
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
   connection error of type PROTOCOL_VIOLATION.
 
+Reserved:
+
+: This field has no meaning in this version of ACK_FREQUENCY.  The value of this
+  field MUST be 0x00. Receipt of any other value MUST be treated as a
+  connection error of type FRAME_ENCODING_ERROR.
+
 Ignore Order:
 
 : A 1-bit field representing a boolean truth value. This field is
