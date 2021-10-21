@@ -184,7 +184,9 @@ ACK_FREQUENCY Frame {
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
   Request Max Ack Delay (i),
-  Ignore Order (8),
+  Reserved (6),
+  Ignore CE (1),
+  Ignore Order (1)
 }
 ~~~
 
@@ -218,14 +220,25 @@ Request Max Ack Delay:
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
   connection error of type PROTOCOL_VIOLATION.
 
+Reserved:
+
+: This field has no meaning in this version of ACK_FREQUENCY.  The value of this
+  field MUST be 0x00. Receipt of any other value MUST be treated as a
+  connection error of type FRAME_ENCODING_ERROR.
+
 Ignore Order:
 
-: An 8-bit field representing a boolean truth value. This field is
+: A 1-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
   acknowledgement when the peer observes reordering ({{reordering}}).
-  The value of this field MUST be 0x00 (representing `false`) or 0x01
-  (representing `true`).  Receipt of any other value MUST be treated
-  as a connection error of type FRAME_ENCODING_ERROR.
+  0 represents 'false' and 1 represents 'true'.
+  
+Ignore CE:
+
+: A 1-bit field representing a boolean truth value. This field is
+  set to `true` by an endpoint that does not wish to receive an immediate
+  acknowledgement when the peer receives CE-marked packets ({{reordering}}).
+  0 represents 'false' and 1 represents 'true'.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
