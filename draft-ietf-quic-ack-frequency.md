@@ -9,7 +9,6 @@ area: Transport
 workgroup: QUIC
 
 stand_alone: yes
-pi: [toc, sortrefs, symrefs, docmapping]
 
 author:
   -
@@ -126,7 +125,7 @@ endpoint performance in the following ways:
   such links, reducing the number of acknowledgments allows connection
   throughput to scale much further.
 
-As discussed in {{implementation}} however, there are undesirable consequences
+As discussed in {{implementation}} however, there can be undesirable consequences
 to congestion control and loss recovery if a receiver uniltaerally reduces the
 acknowledgment frequency. A sender's constraints on the acknowledgement
 frequency need to be taken into account to maximize congestion controller and
@@ -204,12 +203,12 @@ Sequence Number:
 Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets the recipient of this frame can receive before sending an immediate
-  acknowledgment. A value of 0 will result in an immediate acknowledgement
-  whenever an ack-eliciting packet received. If an endpoint
-  receives an ACK-eliciting threshold value that is larger than the maximum
-  value it can represent, the endpoint MUST use the largest representable
-  value instead.
+  packets the recipient of this frame can receive without sending an immediate
+  acknowledgment. An immediate acknowledgement is sent when more than this
+  number of ack-eliciting packets have been received, so value of 0 results in
+  an immediate acknowledgement. If an endpoint receives an ACK-Eliciting
+  Threshold value that is larger than the maximum value the endpoint can represent, the
+  endpoint MUST use the largest representable value instead.
 
 Request Max Ack Delay:
 
@@ -341,10 +340,14 @@ acknowledgements.
 
 ## Expediting Congestion Signals {#congestion}
 
-As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, an endpoint SHOULD
-immediately acknowledge packets marked with the ECN Congestion Experienced (CE)
-codepoint in the IP header. Doing so reduces the peer's response time to
-congestion events.
+An endpoint SHOULD send an immediate acknowledgement when a packet marked
+with the ECN Congestion Experienced (CE) codepoint in the IP header is
+received and the previously received packet was not marked CE.
+
+Doing this maintains the peer's response time to congestion events, while also
+reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
+extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
+congestion controllers that mark more frequently than classic ECN {{?RFC3168}}.
 
 ## Batch Processing of Packets {#batch}
 
@@ -414,6 +417,25 @@ additional data into the network.  Such controllers will suffer degraded
 performance if acknowledgments are delayed excessively.  Similarly, if these
 controllers rely on the timing of peer acknowledgments (an "ACK clock"),
 delaying acknowledgments will cause undesirable bursts of data into the network.
+
+## Connection Migration {#migration}
+To avoid additional delays to connection migration confirmation when using this
+extension, a client can bundle an IMMEDIATE_ACK frame with the first non-probing
+frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can simply send an
+IMMEDIATE_ACK frame, which is a non-probing frame.
+
+An endpoint's congestion controller and RTT estimator are reset upon
+confirmation of migration ({{Section 9.4 of QUIC-TRANSPORT}}), which can
+impact the number of acknowledgements received after migration. An
+endpoint that has sent an ACK_FREQUENCY frame earlier in the connection SHOULD
+update and send a new ACK_FREQUENCY frame immediately upon confirmation of
+connection migration.
+
+## Path MTU Discovery {#path-mtu-discovery}
+A sender might use timers to detect loss of PMTUD probe packets. A sender
+SHOULD bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering
+such timers.
+
 
 # Security Considerations
 TBD.
