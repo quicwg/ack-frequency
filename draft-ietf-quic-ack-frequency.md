@@ -413,7 +413,7 @@ delaying acknowledgments will cause undesirable bursts of data into the network.
 
 ## Connection Migration {#migration}
 To avoid additional delays to connection migration confirmation when using this
-extension, clients can bundle an IMMEDIATE_ACK frame with the first non-probing
+extension, a client can bundle an IMMEDIATE_ACK frame with the first non-probing
 frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can simply send an
 IMMEDIATE_ACK frame, which is a non-probing frame.
 
