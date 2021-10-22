@@ -316,7 +316,7 @@ acknowledgement when one of the following conditions are met:
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
 
-{{reordering}}, {{congestion}}, and {{batch}} describe exceptions to this
+{{out-of-order}}, {{congestion}}, and {{batch}} describe exceptions to this
 strategy.
 
 An endpoint is expected to bundle acknowledgements when possible. Every time an
