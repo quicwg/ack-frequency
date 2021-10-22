@@ -231,9 +231,11 @@ Ignore CE:
 Reordering Threshold:
 
 : A 7-bit field representing an unsigned integer that indicates how out of order
-  packets can arrive before eliciting an immediate ACK. This field defaults to 3,
-  the recommended packet threhold for loss detection in
-  ({{Section 18.2 of QUIC-RECOVERY}}).
+  packets can arrive before eliciting an immediate ACK. If no ACK_FREQUENCY
+  frames have been received, this value defaults to 3, which is the recommended
+  packet threhold for loss detection in ({{Section 18.2 of QUIC-RECOVERY}}).
+  A value of 0 indicates immediate ACKs should never be sent due to receiving
+  an out-of-order packet.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
