@@ -133,9 +133,9 @@ loss recovery performance.
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
 mechanism that a receiver can use: send an acknowledgement for every other
-packet, and for every packet when reordering is observed. This simple mechanism
-does not allow a sender to signal its constraints. This extension provides a
-mechanism to solve this problem.
+packet, and for every packet when an out of order packet is received. This
+simple mechanism does not allow a sender to signal its constraints. This
+extension provides a mechanism to solve this problem.
 
 # Negotiating Extension Use
 
@@ -231,14 +231,14 @@ Ignore Order:
 
 : A 1-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer observes reordering ({{reordering}}).
-  0 represents 'false' and 1 represents 'true'.
+  acknowledgement when the peer receives an out of order packet
+  ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
   
 Ignore CE:
 
 : A 1-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer receives CE-marked packets ({{reordering}}).
+  acknowledgement when the peer receives CE-marked packets ({{out-of-order}}).
   0 represents 'false' and 1 represents 'true'.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
@@ -327,7 +327,7 @@ The receiver of an ACK_FREQUENCY frame can continue to process multiple availabl
 packets before determining whether to send an ACK frame in response, as stated in
 {{Section 13.2.2 of QUIC-TRANSPORT}}.
 
-## Response to Reordering {#reordering}
+## Response to Out of Order Packets {#out-of-order}
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
