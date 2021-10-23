@@ -346,7 +346,8 @@ acknowledgements.
 If the most recent value of 'Reordering Threshold' is not 0x00, then in addition
 to the immediate acknowledgement when reordering is detected, an additional
 immediate acknowledgement is sent when the peer can detect missing packets as
-lost.  This can speed up loss detection and loss recovery.
+lost.  This can speed up time threshold loss detection and therefore loss
+recovery.
 
 Every time an ACK frame is sent, the 'Largest Acknowledged' is saved in a local
 value (ie: largest_acknowledged_sent).  When a new packet is received in order,
