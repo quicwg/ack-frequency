@@ -330,16 +330,30 @@ send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
 If the endpoint has not yet received an ACK_FREQUENCY frame, or if the most
-recent frame received from the peer has an `Ignore Order` value of `false`
-(0x00), the endpoint MUST immediately acknowledge any subsequent packets that
+recent frame received from the peer has a `Reordering Threshold` value that is
+not 0x00, the endpoint MUST immediately acknowledge any subsequent packets that
 are received out of order.
 
-If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
-Order` value of `true` (0x01), the endpoint does not make this exception. That
+If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
+Threshold` value of 0x00, the endpoint does not make this exception. That
 is, the endpoint MUST NOT send an immediate acknowledgement in response to
 packets received out of order, and instead continues to use the peer's
 `Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
 acknowledgements.
+
+### Reordering Threshold
+
+If the most recent value of 'Reordering Threshold' is not 0x00, then in addition
+to the immediate acknowledgement when reordering is detected, an additional
+immediate acknowledgement is sent when the peer can detect missing packets as
+lost.  This can speed up loss detection and loss recovery.
+
+Every time an ACK frame is sent, the 'Largest Acknowledged' is saved in a local
+value (ie: largest_acknowledged_sent).  When a new packet is received in order,
+if there are any missing packets in the range
+'[largest_acknowledged_sent - Reordering Threshold,
+largest_acknowledged - Reordering Threshold],' send an immediate ACK.
+
 
 ## Expediting Congestion Signals {#congestion}
 
