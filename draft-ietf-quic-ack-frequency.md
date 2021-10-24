@@ -133,7 +133,8 @@ loss recovery performance.
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
 mechanism that a receiver can use: send an acknowledgement for every other
-packet, and for every packet when an out of order packet is received. This
+packet, and for every packet that is received out of order (Section
+13.2.1 of {{QUIC-TRANSPORT}}). This
 simple mechanism does not allow a sender to signal its constraints. This
 extension provides a mechanism to solve this problem.
 
@@ -231,7 +232,7 @@ Ignore Order:
 
 : A 1-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer receives an out of order packet
+  acknowledgement when the peer receives a packet out of order
   ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
   
 Ignore CE:
@@ -327,7 +328,7 @@ The receiver of an ACK_FREQUENCY frame can continue to process multiple availabl
 packets before determining whether to send an ACK frame in response, as stated in
 {{Section 13.2.2 of QUIC-TRANSPORT}}.
 
-## Response to Out of Order Packets {#out-of-order}
+## Response to Out-of-Order Packets {#out-of-order}
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
