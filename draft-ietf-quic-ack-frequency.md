@@ -453,14 +453,17 @@ acknowledgement therefore delays this method of detecting losses.
 Reducing acknowledgement frequency reduces the number of RTT samples that a
 sender receives (Section 5 of {{QUIC-RECOVERY}}), making a sender's RTT estimate
 less responsive to changes in the path's RTT. As a result, any mechanisms that
-rely on an accurate RTT estimate, such as the time-based loss threshold or the
-Probe Timeout, will be less responsive to changes in the path's RTT.
+rely on an accurate RTT estimate, such as time-threshold loss detection (Section
+6.1.2 of {{QUIC-RECOVERY}}) or Probe Timeout (Section 6.2 of {{QUIC-RECOVERY}}),
+will be less responsive to changes in the path's RTT, resulting in either
+delayed or unnecessary packet transmissions.
 
-To limit delays to loss detection, a sender SHOULD cause a receiver to send an
-acknowledgement at least once per RTT. A sender can accomplish this by sending
-an IMMEDIATE_ACK frame once per round-trip time (RTT), or it can set the
-Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
-congestion window and an estimated RTT, respectively.
+To limit these consequences of reduced acknowledgement frequency, a sender
+SHOULD cause a receiver to send an acknowledgement at least once per RTT. A
+sender can accomplish this by sending an IMMEDIATE_ACK frame once per round-trip
+time (RTT), or it can set the Ack-Eliciting Threshold and Request Max Ack Delay
+values to be no more than a congestion window and an estimated RTT,
+respectively.
 
 A sender might use timers to detect loss of PMTUD probe packets. A sender SHOULD
 bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering such
