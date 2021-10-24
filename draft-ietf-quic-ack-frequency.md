@@ -222,8 +222,7 @@ Request Max Ack Delay:
   
 Ignore CE:
 
-: A 7-bit field representing an unsigned integer that indicates how out of order
-  packets can arrive before eliciting an immediate ACk. This field is
+: A 1-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
   acknowledgement when the peer receives CE-marked packets ({{reordering}}).
   0 represents 'false' and 1 represents 'true'.
