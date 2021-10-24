@@ -418,9 +418,9 @@ the network, and will suffer degraded performance if acknowledgments are delayed
 excessively.
 
 To enable a sender to respond to potential network congestion, a sender SHOULD
-cause a receiver to send an acknowledgement at least once per RTT. A sender
-could accomplish this by sending an IMMEDIATE_ACK frame once per round-trip time
-(RTT), or it could set the Ack-Eliciting Threshold and Request Max Ack Delay
+cause a receiver to send an acknowledgement at least once per RTT. A sender can
+accomplish this by sending an IMMEDIATE_ACK frame once per round-trip time
+(RTT), or it can set the Ack-Eliciting Threshold and Request Max Ack Delay
 values to be no more than a congestion window and an estimated RTT,
 respectively.
 
@@ -457,7 +457,10 @@ rely on an accurate RTT estimate, such as the time-based loss threshold or the
 Probe Timeout, will be less responsive to changes in the path's RTT.
 
 To limit delays to loss detection, a sender SHOULD cause a receiver to send an
-acknowledgement at least once per RTT.
+acknowledgement at least once per RTT. A sender can accomplish this by sending
+an IMMEDIATE_ACK frame once per round-trip time (RTT), or it can set the
+Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
+congestion window and an estimated RTT, respectively.
 
 A sender might use timers to detect loss of PMTUD probe packets. A sender SHOULD
 bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering such
