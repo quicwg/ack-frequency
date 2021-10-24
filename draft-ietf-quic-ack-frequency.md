@@ -204,13 +204,10 @@ Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
   packets the recipient of this frame can receive without sending an immediate
-  acknowledgment. An immediate acknowledgement is sent when more than this
-  number of ack-eliciting packets have been received, so value of 0 results in
-  an immediate acknowledgement.  An endpoint might use a local representation
-  for this value that is smaller than 64 bits for optimization purposes. If it
-  does so, and if it receives an ACK-Eliciting Threshold value that is larger
-  than the maximum value it can represent locally, the endpoint can use the
-  largest representable value instead.
+  acknowledgment. In other words, an acknowledgement is sent when more than this
+  number of ack-eliciting packets have been received. Since this is a maximum
+  value, a receiver can send an acknowledgement earlier. A value of 0 results in
+  a receiver acknowledgement every ack-eliciting packet immediately.
 
 Request Max Ack Delay:
 
