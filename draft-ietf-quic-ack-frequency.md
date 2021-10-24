@@ -297,10 +297,9 @@ The IMMEDIATE_ACK frame helps mitigate this problem. An endpoint SHOULD send a
 packet containing an ACK frame immediately upon receiving an IMMEDIATE_ACK
 frame.
 
-An endpoint MAY use discretion and delay sending an ACK frame despite receiving
-an IMMEDIATE_ACK frame. For example, an endpoint might do this if the vast
-majority of received packets contain an IMMEDIATE_ACK or if the endpoint is
-under heavy load.
+An endpoint MAY delay sending an ACK frame despite receiving an IMMEDIATE_ACK
+frame. For example, an endpoint might do this if the vast majority of received
+packets contain an IMMEDIATE_ACK or if the endpoint is under heavy load.
 
 ~~~
 IMMEDIATE_ACK Frame {
