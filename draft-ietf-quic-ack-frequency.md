@@ -482,12 +482,6 @@ the number of acknowledgements received after migration. An endpoint that has
 sent an ACK_FREQUENCY frame earlier in the connection SHOULD update and send a
 new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 
-## Path MTU Discovery {#path-mtu-discovery}
-
-A sender might use timers to detect loss of PMTUD probe packets. A sender SHOULD
-bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering such
-timers.
-
 
 # Security Considerations
 TBD.
