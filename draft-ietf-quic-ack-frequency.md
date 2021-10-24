@@ -234,7 +234,7 @@ Ignore Order:
   set to `true` by an endpoint that does not wish to receive an immediate
   acknowledgement when the peer receives a packet out of order
   ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
-  
+
 Ignore CE:
 
 : A 1-bit field representing a boolean truth value. This field is
@@ -284,23 +284,30 @@ frame is more recent than any previous ones, as follows:
   delaying acknowledgements; see {{sending}}. The endpoint MUST also replace the
   recorded sequence number.
 
+
 # IMMEDIATE_ACK Frame
 
-The IMMEDIATE_ACK Frame is a frame which causes the peer to send a
-packet containing an ACK frame immediately, similar to the receipt of Initial
-and Handshake packets during the QUIC handshake.
+A sender can use an ACK_FREQUENCY frame to reduce the number of acknowledgements
+sent by a receiver, but doing so increases the chances that time-sensitive
+feedback is delayed as well. For example, as described in {{loss}}, delaying
+acknowledgements can hurt a connection's performance by delaying the sender from
+detecting packet loss.
 
-Receivers of the IMMEDIATE_ACK frame MAY choose to delay sending the ACK
-if the vast majority of received packets contain an IMMEDIATE_ACK or the
-receiver is under heavy load.  Senders MAY include multiple IMMEDIATE_ACK
-frames in a single QUIC packet, but the behavior is identical to a single
-IMMEDIATE_ACK frame.
+The IMMEDIATE_ACK frame helps mitigate this problem. An endpoint SHOULD send a
+packet containing an ACK frame immediately upon receiving an IMMEDIATE_ACK
+frame.
+
+An endpoint MAY use discretion and delay sending an ACK frame despite receiving
+an IMMEDIATE_ACK frame. For example, an endpoint might do this if the vast
+majority of received packets contain an IMMEDIATE_ACK or if the endpoint is
+under heavy load.
 
 ~~~
 IMMEDIATE_ACK Frame {
   Type (i) = 0xac,
 }
 ~~~
+
 
 # Sending Acknowledgments {#sending}
 
