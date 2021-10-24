@@ -133,9 +133,10 @@ loss recovery performance.
 
 {{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
 mechanism that a receiver can use: send an acknowledgement for every other
-packet, and for every packet when reordering is observed. This simple mechanism
-does not allow a sender to signal its constraints. This extension provides a
-mechanism to solve this problem.
+packet, and for every packet that is received out of order (Section
+13.2.1 of {{QUIC-TRANSPORT}}). This
+simple mechanism does not allow a sender to signal its constraints. This
+extension provides a mechanism to solve this problem.
 
 # Negotiating Extension Use
 
@@ -145,7 +146,8 @@ sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
 min_ack_delay (0xff03de1a):
 
 : A variable-length integer representing the minimum amount of time in
-  microseconds by which the endpoint can delay an acknowledgement.
+  microseconds by which the endpoint can delay an acknowledgement. This limit
+  could be based on the receiver's clock or timer granularity.
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
@@ -229,14 +231,14 @@ Ignore Order:
 
 : A 1-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer observes reordering ({{reordering}}).
-  0 represents 'false' and 1 represents 'true'.
-
+  acknowledgement when the peer receives a packet out of order
+  ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
+  
 Ignore CE:
 
 : A 1-bit field representing a boolean truth value. This field is
   set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer receives CE-marked packets ({{reordering}}).
+  acknowledgement when the peer receives CE-marked packets ({{out-of-order}}).
   0 represents 'false' and 1 represents 'true'.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
@@ -314,7 +316,7 @@ acknowledgement when one of the following conditions are met:
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
 
-{{reordering}}, {{congestion}}, and {{batch}} describe exceptions to this
+{{out-of-order}}, {{congestion}}, and {{batch}} describe exceptions to this
 strategy.
 
 An endpoint is expected to bundle acknowledgements when possible. Every time an
@@ -325,7 +327,7 @@ The receiver of an ACK_FREQUENCY frame can continue to process multiple availabl
 packets before determining whether to send an ACK frame in response, as stated in
 {{Section 13.2.2 of QUIC-TRANSPORT}}.
 
-## Response to Reordering {#reordering}
+## Response to Out-of-Order Packets {#out-of-order}
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
