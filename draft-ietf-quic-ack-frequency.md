@@ -424,15 +424,6 @@ sending an IMMEDIATE_ACK frame once per round-trip time (RTT), or it can set the
 Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
 congestion window and an estimated RTT, respectively.
 
-Many congestion controllers have a startup phase at the beginning of a
-connection, during which a sender seeks to quickly find an approximate but
-sustainable congestion window or bandwidth. Acknowledgments from the peer serve
-as critical feedback during this phase, and a sender can use ACK_FREQUENCY
-frames to increase the rate of feedback during this phase. For example, a sender
-could cause an ACK frame to be sent on every ack-eliciting packet to increase
-the congestion controller's robustness to loss of an ACK and to enable more
-accurate RTT tracking at the beginning of the connection.
-
 ## Burst Mitigation
 
 Receiving an acknowledgement can allow a sender to release new packets into the
