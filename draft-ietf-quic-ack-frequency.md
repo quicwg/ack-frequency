@@ -413,7 +413,7 @@ discusses some additional considerations.
 A sender needs to be responsive to notifications of congestion, such as
 a packet loss or an ECN CE marking. Also, window-based congestion controllers
 that strictly adhere to packet conservation, such as the one defined in
-{{QUIC-RECOVERY}}, rely on receipt of acknowledgments send additional data into
+{{QUIC-RECOVERY}}, rely on receipt of acknowledgments to send additional data into
 the network, and will suffer degraded performance if acknowledgments are delayed
 excessively.
 
@@ -445,7 +445,7 @@ data.
 
 ## Loss Detection and Timers {#loss}
 
-Acknowledgements are fundamental to data reliability in QUIC. Consequently,
+Acknowledgements are fundamental to reliability in QUIC. Consequently,
 delaying or reducing the frequency of acknowledgments can cause loss detection
 at the sender to be delayed.
 
