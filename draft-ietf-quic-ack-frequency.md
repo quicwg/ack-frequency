@@ -405,7 +405,7 @@ it can cause premature PTOs under packet loss when `ignore_order` is enabled.
 
 Implementers are expected to experiment with different strategies and find those
 that best suit their applications and congestion controllers. This section
-provides some bounds on a sender's choice of acknowledgment frequency and
+provides some guidance on a sender's choice of acknowledgment frequency and
 discusses some additional considerations.
 
 ## Congestion Control
@@ -418,27 +418,30 @@ the network, and will suffer degraded performance if acknowledgments are delayed
 excessively.
 
 To enable a sender to respond to potential network congestion, a sender SHOULD
-cause a receiver to send an acknowledgement at least once per RTT. A sender can
-accomplish this by sending an IMMEDIATE_ACK frame once per round-trip time
-(RTT), or it can set the Ack-Eliciting Threshold and Request Max Ack Delay
-values to be no more than a congestion window and an estimated RTT,
-respectively.
+cause a receiver to send an acknowledgement at least once per RTT if there are
+unacknowledged ack-eliciting packets in flight. A sender can accomplish this by
+sending an IMMEDIATE_ACK frame once per round-trip time (RTT), or it can set the
+Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
+congestion window and an estimated RTT, respectively.
 
 Many congestion controllers have a startup phase at the beginning of a
 connection, during which a sender seeks to quickly find an approximate but
 sustainable congestion window or bandwidth. Acknowledgments from the peer serve
 as critical feedback during this phase, and a sender can use ACK_FREQUENCY
-frames to increase the rate of feedback during this phase.
+frames to increase the rate of feedback during this phase. For example, a sender
+could cause an ACK frame to be sent on every ack-eliciting packet to increase
+the congestion controller's robustness to loss of an ACK and to enable more
+accurate RTT tracking at the beginning of the connection.
 
 ## Burst Mitigation
 
-Receiving an acknowledgement usually allows a sender to release new packets into
-the network. If a sender is designed to rely on the timing of peer
-acknowledgments ("ACK clock"), delaying acknowledgments can cause undesirable
-bursts of data into the network. A sender MUST limit such bursts. In keeping
-with Section 7.7 of {{QUIC-RECOVERY}}, a sender can either employ pacing or
-cause a receiver to send an acknowledgement for at least each initial congestion
-window of received data.
+Receiving an acknowledgement can allow a sender to release new packets into the
+network. If a sender is designed to rely on the timing of peer acknowledgments
+("ACK clock"), delaying acknowledgments can cause undesirable bursts of data
+into the network. A sender MUST limit such bursts. In keeping with Section 7.7
+of {{QUIC-RECOVERY}}, a sender can either employ pacing or cause a receiver to
+send an acknowledgement for at least each initial congestion window of received
+data.
 
 ## Loss Detection and Timers {#loss}
 
@@ -459,9 +462,10 @@ will be less responsive to changes in the path's RTT, resulting in either
 delayed or unnecessary packet transmissions.
 
 To limit these consequences of reduced acknowledgement frequency, a sender
-SHOULD cause a receiver to send an acknowledgement at least once per RTT. A
-sender can accomplish this by sending an IMMEDIATE_ACK frame once per round-trip
-time (RTT), or it can set the Ack-Eliciting Threshold and Request Max Ack Delay
+SHOULD cause a receiver to send an acknowledgement at least once per RTT if
+there are unacknowledged ack-eliciting packets in flight. A sender can
+accomplish this by sending an IMMEDIATE_ACK frame once per round-trip time
+(RTT), or it can set the Ack-Eliciting Threshold and Request Max Ack Delay
 values to be no more than a congestion window and an estimated RTT,
 respectively.
 
