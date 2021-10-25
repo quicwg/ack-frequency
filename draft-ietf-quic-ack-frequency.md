@@ -403,10 +403,10 @@ it can cause premature PTOs under packet loss when `ignore_order` is enabled.
 
 # Determining Acknowledgement Frequency {#implementation}
 
-Implementers are expected to experiment with different strategies and find those
-that best suit their applications and congestion controllers. This section
-provides some guidance on a sender's choice of acknowledgment frequency and
-discusses some additional considerations.
+This section provides some guidance on a sender's choice of acknowledgment
+frequency and discusses some additional considerations. Implementers can
+experiment with different strategies and find those that best suit their
+applications and congestion controllers.
 
 ## Congestion Control
 
