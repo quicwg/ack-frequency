@@ -290,16 +290,19 @@ frame is more recent than any previous ones, as follows:
 A sender can use an ACK_FREQUENCY frame to reduce the number of acknowledgements
 sent by a receiver, but doing so increases the chances that time-sensitive
 feedback is delayed as well. For example, as described in {{loss}}, delaying
-acknowledgements can hurt a connection's performance by delaying the sender from
-detecting packet loss.
+acknowledgements can increase the time it takes for a sender to detect packet
+loss. The IMMEDIATE_ACK frame helps mitigate this problem.
 
-The IMMEDIATE_ACK frame helps mitigate this problem. An endpoint SHOULD send a
-packet containing an ACK frame immediately upon receiving an IMMEDIATE_ACK
-frame.
+An IMMEDIATE_ACK frame can be useful in other situations as well. For example,
+it can be used with a PING frame (Section 19.2 of {{QUIC-TRANSPORT}}) if a
+sender wants an immediate RTT measurement or if a sender wants to establish
+receiver liveness as quickly as possible.
 
-An endpoint MAY delay sending an ACK frame despite receiving an IMMEDIATE_ACK
-frame. For example, an endpoint might do this if the vast majority of received
-packets contain an IMMEDIATE_ACK or if the endpoint is under heavy load.
+An endpoint SHOULD send a packet containing an ACK frame immediately upon
+receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending an ACK frame
+despite receiving an IMMEDIATE_ACK frame. For example, an endpoint might do this
+if a large number of received packets contain an IMMEDIATE_ACK or if the
+endpoint is under heavy load.
 
 ~~~
 IMMEDIATE_ACK Frame {
