@@ -468,7 +468,7 @@ timers.
 
 To avoid additional delays to connection migration confirmation when using this
 extension, a client can bundle an IMMEDIATE_ACK frame with the first non-probing
-frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can simply send an
+frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can send only an
 IMMEDIATE_ACK frame, which is a non-probing frame.
 
 An endpoint's congestion controller and RTT estimator are reset upon
