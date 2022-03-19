@@ -20,7 +20,7 @@ author:
     ins: I. Swett
     name: Ian Swett
     org: Google
-    email: ian.swett@google.com
+    email: ianswett@google.com
 
 normative:
 
