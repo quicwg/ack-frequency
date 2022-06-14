@@ -397,8 +397,11 @@ When the number of in-flight ack-eliciting packets is larger than the
 ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
 wait for its `max_ack_delay` period before sending an acknowledgement. In such
 cases, the endpoint MAY therefore exclude the peer's 'max_ack_delay' from its PTO
-calculation. Note that this optimization requires some care in implementation, since
-it can cause premature PTOs under packet loss when `ignore_order` is enabled.
+calculation.  When Ignore Order is enabled and loss causes the peer to not
+receive enough packets to trigger an immediate acknowledgement, the receiver
+will wait 'max_ack_delay', increasing the chances of a premature PTO.
+Therefore, if Ignore Order is enabled, the PTO MUST be larger than the peer's
+'max_ack_delay'.
 
 
 # Determining Acknowledgement Frequency {#implementation}
