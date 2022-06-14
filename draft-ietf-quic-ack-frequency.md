@@ -390,8 +390,8 @@ increases the peer's `max_ack_delay`.
 
 While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
-in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
-MUST use the maximum of the current value and all those in flight.
+in flight. When using `max_ack_delay` for PTO computations, endpoints MUST use
+the maximum of the current value and all those in flight.
 
 When the number of in-flight ack-eliciting packets is larger than the
 ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
