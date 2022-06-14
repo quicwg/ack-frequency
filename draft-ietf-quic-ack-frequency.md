@@ -411,18 +411,25 @@ controllers.
 ## Congestion Control
 
 A sender needs to be responsive to notifications of congestion, such as
-a packet loss or an ECN CE marking. Also, window-based congestion controllers
-that strictly adhere to packet conservation, such as the one defined in
-{{QUIC-RECOVERY}}, rely on receipt of acknowledgments to send additional data into
-the network, and will suffer degraded performance if acknowledgments are delayed
-excessively.
+a packet loss or an ECN CE marking.  To enable a sender to respond to potential
+network congestion, a sender SHOULD cause a receiver to send an acknowledgement
+at least once per RTT if there are unacknowledged ack-eliciting packets in flight.
+A sender can accomplish this by sending an IMMEDIATE_ACK frame once per
+round-trip time (RTT), or it can set the Ack-Eliciting Threshold and
+Request Max Ack Delay values to be no more than a congestion window and an
+estimated RTT, respectively.
 
-To enable a sender to respond to potential network congestion, a sender SHOULD
-cause a receiver to send an acknowledgement at least once per RTT if there are
-unacknowledged ack-eliciting packets in flight. A sender can accomplish this by
-sending an IMMEDIATE_ACK frame once per round-trip time (RTT), or it can set the
-Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
-congestion window and an estimated RTT, respectively.
+A congestion controller that is congestion window limited relies upon receiving
+acknowledgements to send additional data into the network.  An increase in
+acknowledgement delay increases the delay in sending data, which may reduce the
+achieved bandwidth.  Congestion window growth can also depend upon receiving
+acknowledgements, such as in slow start (Section 7.3.1 of {{QUIC-RECOVERY}}),
+so delaying acknowledgements delays the increase in congestion window.
+
+Window-based congestion controllers, such as the one defined in {{QUIC-RECOVERY}},
+rely on receipt of acknowledgments to send additional data into the network,
+and are degraded performance if acknowledgments are delayed excessively.
+
 
 ## Burst Mitigation
 
