@@ -365,6 +365,10 @@ reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
 congestion controllers that mark more frequently than classic ECN {{?RFC3168}}.
 
+If the most recent ACK_FREQUENCY frame an endpoint has received from the peer
+has an `Ignore CE` value of `true` (0x01), the endpoint SHOULD NOT send an
+immediate acknowledgement when receiving a CE marked packet.
+
 ## Batch Processing of Packets {#batch}
 
 For performance reasons, an endpoint can receive incoming packets from the
