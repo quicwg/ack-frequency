@@ -366,8 +366,10 @@ extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
 congestion controllers that mark more frequently than classic ECN {{?RFC3168}}.
 
 If the most recent ACK_FREQUENCY frame an endpoint has received from the peer
-has an `Ignore CE` value of `true` (0x01), the endpoint SHOULD NOT send an
-immediate acknowledgement when receiving a CE marked packet.
+has an `Ignore CE` value of `true` (0x01), receipt of a CE marked packet
+SHOULD NOT cause an endpoint to send an immediate acknowledgement.  The endpoint
+still sends an immediate acknowledgement if it would have for a non CE marked
+packet.  Otherwise, the CE marks are reported in the next acknowledgement.
 
 ## Batch Processing of Packets {#batch}
 
