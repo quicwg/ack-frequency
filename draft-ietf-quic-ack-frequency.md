@@ -424,11 +424,11 @@ acknowledgements to send additional data into the network.  An increase in
 acknowledgement delay increases the delay in sending data, which can reduce the
 achieved bandwidth.  Congestion window growth can also depend upon receiving
 acknowledgements, such as in slow start (Section 7.3.1 of {{QUIC-RECOVERY}}),
-so delaying acknowledgements delays the increase in congestion window.
+so delaying acknowledgements can delay the increase in congestion window.
 
 Window-based congestion controllers, such as the one defined in {{QUIC-RECOVERY}},
 rely on receipt of acknowledgments to send additional data into the network,
-and are degraded performance if acknowledgments are delayed excessively.
+so performance is degraded if acknowledgments are delayed excessively.
 
 
 ## Burst Mitigation
