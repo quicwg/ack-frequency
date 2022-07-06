@@ -427,7 +427,7 @@ receiver from sending an acknowledgment every RTT in time.  In these cases,
 A congestion controller that is congestion window limited relies upon receiving
 acknowledgements to send additional data into the network.  An increase in
 acknowledgement delay increases the delay in sending data, which can reduce the
-achieved bandwidth.  Congestion window growth can also depend upon receiving
+achieved throughput.  Congestion window growth can also depend upon receiving
 acknowledgements, such as in slow start ({{Section 7.3.1 of QUIC-RECOVERY}}),
 so delaying acknowledgements can delay the increase in congestion window.
 
