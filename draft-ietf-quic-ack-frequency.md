@@ -369,7 +369,7 @@ If the most recent ACK_FREQUENCY frame an endpoint has received from the peer
 has an `Ignore CE` value of `true` (0x01), receipt of a CE marked packet
 SHOULD NOT cause an endpoint to send an immediate acknowledgement.  The endpoint
 still sends an immediate acknowledgement if it would have for a non CE marked
-packet.  If an immediate acknowledgement is not send, the CE marks are reported
+packet.  If an immediate acknowledgement is not sent, the CE marks are reported
 in the next acknowledgement.
 
 The Ignore-CE bit SHOULD NOT be set if the sender sets ECT(1) in its outgoing
