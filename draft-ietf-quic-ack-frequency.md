@@ -372,9 +372,9 @@ still sends an immediate acknowledgement if it would have for a non CE marked
 packet.  If an immediate acknowledgement is not send, the CE marks are reported
 in the next acknowledgement.
 
-The Ignore-CE bit SHOULD NOT be set if ECT(1) is negotiated with DCTCP
-{{?RFC8257}} or L4S, because it delays the congestion controller's ability to
-quickly respond to congestion.
+The Ignore-CE bit SHOULD NOT be set if the sender sets ECT(1) in its outgoing
+packets, such as with L4S, because it delays the congestion controller's ability
+to quickly respond to congestion.
 
 ## Batch Processing of Packets {#batch}
 
