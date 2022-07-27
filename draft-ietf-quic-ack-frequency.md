@@ -119,11 +119,15 @@ endpoint performance in the following ways:
 - Similarly, receiving and processing UDP packets can also be CPU intensive, and
   reducing acknowledgement frequency reduces this cost at a data sender.
 
-- Severely asymmetric link technologies, such as DOCSIS, LTE, and satellite
-  links, connection throughput in the data direction becomes constrained when
-  the reverse bandwidth is filled by acknowledgment packets. When traversing
-  such links, reducing the number of acknowledgments allows connection
-  throughput to scale much further.
+- For severely asymmetric link technologies, such as DOCSIS, LTE, and satellite
+  links, connection throughput in the forward path can become constrained
+  when the reverse path is filled by acknowledgment packets. When traversing
+  such links, reducing the number of acknowledgments can achieve higher
+  connection throughput.
+
+- The rate of acknowledgment packets can impact link efficiency, including
+  transmission opportunities or battery life.
+
 
 As discussed in {{implementation}} however, there can be undesirable consequences
 to congestion control and loss recovery if a receiver uniltaerally reduces the
