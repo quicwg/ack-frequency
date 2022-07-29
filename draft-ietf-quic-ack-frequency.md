@@ -190,8 +190,7 @@ ACK_FREQUENCY Frame {
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
   Request Max Ack Delay (i),
-  Reserved (6),
-  Ignore CE (1),
+  Reserved (7),
   Ignore Order (1)
 }
 ~~~
@@ -230,13 +229,6 @@ Reserved:
 : This field has no meaning in this version of ACK_FREQUENCY.  The value of this
   field MUST be 0x00. Receipt of any other value MUST be treated as a
   connection error of type FRAME_ENCODING_ERROR.
-
-Ignore CE:
-
-: A 1-bit field representing a boolean truth value. This field is
-  set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer receives CE-marked packets ({{out-of-order}}).
-  0 represents 'false' and 1 represents 'true'.
 
 Ignore Order:
 
@@ -369,16 +361,6 @@ reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
 congestion controllers that mark more frequently than classic ECN {{?RFC3168}}.
 
-If the most recent ACK_FREQUENCY frame an endpoint has received from the peer
-has an `Ignore CE` value of `true` (0x01), receipt of a CE marked packet
-SHOULD NOT cause an endpoint to send an immediate acknowledgement.  The endpoint
-still sends an immediate acknowledgement if it would have for a non CE marked
-packet.  If an immediate acknowledgement is not sent, the CE marks are reported
-in the next acknowledgement.
-
-The Ignore-CE bit SHOULD NOT be set if the sender sets ECT(1) in its outgoing
-packets, such as with L4S, because it delays the congestion controller's ability
-to quickly respond to congestion.
 
 ## Batch Processing of Packets {#batch}
 
