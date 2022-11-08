@@ -20,7 +20,7 @@ author:
     ins: I. Swett
     name: Ian Swett
     org: Google
-    email: ian.swett@google.com
+    email: ianswett@google.com
 
 normative:
 
@@ -119,11 +119,15 @@ endpoint performance in the following ways:
 - Similarly, receiving and processing UDP packets can also be CPU intensive, and
   reducing acknowledgement frequency reduces this cost at a data sender.
 
-- Severely asymmetric link technologies, such as DOCSIS, LTE, and satellite
-  links, connection throughput in the data direction becomes constrained when
-  the reverse bandwidth is filled by acknowledgment packets. When traversing
-  such links, reducing the number of acknowledgments allows connection
-  throughput to scale much further.
+- For severely asymmetric link technologies, such as DOCSIS, LTE, and satellite
+  links, connection throughput in the forward path can become constrained
+  when the reverse path is filled by acknowledgment packets. When traversing
+  such links, reducing the number of acknowledgments can achieve higher
+  connection throughput.
+
+- The rate of acknowledgment packets can impact link efficiency, including
+  transmission opportunities or battery life.
+
 
 As discussed in {{implementation}} however, there can be undesirable consequences
 to congestion control and loss recovery if a receiver uniltaerally reduces the
@@ -187,7 +191,7 @@ ACK_FREQUENCY Frame {
   Ack-Eliciting Threshold (i),
   Request Max Ack Delay (i),
   Ignore CE (1),
-  Reordering Threshold (7)
+  Reordering Threshold (i)
 }
 ~~~
 
@@ -204,12 +208,11 @@ Sequence Number:
 Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets the recipient of this frame can receive without sending an immediate
-  acknowledgment. An immediate acknowledgement is sent when more than this
-  number of ack-eliciting packets have been received, so value of 0 results in
-  an immediate acknowledgement. If an endpoint receives an ACK-Eliciting
-  Threshold value that is larger than the maximum value the endpoint can represent, the
-  endpoint MUST use the largest representable value instead.
+  packets the recipient of this frame can receive without sending an
+  acknowledgment. In other words, an acknowledgement is sent when more than this
+  number of ack-eliciting packets have been received. Since this is a maximum
+  value, a receiver can send an acknowledgement earlier. A value of 0 results in
+  a receiver immediately acknowledging every ack-eliciting packet.
 
 Request Max Ack Delay:
 
@@ -221,21 +224,14 @@ Request Max Ack Delay:
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
   connection error of type PROTOCOL_VIOLATION.
   
-Ignore CE:
-
-: A 1-bit field representing a boolean truth value. This field is
-  set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer receives CE-marked packets ({{out-of-order}}).
-  0 represents 'false' and 1 represents 'true'.
-  
 Reordering Threshold:
 
-: A 7-bit field representing an unsigned integer that indicates how out of order
-  packets can arrive before eliciting an immediate ACK. If no ACK_FREQUENCY
-  frames have been received, this value defaults to 3, which is the recommended
-  packet threhold for loss detection in ({{Section 18.2 of QUIC-RECOVERY}}).
-  A value of 0 indicates immediate ACKs should never be sent due to receiving
-  an out-of-order packet.
+: A variable-length integer representing an unsigned integer that indicates how
+  out of order packets can arrive before eliciting an immediate ACK. If no
+  ACK_FREQUENCY frames have been received, this value defaults to 3, which is
+  the recommended packet threhold for loss detection in
+  ({{Section 18.2 of QUIC-RECOVERY}}). A value of 0 indicates immediate ACKs
+  SHOULD never be sent due to receiving an out-of-order packet.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
@@ -279,23 +275,32 @@ frame is more recent than any previous ones, as follows:
   delaying acknowledgements; see {{sending}}. The endpoint MUST also replace the
   recorded sequence number.
 
+
 # IMMEDIATE_ACK Frame
 
-The IMMEDIATE_ACK Frame is a frame which causes the peer to send a
-packet containing an ACK frame immediately, similar to the receipt of Initial
-and Handshake packets during the QUIC handshake.
+A sender can use an ACK_FREQUENCY frame to reduce the number of acknowledgements
+sent by a receiver, but doing so increases the chances that time-sensitive
+feedback is delayed as well. For example, as described in {{loss}}, delaying
+acknowledgements can increase the time it takes for a sender to detect packet
+loss. The IMMEDIATE_ACK frame helps mitigate this problem.
 
-Receivers of the IMMEDIATE_ACK frame MAY choose to delay sending the ACK
-if the vast majority of received packets contain an IMMEDIATE_ACK or the
-receiver is under heavy load.  Senders MAY include multiple IMMEDIATE_ACK
-frames in a single QUIC packet, but the behavior is identical to a single
-IMMEDIATE_ACK frame.
+An IMMEDIATE_ACK frame can be useful in other situations as well. For example,
+it can be used with a PING frame (Section 19.2 of {{QUIC-TRANSPORT}}) if a
+sender wants an immediate RTT measurement or if a sender wants to establish
+receiver liveness as quickly as possible.
+
+An endpoint SHOULD send a packet containing an ACK frame immediately upon
+receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending an ACK frame
+despite receiving an IMMEDIATE_ACK frame. For example, an endpoint might do this
+if a large number of received packets contain an IMMEDIATE_ACK or if the
+endpoint is under heavy load.
 
 ~~~
 IMMEDIATE_ACK Frame {
   Type (i) = 0xac,
 }
 ~~~
+
 
 # Sending Acknowledgments {#sending}
 
@@ -367,6 +372,7 @@ reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
 congestion controllers that mark more frequently than classic ECN {{?RFC3168}}.
 
+
 ## Batch Processing of Packets {#batch}
 
 For performance reasons, an endpoint can receive incoming packets from the
@@ -392,67 +398,95 @@ increases the peer's `max_ack_delay`.
 
 While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
-in flight. Generally, when using `max_ack_delay` for PTO computations, endpoints
-MUST use the maximum of the current value and all those in flight.
+in flight. When using `max_ack_delay` for PTO computations, endpoints MUST use
+the maximum of the current value and all those in flight.
 
 When the number of in-flight ack-eliciting packets is larger than the
 ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
 wait for its `max_ack_delay` period before sending an acknowledgement. In such
 cases, the endpoint MAY therefore exclude the peer's 'max_ack_delay' from its PTO
-calculation. Note that this optimization requires some care in implementation, since
-it can cause premature PTOs under packet loss when `ignore_order` is enabled.
+calculation.  When Ignore Order is enabled and loss causes the peer to not
+receive enough packets to trigger an immediate acknowledgement, the receiver
+will wait 'max_ack_delay', increasing the chances of a premature PTO.
+Therefore, if Ignore Order is enabled, the PTO MUST be larger than the peer's
+'max_ack_delay'.
 
-# Implementation Considerations {#implementation}
 
-There are tradeoffs inherent in a sender sending an ACK_FREQUENCY frame to the
-receiver.  As such it is recommended that implementers experiment with different
-strategies and find those which best suit their applications and congestion
-controllers.  There are, however, noteworthy considerations when devising
-strategies for sending ACK_FREQUENCY frames.
+# Determining Acknowledgement Frequency {#implementation}
 
-## Loss Detection {#loss}
-A sender relies on receipt of acknowledgements to determine the amount of data
-in flight and to detect losses, e.g. when packets experience reordering, see
-{{QUIC-RECOVERY}}.  Consequently, how often a receiver sends acknowledgments
-determines how long it takes for losses to be detected at the sender.
+This section provides some guidance on a sender's choice of acknowledgment
+frequency and discusses some additional considerations. Implementers can select
+an appropriate strategy to meet the needs of their applications and congestion
+controllers.
 
-## New Connections {#new-connections}
-Many congestion control algorithms have a startup mechanism during the beginning
-phases of a connection.  It is typical that in this period the congestion
-controller will quickly increase the amount of data in the network until it is
-signalled to stop.  While the mechanism used to achieve this increase varies,
-acknowledgments by the peer are generally critical during this phase to drive
-the congestion controller's machinery.  A sender can send ACK_FREQUENCY frames
-while its congestion controller is in this state, ensuring that the receiver
-will send acknowledgments at a rate which is optimal for the the sender's
-congestion controller.
+## Congestion Control
 
-## Window-based Congestion Controllers {#window}
-Congestion controllers that are purely window-based and strictly adherent to
-packet conservation, such as the one defined in {{QUIC-RECOVERY}}, rely on
-receipt of acknowledgments to move the congestion window forward and send
-additional data into the network.  Such controllers will suffer degraded
-performance if acknowledgments are delayed excessively.  Similarly, if these
-controllers rely on the timing of peer acknowledgments (an "ACK clock"),
-delaying acknowledgments will cause undesirable bursts of data into the network.
+A sender needs to be responsive to notifications of congestion, such as
+a packet loss or an ECN CE marking. Also, window-based congestion controllers
+that strictly adhere to packet conservation, such as the one defined in
+{{QUIC-RECOVERY}}, rely on receipt of acknowledgments to send additional data into
+the network, and will suffer degraded performance if acknowledgments are delayed
+excessively.
+
+To enable a sender to respond to potential network congestion, a sender SHOULD
+cause a receiver to send an acknowledgement at least once per RTT if there are
+unacknowledged ack-eliciting packets in flight. A sender can accomplish this by
+sending an IMMEDIATE_ACK frame once per round-trip time (RTT), or it can set the
+Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
+congestion window and an estimated RTT, respectively.
+
+## Burst Mitigation
+
+Receiving an acknowledgement can allow a sender to release new packets into the
+network. If a sender is designed to rely on the timing of peer acknowledgments
+("ACK clock"), delaying acknowledgments can cause undesirable bursts of data
+into the network. A sender MUST limit such bursts. In keeping with Section 7.7
+of {{QUIC-RECOVERY}}, a sender can either employ pacing or cause a receiver to
+send an acknowledgement for at least each initial congestion window of received
+data.
+
+## Loss Detection and Timers {#loss}
+
+Acknowledgements are fundamental to reliability in QUIC. Consequently,
+delaying or reducing the frequency of acknowledgments can cause loss detection
+at the sender to be delayed.
+
+A QUIC sender detects loss using packet thresholds on receiving an
+acknowledgement (Section 6.1.1 of {{QUIC-RECOVERY}}); delaying the
+acknowledgement therefore delays this method of detecting losses.
+
+Reducing acknowledgement frequency reduces the number of RTT samples that a
+sender receives (Section 5 of {{QUIC-RECOVERY}}), making a sender's RTT estimate
+less responsive to changes in the path's RTT. As a result, any mechanisms that
+rely on an accurate RTT estimate, such as time-threshold loss detection (Section
+6.1.2 of {{QUIC-RECOVERY}}) or Probe Timeout (Section 6.2 of {{QUIC-RECOVERY}}),
+will be less responsive to changes in the path's RTT, resulting in either
+delayed or unnecessary packet transmissions.
+
+To limit these consequences of reduced acknowledgement frequency, a sender
+SHOULD cause a receiver to send an acknowledgement at least once per RTT if
+there are unacknowledged ack-eliciting packets in flight. A sender can
+accomplish this by sending an IMMEDIATE_ACK frame once per round-trip time
+(RTT), or it can set the Ack-Eliciting Threshold and Request Max Ack Delay
+values to be no more than a congestion window and an estimated RTT,
+respectively.
+
+A sender might use timers to detect loss of PMTUD probe packets. A sender SHOULD
+bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering such
+timers.
 
 ## Connection Migration {#migration}
+
 To avoid additional delays to connection migration confirmation when using this
 extension, a client can bundle an IMMEDIATE_ACK frame with the first non-probing
-frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can simply send an
+frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can send only an
 IMMEDIATE_ACK frame, which is a non-probing frame.
 
 An endpoint's congestion controller and RTT estimator are reset upon
-confirmation of migration ({{Section 9.4 of QUIC-TRANSPORT}}), which can
-impact the number of acknowledgements received after migration. An
-endpoint that has sent an ACK_FREQUENCY frame earlier in the connection SHOULD
-update and send a new ACK_FREQUENCY frame immediately upon confirmation of
-connection migration.
-
-## Path MTU Discovery {#path-mtu-discovery}
-A sender might use timers to detect loss of PMTUD probe packets. A sender
-SHOULD bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering
-such timers.
+confirmation of migration ({{Section 9.4 of QUIC-TRANSPORT}}), which can impact
+the number of acknowledgements received after migration. An endpoint that has
+sent an ACK_FREQUENCY frame earlier in the connection SHOULD update and send a
+new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 
 
 # Security Considerations
