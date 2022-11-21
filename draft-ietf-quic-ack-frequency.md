@@ -479,7 +479,13 @@ new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 
 
 # Security Considerations
+
 TBD.
+
+An improperly configured or malicious sender could cause standards-compliant receivers to
+acknowledge more frequently than their available resources permit, thus causing a
+Denial Of Service (DOS) attack. However, a sender has control of many aspects of
+the receiver behaviour and therefore, for a well-configured sender, this introduces no additional threat.
 
 # IANA Considerations {#iana}
 TBD.
