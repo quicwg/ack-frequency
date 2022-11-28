@@ -253,7 +253,7 @@ Ack Delay field.
 
 # Multiple ACK_FREQUENCY Frames {#multiple-frames}
 
-An endpoint can send multiple ACK_FREQUENCY frames in the same connection, and each one of them can
+An endpoint can send multiple ACK_FREQUENCY frames on the same connection, and each one of them can
 have different values in all fields. An endpoint MUST use a sequence number of 0
 for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
 increasing value thereafter.
