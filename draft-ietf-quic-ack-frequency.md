@@ -176,7 +176,7 @@ packets, as per {{Section 7.4.1 of QUIC-TRANSPORT}}.
 
 This Transport Parameter is encoded as per {{Section 18 of QUIC-TRANSPORT}}.
 
-# ACK_FREQUENCY Frame
+# ACK_FREQUENCY Frame  {#ack-frequency-frame}
 
 Delaying acknowledgements as much as possible reduces both work done by the
 endpoints and network load. An endpoint's loss detection and congestion control
@@ -280,7 +280,7 @@ frame is more recent than any previous ones, as follows:
   recorded sequence number.
 
 
-# IMMEDIATE_ACK Frame
+# IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
 A sender can use an ACK_FREQUENCY frame to reduce the number of acknowledgements
 sent by a receiver, but doing so increases the chances that time-sensitive
@@ -482,7 +482,30 @@ new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 TBD.
 
 # IANA Considerations {#iana}
-TBD.
+
+This document defines a new transport parameter to advertise support of the
+extension described in this document and two new frame types to registered
+by IANQ in the respective "QUIC Protocol" registries under 
+[https://www.iana.org/assignments/quic/quic.xhtml](https://www.iana.org/assignments/quic/quic.xhtml).
+
+The following entry in {{transport-parameters}} should be added to
+the "QUIC Transport Parameters" registry under the "QUIC Protocol" heading.
+
+Value                        | Parameter Name.   | Specification
+-----------------------------|-------------------|-----------------
+TBD (experiments use 0xbabf) | enable_multipath  | {{nego}}
+{: #transport-parameters title="Addition to QUIC Transport Parameters Entries"}
+
+
+The following frame types should be added to the "QUIC Frame Types"
+registry under the "QUIC Protocol" heading.
+
+
+Value      | Frame Name          | Specification
+-----------|---------------------|-----------------
+0xaf       | ACK_FREQUENCY       | {{ack-frequency-frame}}
+0xac       | IMMEDIATE_ACK       | {{immediate-ack-frame}}
+{: #frame-types title="Addition to QUIC Frame Types Entries"}
 
 --- back
 
