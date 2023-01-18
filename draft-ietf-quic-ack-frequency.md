@@ -485,7 +485,7 @@ TBD.
 
 This document defines a new transport parameter to advertise support of the
 extension described in this document and two new frame types to registered
-by IANQ in the respective "QUIC Protocol" registries under 
+by IANQ in the respective "QUIC Protocol" registries under
 [https://www.iana.org/assignments/quic/quic.xhtml](https://www.iana.org/assignments/quic/quic.xhtml).
 
 The following entry in {{transport-parameters}} should be added to
