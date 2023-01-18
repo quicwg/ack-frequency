@@ -142,7 +142,7 @@ packet, and for every packet that is received out of order (Section
 simple mechanism does not allow a sender to signal its constraints. This
 extension provides a mechanism to solve this problem.
 
-# Negotiating Extension Use
+# Negotiating Extension Use {#nego}
 
 Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
@@ -176,7 +176,7 @@ packets, as per {{Section 7.4.1 of QUIC-TRANSPORT}}.
 
 This Transport Parameter is encoded as per {{Section 18 of QUIC-TRANSPORT}}.
 
-# ACK_FREQUENCY Frame  {#ack-frequency-frame}
+# ACK_FREQUENCY Frame {#ack-frequency-frame}
 
 Delaying acknowledgements as much as possible reduces both work done by the
 endpoints and network load. An endpoint's loss detection and congestion control
@@ -493,7 +493,7 @@ the "QUIC Transport Parameters" registry under the "QUIC Protocol" heading.
 
 Value                        | Parameter Name.   | Specification
 -----------------------------|-------------------|-----------------
-0xff03de1a                   | min_ack_delay | {{nego}}
+0xff03de1a                   | min_ack_delay.    | {{nego}}
 {: #transport-parameters title="Addition to QUIC Transport Parameters Entries"}
 
 
