@@ -493,7 +493,7 @@ the "QUIC Transport Parameters" registry under the "QUIC Protocol" heading.
 
 Value                        | Parameter Name.   | Specification
 -----------------------------|-------------------|-----------------
-TBD (experiments use 0xbabf) | enable_multipath  | {{nego}}
+0xff03de1a                   | min_ack_delay | {{nego}}
 {: #transport-parameters title="Addition to QUIC Transport Parameters Entries"}
 
 
