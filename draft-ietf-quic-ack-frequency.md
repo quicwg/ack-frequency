@@ -150,8 +150,10 @@ sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
 min_ack_delay (0xff03de1a):
 
 : A variable-length integer representing the minimum amount of time in
-  microseconds by which the endpoint can delay an acknowledgement. This limit
-  could be based on the receiver's clock or timer granularity.
+  microseconds by which the endpoint that is sending this vlaue is able to
+  delay an acknowledgement. This limit could be based on the receiver's clock
+  or timer granularity. This information is used by the peer for selecting a
+  suitable value in the Request Max Ack Delay field in the ACK_FREQUENCY frame.
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
@@ -171,8 +173,8 @@ receiving this transport parameter does not cause the endpoint to
 change its acknowledgement behavior.
 
 Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
-they received. Consequently, ACK_FREQUENCY frames cannot be sent in 0-RTT
-packets, as per {{Section 7.4.1 of QUIC-TRANSPORT}}.
+they received for use in a subsequent connection. Consequently, ACK_FREQUENCY
+frames cannot be sent in 0-RTT packets, as per {{Section 7.4.1 of QUIC-TRANSPORT}}.
 
 This Transport Parameter is encoded as per {{Section 18 of QUIC-TRANSPORT}}.
 
