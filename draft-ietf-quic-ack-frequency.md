@@ -222,7 +222,6 @@ Request Max Ack Delay:
   milliseconds. Sending a value smaller than the `min_ack_delay` advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
   connection error of type PROTOCOL_VIOLATION.
-  
 Reordering Threshold:
 
 : A variable-length integer that indicates how many
