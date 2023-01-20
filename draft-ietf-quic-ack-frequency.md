@@ -225,7 +225,7 @@ Request Max Ack Delay:
   
 Reordering Threshold:
 
-: A variable-length integer representing an unsigned integer that indicates how
+: A variable-length integer that indicates how many
   out of order packets can arrive before eliciting an immediate ACK. If no
   ACK_FREQUENCY frames have been received, this value defaults to 3, which is
   the recommended packet threhold for loss detection in
