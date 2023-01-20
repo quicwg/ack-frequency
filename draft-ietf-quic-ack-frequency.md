@@ -353,7 +353,7 @@ lost.  This can speed up time threshold loss detection and therefore loss
 recovery.
 
 Every time an ACK frame is sent, the 'Largest Acknowledged' is saved in a local
-value (ie: largest_acknowledged_sent).  When a new packet is received in order,
+value (i.e., `largest_acknowledged_sent`).  When a new packet is received in order,
 if there are any missing packets in the range
 '[largest_acknowledged_sent - Reordering Threshold,
 largest_acknowledged - Reordering Threshold],' send an immediate ACK.
