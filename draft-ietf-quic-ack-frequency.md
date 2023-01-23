@@ -237,9 +237,10 @@ Ignore Order:
   acknowledgement when the peer receives a packet out of order
   ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
 
-ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
-retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
-has been sent.
+ACK_FREQUENCY frames are ack-eliciting. However, an ACK_FREQUENCY frame SHOULD
+NOT just be retransmitted. Instead, a new ACK_FREQUENCY frame with a larger Sequence
+Number value and potential updated information SHOULD be sent if loss was detected and
+if a new ACK_FREQUENCY was not already sent in the mean time until the loss was detected.
 
 An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
 with different values.
@@ -293,6 +294,7 @@ it can be used with a PING frame (Section 19.2 of {{QUIC-TRANSPORT}}) if a
 sender wants an immediate RTT measurement or if a sender wants to establish
 receiver liveness as quickly as possible.
 
+By definition IMMEDIATE_ACK frames are ack-eliciting. 
 An endpoint SHOULD send a packet containing an ACK frame immediately upon
 receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending an ACK frame
 despite receiving an IMMEDIATE_ACK frame. For example, an endpoint might do this
@@ -305,6 +307,11 @@ IMMEDIATE_ACK Frame {
 }
 ~~~
 
+IMMEDIATE_ACK frames SHOULD NOT be retransmitted. If loss is detected, based
+on the receipt of an ACK frames, there is no need to request another ack. If
+a packet containing IMMEDIATE_ACK and data is detected as lost due to an
+time-out, the sender MAY send the retransmitted data again together with an
+IMMEDIATE_ACK frame.
 
 # Sending Acknowledgments {#sending}
 
