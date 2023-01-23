@@ -294,7 +294,7 @@ it can be used with a PING frame (Section 19.2 of {{QUIC-TRANSPORT}}) if a
 sender wants an immediate RTT measurement or if a sender wants to establish
 receiver liveness as quickly as possible.
 
-By definition IMMEDIATE_ACK frames are ack-eliciting. 
+By definition IMMEDIATE_ACK frames are ack-eliciting.
 An endpoint SHOULD send a packet containing an ACK frame immediately upon
 receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending an ACK frame
 despite receiving an IMMEDIATE_ACK frame. For example, an endpoint might do this
