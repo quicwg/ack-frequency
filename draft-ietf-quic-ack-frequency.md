@@ -460,8 +460,9 @@ accomplish this by sending an IMMEDIATE_ACK frame once per round-trip time
 values to be no more than a congestion window and an estimated RTT,
 respectively.
 
-A sender might use timers to detect loss of PMTUD probe packets. A sender SHOULD
-bundle an IMMEDIATE_ACK frame with any PTMUD probes to avoid triggering such
+A sender might use timers to detect loss of PMTU probe packets
+({{Section 14 of QUIC-TRANSPORT}}). A sender SHOULD
+bundle an IMMEDIATE_ACK frame with any PTMU probes to avoid triggering such
 timers.
 
 ## Connection Migration {#migration}
