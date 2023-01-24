@@ -426,7 +426,7 @@ congestion window and an estimated RTT, respectively. If the sender is
 application-limited, a large ack delay can delay acknowledgement information
 unnecessarily when entering idle periods. Therefore, if no further data is buffered to be
 sent, a sender can send an IMMEDIATE_ACK frame with the last data
-packet before an idle period to avoid waiting the for ack delay.
+packet before an idle period to avoid waiting for the ack delay.
 
 ## Burst Mitigation
 
