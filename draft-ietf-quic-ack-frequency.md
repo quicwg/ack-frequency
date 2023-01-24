@@ -486,7 +486,17 @@ new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 
 
 # Security Considerations
-TBD.
+
+An improperly configured or malicious sender could cause standards-compliant
+receivers to  acknowledge more frequently than their available resources permit,
+thus causing a denial-of-service (DoS) attack. However, a sender has control of
+many aspects of the receiver behaviour and therefore, for a well-configured
+sender, this introduces no additional threat. Further, the information in the
+ACK_FREQUENCY frame are ultimately only a request but do not provide any ability
+for the requester to enforce a certain behavior on the ACK sender. As such an
+endpoint can simply not follow the request due to security concerns or practical
+limits, especially in situation such as a DDoS attack or when otherwise under
+high computational or network load.
 
 # IANA Considerations {#iana}
 
