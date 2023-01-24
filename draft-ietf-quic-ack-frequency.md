@@ -150,7 +150,7 @@ sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
 min_ack_delay (0xff03de1a):
 
 : A variable-length integer representing the minimum amount of time in
-  microseconds by which the endpoint that is sending this vlaue is able to
+  microseconds by which the endpoint that is sending this value is able to
   delay an acknowledgement. This limit could be based on the receiver's clock
   or timer granularity. This information is used by the peer for selecting a
   suitable value in the Request Max Ack Delay field in the ACK_FREQUENCY frame.
