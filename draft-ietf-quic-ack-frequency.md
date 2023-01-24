@@ -152,8 +152,9 @@ min_ack_delay (0xff03de1a):
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint that is sending this value is able to
   delay an acknowledgement. This limit could be based on the receiver's clock
-  or timer granularity. This information is used by the peer for selecting a
-  suitable value in the Request Max Ack Delay field of the ACK_FREQUENCY frame.
+  or timer granularity. 'min_ack_delay' is used by the peer to avoid requesting
+  too small a value in the Request Max Ack Delay field of the ACK_FREQUENCY
+  frame.
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
