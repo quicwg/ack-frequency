@@ -67,7 +67,7 @@ imformative:
     date: 2022-10
     seriesinfo:
       DOI: 10.1002/sat.1466
-      name: IJSCN    
+      name: IJSCN
     author:
       -
         name: A. Custura
@@ -148,8 +148,8 @@ connection throughput, lower the impact on other flows or optimise the
 overall use of transmission resources {{Cus22}}.
 
 - The rate of acknowledgment packets can impact link efficiency, including
-  transmission opportunities or battery life. In some cases, 
-consumption of link resources can also impact other users that share the link or 
+  transmission opportunities or battery life. In some cases,
+consumption of link resources can also impact other users that share the link or
 are allocated capacity from the same resource pool.
 
 As discussed in {{implementation}} however, there can be undesirable consequences
