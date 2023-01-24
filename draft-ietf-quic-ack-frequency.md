@@ -347,20 +347,6 @@ packets received out of order, and instead continues to use the peer's
 `Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
 acknowledgements.
 
-### Reordering Threshold
-
-If the most recent value of 'Reordering Threshold' is not 0x00, then in addition
-to the immediate acknowledgement when reordering is detected, an additional
-immediate acknowledgement is sent when the peer can detect missing packets as
-lost. This can reduce the time to detect loss and therefore improve the performance of loss
-recovery.
-
-Every time an ACK frame is sent, the 'Largest Acknowledged' is saved in a local
-value (i.e., `largest_acknowledged_sent`).  When a new packet is received in order,
-if there are any missing packets in the range
-'[largest_acknowledged_sent - Reordering Threshold,
-largest_acknowledged - Reordering Threshold],' send an immediate ACK.
-
 
 ## Expediting Congestion Signals {#congestion}
 
