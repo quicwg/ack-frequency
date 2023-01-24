@@ -421,7 +421,11 @@ cause a receiver to send an acknowledgement at least once per RTT if there are
 unacknowledged ack-eliciting packets in flight. A sender can accomplish this by
 sending an IMMEDIATE_ACK frame once per round-trip time (RTT), or it can set the
 Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
-congestion window and an estimated RTT, respectively.
+congestion window and an estimated RTT, respectively. If the sender is
+application-limited, a large ack delay can delay acknowledgement information
+unnecessarily when entering idle periods. Therefore, if no further data is buffered to be
+sent, a sender can send an IMMEDIATE_ACK frame with the last data
+packet before an idle period to avoid waiting for the ack delay.
 
 ## Burst Mitigation
 
