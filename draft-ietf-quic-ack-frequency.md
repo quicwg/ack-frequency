@@ -347,7 +347,6 @@ packets received out of order, and instead continues to use the peer's
 `Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
 acknowledgements.
 
-
 ## Expediting Congestion Signals {#congestion}
 
 An endpoint SHOULD send an immediate acknowledgement when a packet marked
