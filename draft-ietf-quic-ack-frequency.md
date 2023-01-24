@@ -213,8 +213,7 @@ ACK_FREQUENCY Frame {
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
   Request Max Ack Delay (i),
-  Reserved (7),
-  Ignore Order (1)
+  Reordering Threshold (i)
 }
 ~~~
 
@@ -246,19 +245,15 @@ Request Max Ack Delay:
   milliseconds. Sending a value smaller than the `min_ack_delay` advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
   connection error of type PROTOCOL_VIOLATION.
+  
+Reordering Threshold:
 
-Reserved:
-
-: This field has no meaning in this version of ACK_FREQUENCY.  The value of this
-  field MUST be 0x00. Receipt of any other value MUST be treated as a
-  connection error of type FRAME_ENCODING_ERROR.
-
-Ignore Order:
-
-: A 1-bit field representing a boolean truth value. This field is
-  set to `true` by an endpoint that does not wish to receive an immediate
-  acknowledgement when the peer receives a packet out of order
-  ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
+: A variable-length integer that indicates how many
+  out of order packets can arrive before eliciting an immediate ACK. If no
+  ACK_FREQUENCY frames have been received, this value defaults to 3, which is
+  the recommended packet threhold for loss detection in
+  ({{Section 18.2 of QUIC-RECOVERY}}). A value of 0 indicates immediate ACKs
+  SHOULD never be sent due to receiving an out-of-order packet.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
@@ -361,13 +356,16 @@ As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
-If the endpoint has not yet received an ACK_FREQUENCY frame, or if the most
-recent frame received from the peer has an `Ignore Order` value of `false`
-(0x00), the endpoint MUST immediately acknowledge any subsequent packets that
-are received out of order.
+If an endpoint has not yet received an ACK_FREQUENCY frame,
+the endpoint immediately acknowledges any subsequent packets that
+are received out of order, as specified in {{Section 13.2 of QUIC-TRANSPORT}}.
+An endpoint, that receives an ACK_FREQUENCY frame with a Reordering
+Threshold value other than 0x00, MUST immediately send an ACK frame
+when the packet number of largest unacknowledged packet since
+the last detected reordering event exceeds the Reordering Threshold.
 
-If the most recent ACK_FREQUENCY frame received from the peer has an `Ignore
-Order` value of `true` (0x01), the endpoint does not make this exception. That
+If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
+Threshold` value of 0x00, the endpoint does not make this exception. That
 is, the endpoint MUST NOT send an immediate acknowledgement in response to
 packets received out of order, and instead continues to use the peer's
 `Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
@@ -382,6 +380,7 @@ Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
 congestion controllers (e.g. {{?I-D.ietf-tsvwg-aqm-dualq-coupled}}) that mark more frequently than classic ECN {{?RFC3168}}.
+
 
 
 ## Batch Processing of Packets {#batch}
