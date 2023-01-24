@@ -425,7 +425,7 @@ Ack-Eliciting Threshold and Request Max Ack Delay values to be no more than a
 congestion window and an estimated RTT, respectively. If the sender is
 application-limited a high ack delay can delay acknowledgement information
 unnecessarily before idle periods. Therefore no further data is buffered to be
-sent, a sender MAY consider to send an IMMEDIATE_ACK frame with the last data
+sent, a sender might consider to send an IMMEDIATE_ACK frame with the last data
 packet before an idle period.
 
 ## Burst Mitigation
