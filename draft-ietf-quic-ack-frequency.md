@@ -335,9 +335,10 @@ packet. This extension modifies this behavior.
 If an endpoint has not yet received an ACK_FREQUENCY frame,
 the endpoint immediately acknowledges any subsequent packets that
 are received out of order, as specified in {{Section 13.2 of QUIC-TRANSPORT}}.
-recent frame received from the peer has a `Reordering Threshold` value that is
-not 0x00, the endpoint MUST immediately acknowledge any subsequent packets that
-are received out of order.
+An endpoint, that receives an ACK_FREQUENCY frame with a Reordering
+Threshold value other than 0x00, MUST immediately send an ACK frame
+when the packet number of largest unacknowledged packet since
+the last detected reordering event exceeds the Reordering Threshold.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
 Threshold` value of 0x00, the endpoint does not make this exception. That
