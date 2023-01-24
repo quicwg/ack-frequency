@@ -60,7 +60,7 @@ normative:
         org: Google
         role: editor
 
-imformative:
+informative:
 
   Cus22:
     title: "Reducing the acknowledgement frequency in IETF QUIC"
