@@ -502,8 +502,6 @@ new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 
 # Security Considerations
 
-TBD.
-
 An improperly configured or malicious sender could cause standards-compliant receivers to
 acknowledge more frequently than their available resources permit, thus causing a
 denial-of-service (DoS) attack. However, a sender has control of many aspects of
