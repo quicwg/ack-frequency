@@ -289,11 +289,11 @@ acknowledgements can increase the time it takes for a sender to detect packet
 loss. The IMMEDIATE_ACK frame helps mitigate this problem.
 
 An IMMEDIATE_ACK frame can be useful in other situations as well. For example,
-if a sender wants an immediate RTT
-measurement or if a sender wants to establish receiver liveness as quickly
-as possible. PING frames (Section 19.2 of {{QUIC-TRANSPORT}}) are ack-eliciting but if a PING frame is sent without
-an IMMEDIATE_ACK frame, the receiver might not immediately send an ACK based
-on it local ACK strategy.
+if a sender wants an immediate RTT measurement or if a sender wants to establish
+receiver liveness as quickly as possible. PING frames
+({{Section 19.2 of QUIC-TRANSPORT}}) are ack-eliciting but if a PING frame is
+sent without an IMMEDIATE_ACK frame, the receiver might not immediately send
+an ACK based on it local ACK strategy.
 
 An endpoint SHOULD send a packet containing an ACK frame immediately upon
 receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending an ACK frame
