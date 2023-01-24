@@ -291,7 +291,7 @@ loss. The IMMEDIATE_ACK frame helps mitigate this problem.
 An IMMEDIATE_ACK frame can be useful in other situations as well. For example,
 if a sender wants an immediate RTT
 measurement or if a sender wants to establish receiver liveness as quickly
-as possible. PING frames are ack-eliciting but if a PING frame is sent without
+as possible. PING frames (Section 19.2 of {{QUIC-TRANSPORT}}) are ack-eliciting but if a PING frame is sent without
 an IMMEDIATE_ACK frame, the receiver might not immediately send an ACK based
 on it local ACK strategy.
 
