@@ -332,7 +332,9 @@ As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
-If the endpoint has not yet received an ACK_FREQUENCY frame, or if the most
+If an endpoint has not yet received an ACK_FREQUENCY frame,
+the endpoint immediately acknowledges any subsequent packets that
+are received out of order, as specified in {{Section 13.2 of QUIC-TRANSPORT}}.
 recent frame received from the peer has a `Reordering Threshold` value that is
 not 0x00, the endpoint MUST immediately acknowledge any subsequent packets that
 are received out of order.
