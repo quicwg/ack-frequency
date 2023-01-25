@@ -343,8 +343,27 @@ the endpoint immediately acknowledges any subsequent packets that
 are received out of order, as specified in {{Section 13.2 of QUIC-TRANSPORT}}.
 An endpoint, that receives an ACK_FREQUENCY frame with a Reordering
 Threshold value other than 0x00, MUST immediately send an ACK frame
-when the packet number of largest unacknowledged packet since
+when the offset of the largest received packet number since
 the last detected reordering event exceeds the Reordering Threshold.
+
+More correctly, this means if a gap in the packet number is
+detected, one additional ACK frame will be sent if the difference between the largest received packet number and the packet number
+of the last in-order packet number is larger than the Reordering Threshold for the first time
+(largest_unacknowledged - largest_inorder > Reordering Threshold).
+Therefore the Reordering Threshold causes an ACK to be send earlier than it would
+otherwise be sent based on the Ack-Eliciting Threshold and max_ack_delay.
+This ensures that an acknowledgement is sent at the earliest point of time
+when the peer is able to declare missing packets as lost. This can reduce the time to
+detect loss and therefore improve the performance of loss recovery.
+
+If a potential reordering events happens, which means a gap in the packet number is
+detected, an additional ack will be sent if no ack has been sent based on the other
+conditions since the reordering event (largest_acknowledged_sent <= largest_inorder)
+and the offset between the largest unacknowledged packet number and the packet number
+of the last in-order packet number exceeds the Reordering Threshold
+(largest_unacknowledged - largest_inorder > Reordering Threshold).
+Note that this means the Reordering Threshold is only effective if it is smaller
+than the Ack-Eliciting Threshold.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
 Threshold` value of 0x00, the endpoint does not make this exception. That
