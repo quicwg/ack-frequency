@@ -239,8 +239,8 @@ Ignore Order:
 
 ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
 a sender is encouraged to send a new ACK_FREQUENCY frame with a larger Sequence
-Number value and potentially updated information. However, it is not forbidden to retransmit
-frames being lost as-is; see Section 13.3 of {{QUIC-TRANSPORT}.
+Number value and potentially updated information. However, it is not forbidden to
+retransmit the lost frame; see Section 13.3 of {{QUIC-TRANSPORT}.
 
 An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
 with different values.
