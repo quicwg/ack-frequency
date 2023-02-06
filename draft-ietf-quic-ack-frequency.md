@@ -325,14 +325,6 @@ acknowledgement when one of the following conditions are met:
 {{out-of-order}}, {{congestion}}, and {{batch}} describe exceptions to this
 strategy.
 
-An endpoint is expected to bundle acknowledgements when possible. Every time an
-acknowledgement is sent, bundled or otherwise, all counters and timers related
-to delaying of acknowledgments are reset.
-
-The receiver of an ACK_FREQUENCY frame can continue to process multiple available
-packets before determining whether to send an ACK frame in response, as stated in
-{{Section 13.2.2 of QUIC-TRANSPORT}}.
-
 ## Response to Out-of-Order Packets {#out-of-order}
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
@@ -375,10 +367,9 @@ For performance reasons, an endpoint can receive incoming packets from the
 underlying platform in a batch of multiple packets. This batch can contain
 enough packets to cause multiple acknowledgements to be sent.
 
-To avoid sending multiple acknowledgements in rapid succession, an endpoint MAY
-process all packets in a batch before determining whether a threshold has been
-met and an acknowledgement is to be sent in response.
-
+To avoid sending multiple acknowledgements in rapid succession, an endpoint can
+process all packets in a batch before determining whether to send an ACK frame
+in response, as stated in {{Section 13.2.2 of QUIC-TRANSPORT}}.
 
 # Computation of Probe Timeout Period
 
