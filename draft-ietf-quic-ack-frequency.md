@@ -422,7 +422,7 @@ estimated RTT, respectively.
 Note that it's possible the RTT is smaller than the receiver's timer granularity,
 as communicated via the 'min_ack_delay' transport parameter, preventing the
 receiver from sending an acknowledgment every RTT in time.  In these cases,
-'Ignore Order' can be harmful, because it delays fast loss detection.
+'Reordering Threshold' can be harmful, because it delays fast loss detection.
 
 A congestion controller that is congestion window limited relies upon receiving
 acknowledgements to send additional data into the network.  An increase in
