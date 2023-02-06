@@ -257,26 +257,26 @@ have different values in all fields. An endpoint MUST use a sequence number of 0
 for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
 increasing value thereafter.
 
-An endpoint MUST allow reordered ACK_FREQUENCY frames to be received and
-processed, see {{Section 13.3 of QUIC-TRANSPORT}}.
+An endpoint might receive a reordered ACK_FREQUENCY frames (see {{Section 13.3 of QUIC-TRANSPORT}}).
+In this case it needs to check the Sequence number and only process the other fields
+if the sequenece number is larger than the last processed sequenece number.
+In detail this means the following process is applied:
 
-On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
-immediately record all values from the frame. The sequence number of the frame
-is recorded as the largest seen sequence number. The new Ack-Eliciting Threshold
-and Request Max Ack Delay values MUST be immediately used for delaying
+On the first received ACK_FREQUENCY frame in a connection, an endpoint records
+all values from the frame. The sequence number of the this first frame
+is recorded as the largest seen sequence number. From now on, the Ack-Eliciting
+Threshold and Request Max Ack Delay values are used for delaying
 acknowledgements; see {{sending}}.
 
-On a subsequently received ACK_FREQUENCY frame, the endpoint MUST check if this
+On a subsequently received ACK_FREQUENCY frame, the endpoint checks if this
 frame is more recent than any previous ones, as follows:
 
 - If the frame's sequence number is not greater than the largest one seen so
   far, the endpoint MUST ignore this frame.
 
 - If the frame's sequence number is greater than the largest one seen so far,
-  the endpoint MUST immediately replace old recorded state with values received
-  in this frame. The endpoint MUST start using the new values immediately for
-  delaying acknowledgements; see {{sending}}. The endpoint MUST also replace the
-  recorded sequence number.
+  the endpoint MUST replace old recorded state with values received
+  in this frame, including the recorded sequence number.
 
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
