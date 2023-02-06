@@ -237,10 +237,10 @@ Ignore Order:
   acknowledgement when the peer receives a packet out of order
   ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
 
-ACK_FREQUENCY frames are ack-eliciting. However, an ACK_FREQUENCY frame SHOULD
-NOT just be retransmitted. Instead, a new ACK_FREQUENCY frame with a larger Sequence
-Number value and potential updated information SHOULD be sent if loss was detected and
-if a new ACK_FREQUENCY was not already sent in the mean time until the loss was detected.
+ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
+a sender is encouraged to send a new ACK_FREQUENCY frame with a larger Sequence
+Number value and potentially updated information. However, it is not forbidden to retransmit
+frames being lost as-is; see Section 13.3 of {{QUIC-TRANSPORT}.
 
 An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
 with different values.
