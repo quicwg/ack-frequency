@@ -230,10 +230,11 @@ Reordering Threshold:
 
 : A variable-length integer that indicates how many
   out of order packets can arrive before eliciting an immediate ACK. If no
-  ACK_FREQUENCY frames have been received, this value defaults to 3, which is
-  the recommended packet threhold for loss detection in
-  ({{Section 18.2 of QUIC-RECOVERY}}). A value of 0 indicates immediate ACKs
-  SHOULD never be sent due to receiving an out-of-order packet.
+  ACK_FREQUENCY frames have been received, the endpoint immediately acknowledges
+  any subsequent packets that are received out of order, as specified in
+  {{Section 13.2 of QUIC-TRANSPORT}}, as such the default value is 1.
+  A value of 0 indicates immediate ACKs SHOULD never be sent due to receiving
+  an out-of-order packet.
 
 ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
 retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
@@ -338,9 +339,11 @@ As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies this behavior.
 
-If an endpoint has not yet received an ACK_FREQUENCY frame,
-the endpoint immediately acknowledges any subsequent packets that
-are received out of order, as specified in {{Section 13.2 of QUIC-TRANSPORT}}.
+In order to ensure timely loss detection, the Reordering Threshold provided
+in the ACK_FREQUENCY frame SHOULD NOT be larger than the re-ordering threshold
+used by the data sender for loss detection. ({{Section 18.2 of QUIC-RECOVERY}})
+recommends a default packet threshold for loss detection of 3.
+
 An endpoint, that receives an ACK_FREQUENCY frame with a Reordering
 Threshold value other than 0x00, MUST immediately send an ACK frame
 when the packet number of largest unacknowledged packet since
