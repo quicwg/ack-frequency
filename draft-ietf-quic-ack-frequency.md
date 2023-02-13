@@ -238,9 +238,9 @@ Ignore Order:
   ({{out-of-order}}). 0 represents 'false' and 1 represents 'true'.
 
 ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
-is encouraged to send an ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame with a
-larger Sequence Number value has already been sent.
-However, it is not forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
+is encouraged to send an ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame
+with a larger Sequence Number value has already been sent. However, it is not
+forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
 as the receiver will ignore duplicate or out-of-order ACK_FREQUENCY frames
 based on the Sequence Number.
 
