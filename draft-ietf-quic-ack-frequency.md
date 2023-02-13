@@ -258,7 +258,7 @@ for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
 increasing value thereafter.
 
 An endpoint might receive an ACK_FREQUENCY frame out of order (see {{Section 13.3 of QUIC-TRANSPORT}}).
-In this case it needs to check the Sequence Number and only process the other fields
+In this case it needs to only process the other fields
 if the Sequence Number is larger than the last processed Sequence Number.
 In detail this means the following process is applied:
 
