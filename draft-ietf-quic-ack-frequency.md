@@ -257,7 +257,7 @@ have different values in all fields. An endpoint MUST use a sequence number of 0
 for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
 increasing value thereafter.
 
-An endpoint might receive a reordered ACK_FREQUENCY frames (see {{Section 13.3 of QUIC-TRANSPORT}}).
+An endpoint might receive an ACK_FREQUENCY frame out of order (see {{Section 13.3 of QUIC-TRANSPORT}}).
 In this case it needs to check the Sequence number and only process the other fields
 if the sequenece number is larger than the last processed sequenece number.
 In detail this means the following process is applied:
