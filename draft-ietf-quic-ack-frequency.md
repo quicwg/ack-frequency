@@ -236,9 +236,12 @@ Reordering Threshold:
   A value of 0 indicates immediate ACKs SHOULD never be sent due to receiving
   an out-of-order packet.
 
-ACK_FREQUENCY frames are ack-eliciting. However, their loss does not require
-retransmission if an ACK_FREQUENCY frame with a larger Sequence Number value
-has been sent.
+ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
+is encouraged to send an ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame
+with a larger Sequence Number value has already been sent. However, it is not
+forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
+as the receiver will ignore duplicate or out-of-order ACK_FREQUENCY frames
+based on the Sequence Number.
 
 An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
 with different values.
@@ -294,6 +297,7 @@ receiver liveness as quickly as possible. PING frames
 sent without an IMMEDIATE_ACK frame, the receiver might not immediately send
 an ACK based on its local ACK strategy.
 
+By definition IMMEDIATE_ACK frames are ack-eliciting.
 An endpoint SHOULD send a packet containing an ACK frame immediately upon
 receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending an ACK frame
 despite receiving an IMMEDIATE_ACK frame. For example, an endpoint might do this
@@ -306,6 +310,7 @@ IMMEDIATE_ACK Frame {
 }
 ~~~
 
+IMMEDIATE_ACK frames do not need to be retransmitted.
 
 # Sending Acknowledgments {#sending}
 
