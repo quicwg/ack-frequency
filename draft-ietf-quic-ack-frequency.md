@@ -271,7 +271,7 @@ acknowledgements; see {{sending}}.
 On a subsequently received ACK_FREQUENCY frame, the endpoint checks if this
 frame is more recent than any previous ones, as follows:
 
-- If the frame's sequence number is not greater than the largest one seen so
+- If the frame's Sequence Number is not greater than the largest one seen so
   far, the endpoint MUST ignore this frame.
 
 - If the frame's sequence number is greater than the largest one seen so far,
