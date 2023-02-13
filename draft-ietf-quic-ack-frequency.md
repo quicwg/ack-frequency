@@ -262,7 +262,7 @@ increasing value thereafter.
 
 An endpoint might receive an ACK_FREQUENCY frame out of order 
 (see {{Section 13.3 of QUIC-TRANSPORT}}). 
-The enpoint MUST ignore the frame if the Sequence Number is smaller than the last processed Sequence Number.
+The endpoint MUST ignore the frame if the Sequence Number is smaller than the last processed Sequence Number.
 Otherwise, the endpoint MUST update its state with values received
 in this frame, including the processed largest Sequence Number.
 
