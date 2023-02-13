@@ -307,7 +307,7 @@ IMMEDIATE_ACK Frame {
 }
 ~~~
 
-IMMEDIATE_ACK frames SHOULD NOT be retransmitted. If loss is detected, based
+IMMEDIATE_ACK frames do not need to be retransmitted. If loss is detected, based
 on the receipt of an ACK frames, there is no need to request another ack. If
 a packet containing IMMEDIATE_ACK and data is detected as lost due to an
 time-out, the sender MAY send the retransmitted data again together with an
