@@ -276,7 +276,7 @@ frame is more recent than any previous ones, as follows:
 
 - If the frame's sequence number is greater than the largest one seen so far,
   the endpoint MUST replace old recorded state with values received
-  in this frame, including the recorded sequence number.
+  in this frame, including the recorded Sequence Number.
 
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
