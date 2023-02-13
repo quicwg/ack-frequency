@@ -260,8 +260,8 @@ have different values in all fields. An endpoint MUST use a sequence number of 0
 for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
 increasing value thereafter.
 
-An endpoint might receive an ACK_FREQUENCY frame out of order 
-(see {{Section 13.3 of QUIC-TRANSPORT}}). 
+An endpoint might receive an ACK_FREQUENCY frame out of order
+(see {{Section 13.3 of QUIC-TRANSPORT}}).
 The endpoint MUST ignore the frame if the Sequence Number is smaller than the last processed Sequence Number.
 Otherwise, the endpoint MUST update its state with values received
 in this frame, including the processed largest Sequence Number.
