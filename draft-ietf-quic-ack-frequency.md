@@ -230,11 +230,12 @@ Sequence Number:
 Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets the recipient of this frame can receive without sending an
-  acknowledgment. In other words, an acknowledgement is sent when more than this
-  number of ack-eliciting packets have been received. Since this is a maximum
-  value, a receiver can send an acknowledgement earlier. A value of 0 results in
-  a receiver immediately acknowledging every ack-eliciting packet.
+  packets the recipient of this frame receives before sending an acknowledgment.
+  A receiving endpoint SHOULD send at least one ACK frame when more than this
+  number of ack-eliciting packets have been received. A value of 0 results in
+  a receiver immediately acknowledging every ack-eliciting packet. By default, an
+  endpoint sends an ACK frame for every other ack-eliciting packet, as specified in
+  {{Section 13.2.2 of QUIC-TRANSPORT}}, which corresponds to a value of 1.
 
 Request Max Ack Delay:
 
@@ -244,7 +245,9 @@ Request Max Ack Delay:
   microseconds, unlike the 'max_ack_delay' transport parameter, which is in
   milliseconds. Sending a value smaller than the `min_ack_delay` advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
-  connection error of type PROTOCOL_VIOLATION.
+  connection error of type PROTOCOL_VIOLATION. On receiving a valid value in
+  this field, the endpoint MUST update its `max_ack_delay` to the value provided
+  by the peer.
 
 Reordering Threshold:
 
@@ -267,12 +270,6 @@ connection. A sending endpoint MUST send monotonically increasing values in the
 Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
 out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
 Sequence Number value in the frame is not greater than the largest processed thus far.
-
-An endpoint will have committed a `max_ack_delay` value to the peer, which
-specifies the maximum amount of time by which the endpoint will delay sending
-acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
-update this maximum time to the value proposed by the peer in the Request Max
-Ack Delay field.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
@@ -309,12 +306,12 @@ IMMEDIATE_ACK frames do not need to be retransmitted.
 Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
-On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint MUST send an
+On receiving an ACK_FREQUENCY frame and updating its `max_ack_delay`
+and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint sends an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
-  packets is greater than or equal to the recorded `Ack-Eliciting Threshold`.
+  packets is greater than the `Ack-Eliciting Threshold`.
 
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
