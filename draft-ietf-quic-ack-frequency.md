@@ -476,7 +476,16 @@ new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 
 
 # Security Considerations
-TBD.
+
+An improperly configured or malicious data sender could cause a
+data receiver to acknowledge more frequently than its available resources
+permits. However, there are two limits that make such an attack largely
+inconsequential. First, the acknowledgement rate is bounded by the rate at which
+data is received. Second, ACK_FREQUENCY and IMMEDIATE_ACK frames can only request
+an increase in the acknowledgment rate, but cannot force it.
+
+In general, with this extension, a sender cannot force a receiver to acknowledge
+more frequently than the receiver considers safe based on its resource constraints.
 
 # IANA Considerations {#iana}
 
