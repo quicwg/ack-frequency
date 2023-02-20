@@ -205,7 +205,7 @@ Sequence Number:
 
 : A variable-length integer representing the sequence number assigned to the
   ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
-  frames, see {{multiple-frames}}.
+  frames.
 
 Ack-Eliciting Threshold:
 
@@ -291,7 +291,7 @@ Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `Ack-Eliciting Threshold` values ({{multiple-frames}}), the endpoint MUST send an
+and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint MUST send an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
