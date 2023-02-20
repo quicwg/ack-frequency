@@ -271,7 +271,7 @@ Sequence Number value in the frame is not greater than the largest processed thu
 
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
-acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it SHOULD
+acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
 update this maximum time to the value proposed by the peer in the Request Max
 Ack Delay field.
 
