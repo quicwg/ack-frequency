@@ -244,7 +244,9 @@ Request Max Ack Delay:
   microseconds, unlike the 'max_ack_delay' transport parameter, which is in
   milliseconds. Sending a value smaller than the `min_ack_delay` advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
-  connection error of type PROTOCOL_VIOLATION.
+  connection error of type PROTOCOL_VIOLATION. On receiving a valid value in
+  this field, the endpoint MUST update its `max_ack_delay` to the value provided
+  by the peer.
 
 Reordering Threshold:
 
@@ -268,12 +270,6 @@ connection. A sending endpoint MUST send monotonically increasing values in the
 Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
 out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
 Sequence Number value in the frame is not greater than the largest processed thus far.
-
-An endpoint will have committed a `max_ack_delay` value to the peer, which
-specifies the maximum amount of time by which the endpoint will delay sending
-acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
-update this maximum time to the value proposed by the peer in the Request Max
-Ack Delay field.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
