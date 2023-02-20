@@ -245,7 +245,7 @@ based on the Sequence Number.
 
 An endpoint MAY send multiple ACK_FREQUENCY frames with different values within a
 connection. A sending endpoint MUST send monotonically increasing values in the
-Sequence Number field, since this field allows ACK_FREQUENCY frames to be received
+Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
 out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
 Sequence Number value in the frame is not greater than the largest processed thus far.
 
