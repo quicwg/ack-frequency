@@ -244,11 +244,11 @@ as the receiver will ignore duplicate or out-of-order ACK_FREQUENCY frames
 based on the Sequence Number.
 
 An endpoint MAY send multiple ACK_FREQUENCY frames with different values within a
-connection. The Sequence Number field allows reordered ACK_FREQUENCY frames
-to be received and processed in the intended order, see {{Section 13.3 of QUIC-TRANSPORT}}. A sending
-endpoint MUST send monotonically increasing values in the Sequence Number field.
-A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the Sequence Number
-value is not greater than the largest seen thus far.
+connection. A sending endpoint MUST send monotonically increasing values in the
+Sequence Number field, since this field allows reordered ACK_FREQUENCY
+frames to be received out of order. A receiving endpoint processes only the latest
+information it receives and MUST ignore a received ACK_FREQUENCY frame if the
+Sequence Number value is not greater than the largest processed thus far.
 
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
