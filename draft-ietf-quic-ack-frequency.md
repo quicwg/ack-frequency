@@ -243,27 +243,18 @@ forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
 as the receiver will ignore duplicate or out-of-order ACK_FREQUENCY frames
 based on the Sequence Number.
 
-An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
-with different values.
+An endpoint MAY send multiple ACK_FREQUENCY frames with different values within a
+connection. However, the Sequence Number field allows reordered ACK_FREQUENCY frames
+to be received and processed, see {{Section 13.3 of QUIC-TRANSPORT}}. A sending
+endpoint MUST send monotonically increasing values in the Sequence Number field.
+A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the Sequence Number
+value is not greater than the largest seen thus far.
 
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
 acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
 update this maximum time to the value proposed by the peer in the Request Max
 Ack Delay field.
-
-
-# Multiple ACK_FREQUENCY Frames {#multiple-frames}
-
-An endpoint can send multiple ACK_FREQUENCY frames, and each one of them can
-have different values in all fields. An endpoint MUST use a sequence number of 0
-for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
-increasing value thereafter.  The sequence number allows reordered ACK_FREQUENCY frames to be received and processed, see {{Section 13.3 of QUIC-TRANSPORT}}.
-
-The endpoint MUST ignore the frame if the Sequence Number is not larger than the last processed Sequence Number.
-If the Sequence number is larger, the endpoint MUST update its state with values received
-in this frame, including the processed largest Sequence Number.
-
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
