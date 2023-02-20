@@ -271,7 +271,7 @@ Sequence Number value in the frame is not greater than the largest processed thu
 
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
-acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
+acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it SHOULD
 update this maximum time to the value proposed by the peer in the Request Max
 Ack Delay field.
 
@@ -311,7 +311,7 @@ Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint MUST send an
+and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint SHOULD send an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
@@ -335,13 +335,13 @@ used by the data sender for loss detection. ({{Section 18.2 of QUIC-RECOVERY}})
 recommends a default packet threshold for loss detection of 3.
 
 An endpoint, that receives an ACK_FREQUENCY frame with a Reordering
-Threshold value other than 0x00, MUST immediately send an ACK frame
+Threshold value other than 0x00, SHOULD immediately send an ACK frame
 when the packet number of largest unacknowledged packet since
 the last detected reordering event exceeds the Reordering Threshold.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
 Threshold` value of 0x00, the endpoint does not make this exception. That
-is, the endpoint MUST NOT send an immediate acknowledgement in response to
+is, the endpoint SHOULD NOT send an immediate acknowledgement in response to
 packets received out of order, and instead continues to use the peer's
 `Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
 acknowledgements.
