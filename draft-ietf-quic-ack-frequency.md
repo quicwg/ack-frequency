@@ -60,6 +60,24 @@ normative:
         org: Google
         role: editor
 
+informative:
+
+  Cus22:
+    title: "Reducing the acknowledgement frequency in IETF QUIC"
+    date: 2022-10
+    seriesinfo:
+      DOI: 10.1002/sat.1466
+      name: IJSCN
+    author:
+      -
+        name: A. Custura
+        org: University of Aberdeen
+      -
+        name: R. Secchi
+        org: University of Aberdeen
+      -
+        name: G. Fairhurst
+        org: University of Aberdeen
 
 --- abstract
 
@@ -119,14 +137,16 @@ endpoint performance in the following ways:
 - Similarly, receiving and processing UDP packets can also be CPU intensive, and
   reducing acknowledgement frequency reduces this cost at a data sender.
 
-- For severely asymmetric link technologies, such as DOCSIS, LTE, and satellite
-  links, connection throughput in the forward path can become constrained
-  when the reverse path is filled by acknowledgment packets. When traversing
-  such links, reducing the number of acknowledgments can achieve higher
-  connection throughput.
+- For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
+  connection throughput in the forward path can become constrained
+  when the reverse path is filled by acknowledgment packets {{?RFC3449}}.
+  When traversing such links, reducing the number of acknowledgments can achieve
+  higher connection throughput, lower the impact on other flows or optimise the
+  overall use of transmission resources {{Cus22}}.
 
 - The rate of acknowledgment packets can impact link efficiency, including
-  transmission opportunities or battery life.
+  transmission opportunities or battery life, as well as transmission
+  opportunities available to other flows sharing the same link.
 
 
 As discussed in {{implementation}} however, there can be undesirable consequences
