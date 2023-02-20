@@ -225,7 +225,7 @@ Sequence Number:
 
 : A variable-length integer representing the sequence number assigned to the
   ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
-  frames, see {{multiple-frames}}.
+  frames.
 
 Ack-Eliciting Threshold:
 
@@ -263,44 +263,17 @@ forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
 as the receiver will ignore duplicate or out-of-order ACK_FREQUENCY frames
 based on the Sequence Number.
 
-An endpoint MAY send ACK_FREQUENCY frames multiple times during a connection and
-with different values.
+An endpoint can send multiple ACK_FREQUENCY frames with different values within a
+connection. A sending endpoint MUST send monotonically increasing values in the
+Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
+out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
+Sequence Number value in the frame is not greater than the largest processed thus far.
 
 An endpoint will have committed a `max_ack_delay` value to the peer, which
 specifies the maximum amount of time by which the endpoint will delay sending
 acknowledgments. When the endpoint receives an ACK_FREQUENCY frame, it MUST
 update this maximum time to the value proposed by the peer in the Request Max
 Ack Delay field.
-
-
-# Multiple ACK_FREQUENCY Frames {#multiple-frames}
-
-An endpoint can send multiple ACK_FREQUENCY frames, and each one of them can
-have different values in all fields. An endpoint MUST use a sequence number of 0
-for the first ACK_FREQUENCY frame it constructs and sends, and a strictly
-increasing value thereafter.
-
-An endpoint MUST allow reordered ACK_FREQUENCY frames to be received and
-processed, see {{Section 13.3 of QUIC-TRANSPORT}}.
-
-On the first received ACK_FREQUENCY frame in a connection, an endpoint MUST
-immediately record all values from the frame. The sequence number of the frame
-is recorded as the largest seen sequence number. The new Ack-Eliciting Threshold
-and Request Max Ack Delay values MUST be immediately used for delaying
-acknowledgements; see {{sending}}.
-
-On a subsequently received ACK_FREQUENCY frame, the endpoint MUST check if this
-frame is more recent than any previous ones, as follows:
-
-- If the frame's sequence number is not greater than the largest one seen so
-  far, the endpoint MUST ignore this frame.
-
-- If the frame's sequence number is greater than the largest one seen so far,
-  the endpoint MUST immediately replace old recorded state with values received
-  in this frame. The endpoint MUST start using the new values immediately for
-  delaying acknowledgements; see {{sending}}. The endpoint MUST also replace the
-  recorded sequence number.
-
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
@@ -338,7 +311,7 @@ Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `Ack-Eliciting Threshold` values ({{multiple-frames}}), the endpoint MUST send an
+and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint MUST send an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
