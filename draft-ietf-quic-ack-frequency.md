@@ -139,9 +139,10 @@ endpoint performance in the following ways:
 
 - For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
   connection throughput in the forward path can become constrained
-  when the reverse path is filled by acknowledgment packets. When traversing
-  such links, reducing the number of acknowledgments can achieve higher
-  connection throughput.
+  when the reverse path is filled by acknowledgment packets {{?RFC3449}}.
+  When traversing such links, reducing the number of acknowledgments can achieve
+  higher connection throughput, lower the impact on other flows or optimise the
+  overall use of transmission resources {{Cus22}}.
 
 - The rate of acknowledgment packets can impact link efficiency, including
   transmission opportunities or battery life, as well as transmission
@@ -160,16 +161,6 @@ packet, and for every packet that is received out of order (Section
 13.2.1 of {{QUIC-TRANSPORT}}). This
 simple mechanism does not allow a sender to signal its constraints. This
 extension provides a mechanism to solve this problem.
-
-# Background
-
-Asymmetrics links and their performance properties have been studied for years.
-{{?RFC3449}} describes them in detail as well as techniques for mitigating their
-impact on TCP performance.
-
-{{Cus22}} looks a how these asymmetric links affect QUIC specifically, with
-experimental evidence and some recommendations of how to choose parameters based
-on those experiments.
 
 # Negotiating Extension Use {#nego}
 
