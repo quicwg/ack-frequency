@@ -164,7 +164,7 @@ extension provides a mechanism to solve this problem.
 # Background
 
 Asymmetrics links and their performance properties have been studied for years.
-{{?RFC3449} describes them in detail as well as techniques for mitigating their
+{{?RFC3449}} describes them in detail as well as techniques for mitigating their
 impact on TCP performance.
 
 {{Cus22}} looks a how these asymmetric links affect QUIC specifically, with
