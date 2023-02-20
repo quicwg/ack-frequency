@@ -230,11 +230,12 @@ Sequence Number:
 Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets the recipient of this frame can receive without sending an
-  acknowledgment. In other words, an acknowledgement is sent when more than this
-  number of ack-eliciting packets have been received. Since this is a maximum
-  value, a receiver can send an acknowledgement earlier. A value of 0 results in
-  a receiver immediately acknowledging every ack-eliciting packet.
+  packets the recipient of this frame receives before sending an acknowledgment.
+  A receiving endpoint SHOULD send at least one ACK frame when more than this
+  number of ack-eliciting packets have been received. A value of 0 results in
+  a receiver immediately acknowledging every ack-eliciting packet. By default, an
+  endpoint sends an ACK frame for every other ack-eliciting packet, as specified in
+  {{Section 13.2.2 of QUIC-TRANSPORT}}, which corresponds to a value of 1.
 
 Request Max Ack Delay:
 
@@ -306,12 +307,12 @@ IMMEDIATE_ACK frames do not need to be retransmitted.
 Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
-On receiving an ACK_FREQUENCY frame and updating its recorded `max_ack_delay`
-and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint SHOULD send an
+On receiving an ACK_FREQUENCY frame and updating its `max_ack_delay`
+and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint sends an
 acknowledgement when one of the following conditions are met:
 
 - Since the last acknowledgement was sent, the number of received ack-eliciting
-  packets is greater than or equal to the recorded `Ack-Eliciting Threshold`.
+  packets is greater than the `Ack-Eliciting Threshold`.
 
 - Since the last acknowledgement was sent, `max_ack_delay` amount of time has
   passed.
