@@ -168,8 +168,8 @@ Asymmetrics links and their performance properties have been studied for years.
 impact on TCP performance.
 
 {{Cus22}} looks a how these asymmetric links affect QUIC specifically, with
-experimental evidence and some recommendations of how to choose  based on those
-experiments.
+experimental evidence and some recommendations of how to choose parameters based
+on those experiments.
 
 # Negotiating Extension Use {#nego}
 
