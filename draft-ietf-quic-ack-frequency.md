@@ -411,13 +411,16 @@ controllers.
 ## Congestion Control
 
 A sender needs to be responsive to notifications of congestion, such as
-a packet loss or an ECN CE marking.  To enable a sender to respond to potential
-network congestion, a sender SHOULD cause a receiver to send an acknowledgement
-at least once per RTT if there are unacknowledged ack-eliciting packets in flight.
+a packet loss or an ECN CE marking. Therefore, {{Section 13.2.2 of QUIC-TRANSPORT}} 
+indicates "A receiver SHOULD send an ACK frame after receiving at least two ack-eliciting packets".
+This document overwrites this requirement by providing the sender with a way to signal its preferred
+ACK frequency to the receiver. To enable a sender to respond to potential
+network congestion in a timely fashion, usually at least one acknowledgement
+per round-trip time (RTT) is needed if there are unacknowledged ack-eliciting packets in flight.
 A sender can accomplish this by sending an IMMEDIATE_ACK frame once per
-round-trip time (RTT), or it can set the Ack-Eliciting Threshold and
-Request Max Ack Delay values to be no more than a congestion window and an
-estimated RTT, respectively.
+RTT. Similarly, setting the Ack-Eliciting Threshold to a lower value than the current congestion window or
+the Request Max Ack to less than the estimated RTT are two options to request at least one ACK frame per RTT.
+However, the congestion window particularly but also the RTT are dynamic and therefore might require frequent updates if the selected value are close to this limit.
 
 Note that it's possible the RTT is smaller than the receiver's timer granularity,
 as communicated via the 'min_ack_delay' transport parameter, preventing the
