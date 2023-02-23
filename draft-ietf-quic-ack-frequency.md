@@ -428,9 +428,9 @@ A congestion controller that is congestion window limited relies upon receiving
 acknowledgements to send additional data into the network.  An increase in
 acknowledgement delay increases the delay in sending data, which can reduce the
 achieved throughput.  Congestion window growth can also depend upon receiving
-acknowledgements. This can be particularly significant in slow start ({{Section 7.3.1 of QUIC-RECOVERY}}),
-as delaying acknowledgements can delay the increase in congestion window and can
-create larger packet bursts.
+acknowledgements. This can be particularly significant in slow start
+({{Section 7.3.1 of QUIC-RECOVERY}}), when delaying acknowledgements can delay
+the increase in congestion window and can create larger packet bursts.
 
 
 ## Burst Mitigation
