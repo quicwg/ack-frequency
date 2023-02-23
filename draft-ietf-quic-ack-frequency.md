@@ -330,7 +330,7 @@ Largest Unacked
 : The largest packet number of a received ack-eliciting packet.
 
 Largest Acked
-: The Largest Acknowledged value sent in in an ACK frame.
+: The Largest Acknowledged value sent in an ACK frame.
 
 Unreported Missing
 : Packets with packet numbers between the Largest Unacked and Largest Acked that
