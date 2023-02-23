@@ -346,7 +346,7 @@ Threshold value other than 0x00, MUST immediately send an ACK frame
 when the offset of the largest received packet number since
 the last detected reordering event exceeds the Reordering Threshold.
 
-More correctly, this means if a gap in the packet number is
+More concretely, this means if a gap in the packet number is
 detected, one additional ACK frame will be sent if the difference between the largest received packet number and the packet number
 of the last in-order packet number is larger than the Reordering Threshold for the first time
 (largest_unacknowledged - largest_inorder > Reordering Threshold).
