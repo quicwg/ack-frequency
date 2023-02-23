@@ -336,8 +336,8 @@ Unreported Missing
 : Packets with packet numbers between the Largest Unacked and Largest Acked that
   have not yet been received.
 
-An endpoint that receives an ACK_FREQUENCY frame with a Reordering
-Threshold value other than 0x00 SHOULD send an immediate ACK when the gap
+An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
+Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
 than or equal to the Reordering Threshold value.
 
@@ -347,7 +347,7 @@ used by the data sender for loss detection. ({{Section 18.2 of QUIC-RECOVERY}})
 recommends a default packet threshold for loss detection of 3.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
-Threshold` value of 0x00, the endpoint SHOULD NOT send an immediate
+Threshold` value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgement in response to packets received out of order, and instead
 rely on the peer's `Ack-Eliciting Threshold` and `max_ack_delay` thresholds
 for sending acknowledgements.
