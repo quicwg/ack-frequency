@@ -424,9 +424,8 @@ packet before an idle period to avoid waiting for the ack delay.
 
 Acknowledging more packets in a single ACK frame can cause larger bursts
 of packets into the network. Senders MUST continue to follow Section 7.7
-of {{QUIC-RECOVERY}}, a sender can either employ pacing or cause a receiver to
-send an acknowledgement for at least each initial congestion window of received
-data.
+of {{QUIC-RECOVERY}} and either employ pacing or limit bursts to the
+initial congestion window.
 
 ## Loss Detection and Timers {#loss}
 
