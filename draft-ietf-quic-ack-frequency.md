@@ -323,7 +323,7 @@ strategy.
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
-packet. This extension modifies that behavior when an ACK FREQUENCY frame with
+packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 is received.
 
 Largest Unacked
