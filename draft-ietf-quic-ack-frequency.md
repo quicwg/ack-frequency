@@ -413,7 +413,7 @@ accomplish this by sending an IMMEDIATE_ACK frame once per round trip, though
 if the packet containing an IMMEDIATE_ACK is lost, detection of that loss will be
 delayed by the reordering threshold or requested max ack delay.
 
-Note that it's possible the RTT is smaller than the receiver's timer granularity,
+Note that it is possible that the RTT is smaller than the receiver's timer granularity,
 as communicated via the 'min_ack_delay' transport parameter, preventing the
 receiver from sending an acknowledgment every RTT in time.  In these cases,
 Reordering Threshold values other than 1 can be harmful, because it delays fast
