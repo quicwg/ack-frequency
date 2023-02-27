@@ -368,8 +368,8 @@ reordering:
   Receive 8
   Receive 9 -> Send ACK
 
-If the reordering threshold is 5 and we're only considering ACKs sent due to
-reordering:
+If the reordering threshold is 5 and assuming that packets are received close enough
+in time to not exceed max_ack_delay:
 
   Receive 1
   Receive 3 -> 2 Missing
