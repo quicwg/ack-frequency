@@ -408,7 +408,9 @@ network congestion in a timely fashion, usually at least one acknowledgement
 per round trip is needed if there are unacknowledged ack-eliciting packets
 in flight. A sender can accomplish this by setting the Ack-Eliciting Threshold
 to a value no larger than the current congestion window or the Request Max Ack
-Delay value to no more than the estimated round trip. Alternatively, a sender can
+Delay value to no more than the estimated round trip. Note that the congestion
+window particularly but also the RTT are dynamic and therefore might require frequent
+updates if the selected value are close to these limits. Alternatively, a sender can
 accomplish this by sending an IMMEDIATE_ACK frame once per round trip, though
 if the packet containing an IMMEDIATE_ACK is lost, detection of that loss will be
 delayed by the reordering threshold or requested max ack delay.
