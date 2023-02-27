@@ -362,20 +362,21 @@ If the reordering theshold is 3 and ACKs are only sent due to reordering:
 
   Receive 1
   Receive 3 -> 2 Missing
-  Receive 4
-  Receive 5 -> Send ACK
-  Receive 8
-  Receive 9 -> Send ACK
+  Receive 4 -> 2 Missing
+  Receive 5 -> Send ACK because of 2
+  Receive 8 -> 6,7 Missing
+  Receive 9 -> Send ACK because of 6, 7 Missing
+  Receive 10 -> Send ACK because of 7
 
 If the reordering threshold is 5 and ACKs are only sent due to reordering:
 
   Receive 1
   Receive 3 -> 2 Missing
-  Receive 5 -> 4 Missing
-  Receive 6
-  Receive 7 -> Send ACK
-  Receive 8
-  Receive 9 -> Send ACK
+  Receive 5 -> 2 Missing, 4 Missing
+  Receive 6 -> 2 Missing, 4 Missing
+  Receive 7 -> Send ACK because of 2, 4 Missing
+  Receive 8 -> 4 Missing
+  Receive 9 -> Send ACK because of 4
 
 ## Expediting Congestion Signals {#congestion}
 
