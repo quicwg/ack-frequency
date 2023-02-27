@@ -362,7 +362,7 @@ If the reordering theshold is 3 and we're only considering ACKs sent due to
 reordering:
 
   Receive 1
-  Receive 3
+  Receive 3 -> 2 Missing
   Receive 4
   Receive 5 -> Send ACK
   Receive 8
@@ -372,8 +372,8 @@ If the reordering threshold is 5 and we're only considering ACKs sent due to
 reordering:
 
   Receive 1
-  Receive 3
-  Receive 5
+  Receive 3 -> 2 Missing
+  Receive 5 -> 4 Missing
   Receive 6
   Receive 7 -> Send ACK
   Receive 8
