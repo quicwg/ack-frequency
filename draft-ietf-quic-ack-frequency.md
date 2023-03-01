@@ -323,24 +323,62 @@ strategy.
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
-packet. This extension modifies this behavior.
+packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
+a Reordering Threshold value other than 1 is received.
 
-In order to ensure timely loss detection, the Reordering Threshold provided
-in the ACK_FREQUENCY frame SHOULD NOT be larger than the re-ordering threshold
-used by the data sender for loss detection. ({{Section 18.2 of QUIC-RECOVERY}})
-recommends a default packet threshold for loss detection of 3.
+Largest Unacked
+: The largest packet number among all received ack-eliciting packets.
 
-An endpoint, that receives an ACK_FREQUENCY frame with a Reordering
-Threshold value other than 0x00, SHOULD immediately send an ACK frame
-when the packet number of largest unacknowledged packet since
-the last detected reordering event exceeds the Reordering Threshold.
+Largest Acked
+: The Largest Acknowledged value sent in an ACK frame.
+
+Unreported Missing
+: Packets with packet numbers between the Largest Unacked and Largest Acked that
+  have not yet been received.
+
+An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
+Threshold value SHOULD send an immediate ACK when the gap
+between the smallest Unreported Missing packet and the Largest Unacked is greater
+than or equal to the Reordering Threshold value.
+
+In order to ensure timely loss detection, it is optimal to send a Reordering
+Threshold value of 1 less than the packet threshold used by the data sender for
+loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
+packet can be declared lost based on the packet threshold. If the value is
+larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
+recommends a default packet threshold for loss detection of 3, equivalent to
+a Reordering Threshold of 2.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
-Threshold` value of 0x00, the endpoint does not make this exception. That
-is, the endpoint SHOULD NOT send an immediate acknowledgement in response to
-packets received out of order, and instead continues to use the peer's
-`Ack-Eliciting Threshold` and `max_ack_delay` thresholds for sending
-acknowledgements.
+Threshold` value of 0, the endpoint SHOULD NOT send an immediate
+acknowledgement in response to packets received out of order, and instead
+rely on the peer's `Ack-Eliciting Threshold` and `max_ack_delay` thresholds
+for sending acknowledgements.
+
+### Examples
+
+When the reordering threshold is 1, any time a packet is received
+and there is a missing packet, an immediate ACK is sent.
+
+If the reordering theshold is 3 and ACKs are only sent due to reordering:
+
+  Receive 1
+  Receive 3 -> 2 Missing
+  Receive 4 -> 2 Missing
+  Receive 5 -> Send ACK because of 2
+  Receive 8 -> 6,7 Missing
+  Receive 9 -> Send ACK because of 6, 7 Missing
+  Receive 10 -> Send ACK because of 7
+
+If the reordering threshold is 5 and ACKs are only sent due to reordering:
+
+  Receive 1
+  Receive 3 -> 2 Missing
+  Receive 5 -> 2 Missing, 4 Missing
+  Receive 6 -> 2 Missing, 4 Missing
+  Receive 7 -> Send ACK because of 2, 4 Missing
+  Receive 8 -> 4 Missing
+  Receive 9 -> Send ACK because of 4
 
 ## Expediting Congestion Signals {#congestion}
 
