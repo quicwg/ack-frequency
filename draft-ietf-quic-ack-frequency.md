@@ -358,7 +358,7 @@ for sending acknowledgements.
 ### Examples
 
 When the reordering threshold is 1, any time a packet is received
-and there is a missing packet, it must be at least 1 packet number less, so
+and there is a missing packet,
 an immediate ACK is sent.
 
 If the reordering theshold is 3 and ACKs are only sent due to reordering:
