@@ -341,13 +341,13 @@ Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
 than or equal to the Reordering Threshold value.
 
-In order to ensure timely loss detection, it is optimal to send a Reordering Threshold value of 1 less than
-the packet threshold used by the data sender for loss detection.
-If the threshold is smaller, the additional ACK does not provide input to
-the loss detection. If the value is larger, it creates unnecessary delays.
-({{Section 18.2 of QUIC-RECOVERY}}) recommends a default packet threshold for
-loss detection of 3, equivalent to a Reordering Threshold of 2.
-
+In order to ensure timely loss detection, it is optimal to send a Reordering
+Threshold value of 1 less than the packet threshold used by the data sender for
+loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
+packet can be declared lost based on the packet threshold. If the value is
+larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
+recommends a default packet threshold for loss detection of 3, equivalent to
+a Reordering Threshold of 2.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
 Threshold` value of 0, the endpoint SHOULD NOT send an immediate
