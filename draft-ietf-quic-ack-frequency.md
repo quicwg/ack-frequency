@@ -327,7 +327,7 @@ packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 is received.
 
 Largest Unacked
-: The largest packet number among all received ack-eliciting packets so far.
+: The largest packet number among all received ack-eliciting packets.
 
 Largest Acked
 : The Largest Acknowledged value sent in an ACK frame.
