@@ -123,7 +123,7 @@ This document uses terms, definitions, and notational conventions described in
 A receiver acknowledges received packets, but it can delay sending these
 acknowledgements. Delaying acknowledgements can impact connection
 throughput, loss detection and congestion controller performance at the
-sender, and CPU utilization at both the sender and receiver.
+sender, and CPU utilization at both a data sender and a data receiver.
 
 Reducing the frequency of acknowledgements can improve connection and
 endpoint performance in the following ways:
