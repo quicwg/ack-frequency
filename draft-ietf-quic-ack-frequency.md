@@ -259,7 +259,7 @@ Reordering Threshold:
   A value of 0 indicates out-of-order packets do not elicit an immediate ACKs.
 
 ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
-it is recommenended to send another ACK_FREQUENCY frame, unless an ACK_FREQUENCY
+it is encouraged to send another ACK_FREQUENCY frame, unless an ACK_FREQUENCY
 frame with a larger Sequence Number value has already been sent. However, it is
 not forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
 as the receiver will ignore duplicate or out-of-order ACK_FREQUENCY frames
