@@ -129,9 +129,9 @@ Reducing the frequency of acknowledgements can improve connection and
 endpoint performance in the following ways:
 
 - Sending UDP packets can be very CPU intensive on some platforms. Reducing
-  the number packet that only contain acknowledgements reduces the CPU consumed
-  at a data receiver. Experience shows that this reduction can be critical for
-  high bandwidth connections.
+  the number of packets that only contain acknowledgements reduces the CPU
+  consumed at a data receiver. Experience shows that this reduction can be
+  critical for high bandwidth connections.
 
 - Similarly, receiving and processing UDP packets can also be CPU intensive, and
   reducing acknowledgement frequency reduces this cost at a data sender.
