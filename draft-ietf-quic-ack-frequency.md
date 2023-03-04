@@ -251,17 +251,17 @@ Request Max Ack Delay:
 
 Reordering Threshold:
 
-: A variable-length integer that indicates how many
+: A variable-length integer that indicates how 
   out of order packets can arrive before eliciting an immediate ACK. If no
   ACK_FREQUENCY frames have been received, the endpoint immediately acknowledges
   any subsequent packets that are received out of order, as specified in
-  {{Section 13.2 of QUIC-TRANSPORT}}, as such the default value is 1.
+  {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
   A value of 0 indicates out-of-order packets do not elicit an immediate ACKs.
 
 ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
-is encouraged to send an ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame
-with a larger Sequence Number value has already been sent. However, it is not
-forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
+it is recommenended to send another ACK_FREQUENCY frame, unless an ACK_FREQUENCY
+frame with a larger Sequence Number value has already been sent. However, it is
+not forbidden to retransmit the lost frame (see Section 13.3 of {{QUIC-TRANSPORT}),
 as the receiver will ignore duplicate or out-of-order ACK_FREQUENCY frames
 based on the Sequence Number.
 
@@ -269,7 +269,7 @@ An endpoint can send multiple ACK_FREQUENCY frames with different values within 
 connection. A sending endpoint MUST send monotonically increasing values in the
 Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
 out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
-Sequence Number value in the frame is not greater than the largest processed thus far.
+Sequence Number value in the frame is smaller than the largest processed thus far.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
@@ -299,8 +299,6 @@ IMMEDIATE_ACK Frame {
 }
 ~~~
 
-IMMEDIATE_ACK frames do not need to be retransmitted.
-
 # Sending Acknowledgments {#sending}
 
 Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgements as
@@ -324,7 +322,7 @@ strategy.
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
-a Reordering Threshold value other than 1 is received.
+a Reordering Threshold value other than 1 has been received.
 
 Largest Unacked
 : The largest packet number among all received ack-eliciting packets.
@@ -530,7 +528,7 @@ new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
 
 An improperly configured or malicious data sender could cause a
 data receiver to acknowledge more frequently than its available resources
-permits. However, there are two limits that make such an attack largely
+permit. However, there are two limits that make such an attack largely
 inconsequential. First, the acknowledgement rate is bounded by the rate at which
 data is received. Second, ACK_FREQUENCY and IMMEDIATE_ACK frames can only request
 an increase in the acknowledgment rate, but cannot force it.
