@@ -251,7 +251,7 @@ Request Max Ack Delay:
 
 Reordering Threshold:
 
-: A variable-length integer that indicates how 
+: A variable-length integer that indicates how
   out of order packets can arrive before eliciting an immediate ACK. If no
   ACK_FREQUENCY frames have been received, the endpoint immediately acknowledges
   any subsequent packets that are received out of order, as specified in
