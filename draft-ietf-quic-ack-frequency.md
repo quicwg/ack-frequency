@@ -337,7 +337,9 @@ Unreported Missing
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
-than or equal to the Reordering Threshold value.
+than or equal to the Reordering Threshold value. Sending this additional ACK will
+reset the `max_ack_delay` timer and `Ack-Eliciting Threshold` counter as any ACK
+would do.
 
 In order to ensure timely loss detection, it is optimal to send a Reordering
 Threshold value of 1 less than the packet threshold used by the data sender for
