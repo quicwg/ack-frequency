@@ -121,18 +121,17 @@ This document uses terms, definitions, and notational conventions described in
 # Motivation
 
 A receiver acknowledges received packets, but it can delay sending these
-acknowledgements. The delaying of acknowledgements can impact connection
+acknowledgements. Delaying acknowledgements can impact connection
 throughput, loss detection and congestion controller performance at a data
 sender, and CPU utilization at both a data sender and a data receiver.
 
-Reducing the frequency of acknowledgement packets can improve connection and
+Reducing the frequency of acknowledgements can improve connection and
 endpoint performance in the following ways:
 
-- Sending UDP packets can be noticeably CPU intensive on some
-  platforms. Reducing the number of packets that only contain acknowledgements
-  can therefore reduce the amount of CPU consumed at a data receiver. Experience
-  shows that this cost reduction can be significant for high bandwidth
-  connections.
+- Sending UDP packets can be very CPU intensive on some platforms. Reducing
+  the number of packets that only contain acknowledgements reduces the CPU
+  consumed at a data receiver. Experience shows that this reduction can be
+  critical for high bandwidth connections.
 
 - Similarly, receiving and processing UDP packets can also be CPU intensive, and
   reducing acknowledgement frequency reduces this cost at a data sender.
@@ -155,11 +154,10 @@ acknowledgment frequency. A sender's constraints on the acknowledgement
 frequency need to be taken into account to maximize congestion controller and
 loss recovery performance.
 
-{{QUIC-TRANSPORT}} currently specifies a simple delayed acknowledgement
-mechanism that a receiver can use: send an acknowledgement for every other
-packet, and for every packet that is received out of order (Section
-13.2.1 of {{QUIC-TRANSPORT}}). This
-simple mechanism does not allow a sender to signal its constraints. This
+{{QUIC-TRANSPORT}} specifies a simple delayed acknowledgement mechanism that a
+receiver can use: send an acknowledgement for every other packet, and for every
+packet that is received out of order (Section 13.2.1 of {{QUIC-TRANSPORT}}).
+This does not allow a sender to signal its preferences or constraints. This
 extension provides a mechanism to solve this problem.
 
 # Negotiating Extension Use {#nego}
