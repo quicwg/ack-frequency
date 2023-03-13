@@ -482,7 +482,8 @@ Receiving an acknowledgement can allow a sender to release new packets into the
 network. If a sender is designed to rely on the timing of peer acknowledgments
 ("ACK clock"), delaying acknowledgments can cause undesirable bursts of data
 into the network. In keeping with Section 7.7 of {{QUIC-RECOVERY}}, a sender
-can either employ pacing or limit bursts to the initial congestion window.
+can either employ pacing or limit bursts to to the size of the initial
+congestion window.
 
 ## Loss Detection and Timers {#loss}
 
