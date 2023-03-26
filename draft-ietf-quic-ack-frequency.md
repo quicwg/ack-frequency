@@ -412,8 +412,7 @@ in response, as stated in {{Section 13.2.2 of QUIC-TRANSPORT}}.
 
 On sending an update to the peer's `max_ack_delay`, an endpoint can use this new
 value in later computations of its Probe Timeout (PTO) period; see {{Section 5.2.1
-of QUIC-RECOVERY}}. The endpoint MUST however wait until the ACK_FREQUENCY
-frame that carries this new value is acknowledged by the peer.
+of QUIC-RECOVERY}}.
 
 Until the frame is acknowledged, the endpoint MUST use the greater of the
 current `max_ack_delay` and the value that is in flight when computing the PTO
