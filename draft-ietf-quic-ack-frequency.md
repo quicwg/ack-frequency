@@ -364,7 +364,8 @@ When the reordering threshold is 1, any time a packet is received
 and there is a missing packet, an immediate ACK is sent.
 
 If the reordering theshold is 3 and ACKs are only sent due to reordering:
-```
+
+~~~
   Receive 1
   Receive 3 -> 2 Missing
   Receive 4 -> 2 Missing
@@ -372,10 +373,11 @@ If the reordering theshold is 3 and ACKs are only sent due to reordering:
   Receive 8 -> 6,7 Missing
   Receive 9 -> Send ACK because of 6, 7 Missing
   Receive 10 -> Send ACK because of 7
-```
+~~~
 
 If the reordering threshold is 5 and ACKs are only sent due to reordering:
-```
+
+~~~
   Receive 1
   Receive 3 -> 2 Missing
   Receive 5 -> 2 Missing, 4 Missing
@@ -383,7 +385,7 @@ If the reordering threshold is 5 and ACKs are only sent due to reordering:
   Receive 7 -> Send ACK because of 2, 4 Missing
   Receive 8 -> 4 Missing
   Receive 9 -> Send ACK because of 4
-```
+~~~
 
 ## Expediting Congestion Signals {#congestion}
 
