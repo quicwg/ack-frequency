@@ -400,10 +400,6 @@ more frequently than classic ECN {{?RFC3168}}.
 
 ## Batch Processing of Packets {#batch}
 
-For performance reasons, an endpoint can receive incoming packets from the
-underlying platform in a batch of multiple packets. This batch can contain
-enough packets to cause multiple acknowledgements to be sent.
-
 To avoid sending multiple acknowledgements in rapid succession, an endpoint can
 process all packets in a batch before determining whether to send an ACK frame
 in response, as stated in {{Section 13.2.2 of QUIC-TRANSPORT}}.
