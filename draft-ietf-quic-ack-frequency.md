@@ -170,7 +170,7 @@ extension provides a mechanism to solve this problem.
 Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
 
-min_ack_delay (0xff03de1a):
+min_ack_delay (0xff04de1a):
 
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint that is sending this value is able to
@@ -551,7 +551,7 @@ the "QUIC Transport Parameters" registry under the "QUIC Protocol" heading.
 
 Value                        | Parameter Name.   | Specification
 -----------------------------|-------------------|-----------------
-0xff03de1a                   | min_ack_delay.    | {{nego}}
+0xff04de1a                   | min_ack_delay.    | {{nego}}
 {: #transport-parameters title="Addition to QUIC Transport Parameters Entries"}
 
 
