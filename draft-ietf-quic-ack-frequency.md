@@ -441,24 +441,30 @@ controllers.
 ## Congestion Control
 
 A sender needs to be responsive to notifications of congestion, such as
-a packet loss or an ECN CE marking. To enable a sender to respond to potential
-network congestion in a timely fashion, usually at least one acknowledgement
-per round trip is needed if there are unacknowledged ack-eliciting packets
-in flight. A sender can accomplish this by setting the Ack-Eliciting Threshold
+a packet loss or an ECN CE marking. Decreasing the acknowledgement frequncy
+can delay a sender's response to network congestion or cause it to underutilize
+the available bandwidth.
+
+To limit the consequences of reduced acknowledgement frequency, a sender
+SHOULD cause a receiver to send an acknowledgement at least once per RTT if
+there are unacknowledged ack-eliciting packets in flight.
+
+A sender can accomplish this by setting the Ack-Eliciting Threshold
 to a value no larger than the current congestion window or the Request Max Ack
-Delay value to no more than the estimated round trip. Note that the congestion
-window particularly but also the RTT are dynamic and therefore might require
-frequent updates if the selected value are close to these limits. Alternatively,
+Delay value to no more than the estimated round trip. Alternatively,
 a sender can accomplish this by sending an IMMEDIATE_ACK frame once per
 round trip, though if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
 max ack delay.
 
-Note that it is possible that the RTT is smaller than the receiver's timer granularity,
+Note that the congestion window and the RTT are dynamic and therefore might require
+sending frequent ACK_FREQUENCY frames to ensure optimal performance.
+
+It is possible that the RTT is smaller than the receiver's timer granularity,
 as communicated via the 'min_ack_delay' transport parameter, preventing the
-receiver from sending an acknowledgment every RTT in time.  In these cases,
-Reordering Threshold values other than 1 can be harmful, because it delays fast
-loss detection.
+receiver from sending an acknowledgment every RTT in time.  Additionally,
+Reordering Threshold values other than 1 can be harmful, because it can delay
+time threshold loss detection.
 
 A congestion controller that is congestion window limited relies upon receiving
 acknowledgements to send additional data into the network.  An increase in
@@ -498,14 +504,6 @@ rely on an accurate RTT estimate, such as time-threshold loss detection (Section
 6.1.2 of {{QUIC-RECOVERY}}) or Probe Timeout (Section 6.2 of {{QUIC-RECOVERY}}),
 will be less responsive to changes in the path's RTT, resulting in either
 delayed or unnecessary packet transmissions.
-
-To limit these consequences of reduced acknowledgement frequency, a sender
-SHOULD cause a receiver to send an acknowledgement at least once per RTT if
-there are unacknowledged ack-eliciting packets in flight. A sender can
-accomplish this by sending an IMMEDIATE_ACK frame once per round-trip time
-(RTT), or it can set the Ack-Eliciting Threshold and Request Max Ack Delay
-values to be no more than a congestion window and an estimated RTT,
-respectively.
 
 A sender might use timers to detect loss of PMTU probe packets
 ({{Section 14 of QUIC-TRANSPORT}}). A sender SHOULD
