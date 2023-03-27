@@ -327,13 +327,13 @@ send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 has been received.
 
-Largest Unacked
+Largest Unacked:
 : The largest packet number among all received ack-eliciting packets.
 
-Largest Acked
+Largest Acked:
 : The Largest Acknowledged value sent in an ACK frame.
 
-Unreported Missing
+Unreported Missing:
 : Packets with packet numbers between the Largest Unacked and Largest Acked that
   have not yet been received.
 
