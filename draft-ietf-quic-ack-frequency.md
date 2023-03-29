@@ -441,7 +441,7 @@ controllers.
 ## Congestion Control
 
 A sender needs to be responsive to notifications of congestion, such as
-a packet loss or an ECN CE marking. Decreasing the acknowledgement frequncy
+a packet loss or an ECN CE marking. Decreasing the acknowledgement frequency
 can delay a sender's response to network congestion or cause it to underutilize
 the available bandwidth.
 
