@@ -148,7 +148,7 @@ endpoint performance in the following ways:
   higher connection throughput, lower the impact on other flows or optimise the
   overall use of transmission resources {{Cus22}}.
 
-- The rate of acknowledgment packets can impact link efficiency, including
+- The rate of acknowledgment packets can reduce link efficiency, including
   transmission opportunities or battery life, as well as transmission
   opportunities available to other flows sharing the same link.
 
@@ -259,33 +259,33 @@ Reordering Threshold:
   ACK_FREQUENCY frames have been received, the endpoint immediately acknowledges
   any subsequent packets that are received out of order, as specified in
   {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
-  A value of 0 indicates out-of-order packets do not elicit an immediate ACKs.
+  A value of 0 indicates out-of-order packets do not elicit an immediate ACK.
 
 ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
 the sender is encouraged to send another ACK_FREQUENCY frame, unless an
 ACK_FREQUENCY frame with a larger Sequence Number value has already been sent.
 However, it is not forbidden to retransmit the lost frame (see Section 13.3 of
-{{QUIC-TRANSPORT}), as the receiver will ignore duplicate or out-of-order
+{{QUIC-TRANSPORT}), because the receiver will ignore duplicate or out-of-order
 ACK_FREQUENCY frames based on the Sequence Number.
 
 An endpoint can send multiple ACK_FREQUENCY frames with different values within a
 connection. A sending endpoint MUST send monotonically increasing values in the
 Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
 out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
-Sequence Number value in the frame is smaller than the largest processed thus far.
+Sequence Number value in the frame is smaller than the largest currently processed value.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
 A sender can use an ACK_FREQUENCY frame to reduce the number of acknowledgements
-sent by a receiver, but doing so increases the chances that time-sensitive
+sent by a receiver, but doing so increases the likelihood that time-sensitive
 feedback is delayed as well. For example, as described in {{loss}}, delaying
 acknowledgements can increase the time it takes for a sender to detect packet
-loss. The IMMEDIATE_ACK frame helps mitigate this problem.
+loss. Sending an IMMEDIATE_ACK can help mitigate this mitigate this problem.
 
 An IMMEDIATE_ACK frame can be useful in other situations as well. For example,
 if a sender wants an immediate RTT measurement or if a sender wants to establish
 receiver liveness as quickly as possible. PING frames
-({{Section 19.2 of QUIC-TRANSPORT}}) are ack-eliciting but if a PING frame is
+({{Section 19.2 of QUIC-TRANSPORT}}) are ack-eliciting, but if a PING frame is
 sent without an IMMEDIATE_ACK frame, the receiver might not immediately send
 an ACK based on its local ACK strategy.
 
@@ -341,10 +341,10 @@ An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
 than or equal to the Reordering Threshold value. Sending this additional ACK will
-reset the `max_ack_delay` timer and `Ack-Eliciting Threshold` counter as any ACK
-would do.
+reset the `max_ack_delay` timer and `Ack-Eliciting Threshold` counter (as any ACK
+would do).
 
-In order to ensure timely loss detection, it is optimal to send a Reordering
+To ensure timely loss detection, it is optimal to send a Reordering
 Threshold value of 1 less than the packet threshold used by the data sender for
 loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
 packet can be declared lost based on the packet threshold. If the value is
@@ -459,7 +459,7 @@ round trip, though if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
 max ack delay.
 
-Note that the congestion window and the RTT are dynamic and therefore might require
+Note that the congestion window and the RTT are dynamic (can change over the lifetime of a aconnection) and therefore might require
 sending frequent ACK_FREQUENCY frames to ensure optimal performance.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
