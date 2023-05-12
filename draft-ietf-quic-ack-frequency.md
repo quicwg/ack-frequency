@@ -509,7 +509,7 @@ delayed or unnecessary packet transmissions.
 
 A sender might use timers to detect loss of PMTU probe packets
 ({{Section 14 of QUIC-TRANSPORT}}). A sender SHOULD
-bundle an IMMEDIATE_ACK frame with any PMTU probes to avoid triggering such
+bundle a PING frame or an IMMEDIATE_ACK frame with any PMTU probes to avoid triggering such
 timers.
 
 ## Connection Migration {#migration}
