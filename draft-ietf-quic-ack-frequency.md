@@ -387,7 +387,7 @@ If the reordering threshold is 5 and ACKs are only sent due to reordering:
   Receive 9 -> Send ACK because of 4
 ~~~
 
-## Expediting Congestion Signals {#congestion}
+## Expediting Explicit Congestion Notification (ECN) Signals {#congestion}
 
 An endpoint SHOULD send an immediate acknowledgement when a packet marked
 with the ECN Congestion Experienced (CE) {{?RFC3168}} codepoint in the IP
