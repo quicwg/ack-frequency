@@ -523,7 +523,7 @@ An endpoint's congestion controller and RTT estimator are reset upon
 confirmation of migration (Section 9.4 of [QUIC-TRANSPORT]), this
 restores the default delay of acknowledgements.
 Therefore, an endpoint that has sent an ACK_FREQUENCY frame earlier in the
-connection ought to send a new ACK_FREQUENCY frame upon confirmation of 
+connection ought to send a new ACK_FREQUENCY frame upon confirmation of
 connection migration if it wishes to restore an updated delay for acknowledgements.
 
 # Security Considerations
