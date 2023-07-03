@@ -520,8 +520,9 @@ frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can send only an
 IMMEDIATE_ACK frame, which is a non-probing frame.
 
 An endpoint's congestion controller and RTT estimator are reset upon
-confirmation of migration (Section 9.4 of [QUIC-TRANSPORT]), this
-restores the default delay of acknowledgements.
+confirmation of migration (Section 9.4 of [QUIC-TRANSPORT]),
+this changes the pattern of acknowledgements received after migration.
+
 Therefore, an endpoint that has sent an ACK_FREQUENCY frame earlier in the
 connection ought to send a new ACK_FREQUENCY frame upon confirmation of
 connection migration if it wishes to restore an updated delay for acknowledgements.
