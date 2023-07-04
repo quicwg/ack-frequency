@@ -525,7 +525,7 @@ this changes the pattern of acknowledgements received after migration.
 
 Therefore, an endpoint that has sent an ACK_FREQUENCY frame earlier in the
 connection ought to send a new ACK_FREQUENCY frame upon confirmation of
-connection migration if it wishes to restore an updated delay for acknowledgements.
+connection migration with updated information, e.g. to consider the new RTT estimate.
 
 # Security Considerations
 
