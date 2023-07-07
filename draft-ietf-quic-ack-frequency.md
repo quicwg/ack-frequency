@@ -326,6 +326,8 @@ As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 has been received.
+(TODO: we may not need this paragraph, as the specification below matches
+RFC9000 intended behavior when threshold is set to 1.)
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
 Threshold` value of 0, the endpoint SHOULD NOT send an immediate
@@ -349,18 +351,19 @@ Unreported Missing:
   have not yet been received.
 
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
-Threshold value SHOULD send an immediate ACK:
+Threshold value SHOULD send an immediate ACK in response to an Out-of-Order
+Packet:
 
 * when the packet number is larger than the Largest Unacked
   packet and the difference between the this packet number and the Largest
-  Unacked is larger than the threshold.
+  Unacked is larger than the Reordering Threshold.
 
 * when the packet number is lower than the Largest Acked.
   (TODO: is that true? Should there be some kind of threshold?)
 
 * when the total number of Unreported Missing packets is larger
   than the Reordering Threshold.
-  
+
 See {{examples}} for examples explaining this behavior. See
 {{setting-the-reordering-threshold-value}} for guidance on how
 to choose the reordering threshold value when sending ACK_FREQUENCY
