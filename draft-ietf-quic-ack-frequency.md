@@ -322,13 +322,9 @@ strategy.
 
 ## Response to Out-of-Order Packets {#out-of-order}
 
-As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, an endpoint is expected to
-send an acknowledgement without delay when it receives an ack-eliciting packet either:
-
- * when the received packet has a packet number less than another ack-eliciting packet that has been received, or
- * when the packet has a packet number larger than the highest-numbered ack-eliciting packet that has been received and there are missing packets between that packet and this packet.
-
-This extension modifies that behavior when an ACK_FREQUENCY frame with
+As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
+send an acknowledgement immediately on receiving a reordered ack-eliciting
+packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 has been received.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
@@ -359,7 +355,7 @@ Threshold value SHOULD send an immediate ACK:
   packet and the difference between the this packet number and the Largest
   Unacked is larger than the threshold.
 
-* when the packet number is lower than the Largest Acked packet.
+* when the packet number is lower than the Largest Acked.
   (TODO: is that true? Should there be some kind of threshold?)
 
 * when the total number of Unreported Missing packets is larger
