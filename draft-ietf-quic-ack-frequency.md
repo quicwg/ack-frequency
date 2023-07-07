@@ -329,23 +329,46 @@ send an acknowledgement without delay when it receives an ack-eliciting packet e
  * when the packet has a packet number larger than the highest-numbered ack-eliciting packet that has been received and there are missing packets between that packet and this packet.
 
 This extension modifies that behavior when an ACK_FREQUENCY frame with
-a Reordering Threshold value other than 1 has been received. An endpoint is expected to
-send an acknowledgement without delay when it receives an ack-eliciting packet either:
-
- * when the received packet packet number is at least Reordering Threshold less than another ack-eliciting packet that has been received, or
- * when the packet has a packet number Reordering Threshold larger than the lowest-numbered ack-eliciting packet that has been received and not yet acknowledged, and there are missing packets between that packet and this packet.
-
-An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
-Threshold value SHOULD send an immediate ACK when the gap
-between the lowest-numbered ack-eliciting packet that has been received and
-not yet acknowledged and the highest-numbered ack-eliciting packet that has been received
-is larger than the Reordering Threshold.
+a Reordering Threshold value other than 1 has been received.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
 Threshold` value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgement in response to packets received out of order, and instead
 rely on the peer's `Ack-Eliciting Threshold` and `max_ack_delay` thresholds
 for sending acknowledgements.
+
+If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
+Threshold` value larger than 1, the endpoint tests the amount of reordering
+before deciding to send an acknowledgement. The specification uses the following
+definitions:
+ 
+Largest Unacked:
+: The largest packet number among all received ack-eliciting packets.
+
+Largest Acked:
+: The Largest Acknowledged value sent in an ACK frame.
+
+Unreported Missing:
+: Packets with packet numbers between the Largest Unacked and Largest Acked that
+  have not yet been received.
+
+An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
+Threshold value SHOULD send an immediate ACK:
+
+* when the packet number is larger than the Largest Unacked
+  packet and the difference between the this packet number and the Largest
+  Unacked is larger than the threshold.
+
+* when the packet number is lower than the Largest Acked packet.
+  (TODO: is that true? Should there be some kind of threshold?)
+
+* when the total number of Unreported Missing packets is larger
+  than the Reordering Threshold.
+  
+See {{examples}} for examples explaining this behavior. See
+{{setting-the-reordering-threshold-value}} for guidance on how
+to choose the reordering threshold value when sending ACK_FREQUENCY
+frames.
 
 ### Examples
 
