@@ -265,7 +265,7 @@ ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
 the sender is encouraged to send another ACK_FREQUENCY frame, unless an
 ACK_FREQUENCY frame with a larger Sequence Number value has already been sent.
 However, it is not forbidden to retransmit the lost frame (see Section 13.3 of
-{{QUIC-TRANSPORT}), as the receiver will ignore duplicate or out-of-order
+{{QUIC-TRANSPORT}}), as the receiver will ignore duplicate or out-of-order
 ACK_FREQUENCY frames based on the Sequence Number.
 
 An endpoint can send multiple ACK_FREQUENCY frames with different values within a
@@ -322,7 +322,7 @@ strategy.
 
 ## Response to Out-of-Order Packets {#out-of-order}
 
-As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
+As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, an endpoint is expected to
 send an acknowledgement without delay when it receives an ack-eliciting packet either:
 
  * when the received packet has a packet number less than another ack-eliciting packet that has been received, or
