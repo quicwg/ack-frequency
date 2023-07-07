@@ -339,7 +339,7 @@ If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
 Threshold` value larger than 1, the endpoint tests the amount of reordering
 before deciding to send an acknowledgement. The specification uses the following
 definitions:
- 
+
 Largest Unacked:
 : The largest packet number among all received ack-eliciting packets.
 
