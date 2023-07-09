@@ -359,10 +359,9 @@ Packet:
   Unacked is larger than the Reordering Threshold.
 
 * when the packet number is lower than the Largest Acked.
-  (TODO: is that true? Should there be some kind of threshold?)
 
 * when the total number of Unreported Missing packets is larger
-  than the Reordering Threshold.
+  than or equal to the Reordering Threshold.
 
 See {{examples}} for examples explaining this behavior. See
 {{setting-the-reordering-threshold-value}} for guidance on how
