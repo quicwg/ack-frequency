@@ -340,17 +340,6 @@ Threshold` value larger than 1, the endpoint tests the amount of reordering
 before deciding to send an acknowledgement. The specification uses the following
 definitions:
 
-If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
-Threshold` value of 0, the endpoint SHOULD NOT send an immediate
-acknowledgement in response to packets received out of order, and instead
-rely on the peer's `Ack-Eliciting Threshold` and `max_ack_delay` thresholds
-for sending acknowledgements.
-
-If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
-Threshold` value larger than 1, the endpoint tests the amount of reordering
-before deciding to send an acknowledgement. The specification uses the following
-definitions:
-
 Largest Unacked:
 : The largest packet number among all received ack-eliciting packets.
 
@@ -434,16 +423,6 @@ more frequently than classic ECN {{?RFC3168}}.
 To avoid sending multiple acknowledgements in rapid succession, an endpoint can
 process all packets in a batch before determining whether to send an ACK frame
 in response, as stated in {{Section 13.2.2 of QUIC-TRANSPORT}}.
-
-## Setting the Reordering Threshold value
-
-In order to ensure timely loss detection, it is optimal to send a Reordering
-Threshold value of 1 less than the packet threshold used by the data sender for
-loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
-packet can be declared lost based on the packet threshold. If the value is
-larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
-recommends a default packet threshold for loss detection of 3, equivalent to
-a Reordering Threshold of 2.
 
 # Computation of Probe Timeout Period
 
