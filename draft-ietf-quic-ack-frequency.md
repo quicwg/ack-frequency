@@ -457,9 +457,9 @@ a packet loss or an ECN CE marking. Decreasing the acknowledgement frequency
 can delay a sender's response to network congestion or cause it to underutilize
 the available bandwidth.
 
-To limit the consequences of reduced acknowledgement frequency, a sender
-SHOULD cause a receiver to send an acknowledgement at least once per RTT if
-there are unacknowledged ack-eliciting packets in flight.
+To enable a sender to respond	to potential network congestion in a timely
+fashion, at least one acknowledgement per round trip is needed if there
+are unacknowledged ack-eliciting packets in flight.
 
 A sender can accomplish this by setting the Request Max Ack
 Delay value to no more than the estimated round trip time.
