@@ -458,7 +458,7 @@ can delay a sender's response to network congestion or cause it to underutilize
 the available bandwidth.
 
 To enable a sender to respond	to potential network congestion in a timely
-fashion, at least one acknowledgement per round trip is needed if there
+fashion, at least one acknowledgement per round trip is needed when there
 are unacknowledged ack-eliciting packets in flight.
 
 A sender can accomplish this by setting the Request Max Ack
