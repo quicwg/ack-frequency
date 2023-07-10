@@ -458,7 +458,7 @@ can delay a sender's response to network congestion or cause it to underutilize
 the available bandwidth.
 
 To limit the consequences of reduced acknowledgement frequency, a sender
-SHOULD cause a receiver to send an acknowledgement at least once per RTT if
+can cause a receiver to send an acknowledgement at least once per RTT when
 there are unacknowledged ack-eliciting packets in flight.
 
 A sender can accomplish this by setting the Request Max Ack
