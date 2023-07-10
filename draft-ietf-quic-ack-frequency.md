@@ -425,7 +425,7 @@ of QUIC-RECOVERY}}.
 Until the packet carrying this frame is acknowledged, the endpoint MUST use the
 greater of the current `max_ack_delay` and the value that is in flight when
 computing the PTO period. Doing so avoids spurious PTOs that can be caused by an
-update that increases the peer's `max_ack_delay`.
+update that decreases the peer's `max_ack_delay`.
 
 While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
