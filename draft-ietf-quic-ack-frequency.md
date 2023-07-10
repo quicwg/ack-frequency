@@ -508,8 +508,8 @@ will be less responsive to changes in the path's RTT, resulting in either
 delayed or unnecessary packet transmissions.
 
 A sender might use timers to detect loss of PMTU probe packets
-({{Section 14 of QUIC-TRANSPORT}}). A sender SHOULD
-bundle a PING frame or an IMMEDIATE_ACK frame with any PMTU probes to avoid triggering such
+({{Section 14 of QUIC-TRANSPORT}}). A sender MAY
+bundle an IMMEDIATE_ACK frame with any PMTU probes to avoid triggering such
 timers.
 
 ## Connection Migration {#migration}
