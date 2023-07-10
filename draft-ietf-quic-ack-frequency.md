@@ -255,17 +255,17 @@ Request Max Ack Delay:
 Reordering Threshold:
 
 : A variable-length integer that indicates the maximum packet
-  reordering before eliciting an immediate ACK. If no
-  ACK_FREQUENCY frames have been received, the endpoint immediately acknowledges
-  any subsequent packets that are received out of order, as specified in
-  {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
+  reordering before eliciting an immediate ACK, as specified in {#out-of-order}.
+  If no ACK_FREQUENCY frames have been received, the endpoint immediately
+  acknowledges any subsequent packets that are received out of order, as specified
+  in {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
   A value of 0 indicates out-of-order packets do not elicit an immediate ACKs.
 
 ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
 the sender is encouraged to send another ACK_FREQUENCY frame, unless an
 ACK_FREQUENCY frame with a larger Sequence Number value has already been sent.
 However, it is not forbidden to retransmit the lost frame (see Section 13.3 of
-{{QUIC-TRANSPORT}), as the receiver will ignore duplicate or out-of-order
+{{QUIC-TRANSPORT}}), as the receiver will ignore duplicate or out-of-order
 ACK_FREQUENCY frames based on the Sequence Number.
 
 An endpoint can send multiple ACK_FREQUENCY frames with different values within a
@@ -327,6 +327,17 @@ send an acknowledgement immediately on receiving a reordered ack-eliciting
 packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 has been received.
 
+If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
+Threshold` value of 0, the endpoint SHOULD NOT send an immediate
+acknowledgement in response to packets received out of order, and instead
+rely on the peer's `Ack-Eliciting Threshold` and `max_ack_delay` thresholds
+for sending acknowledgements.
+
+If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
+Threshold` value larger than 1, the endpoint tests the amount of reordering
+before deciding to send an acknowledgement. The specification uses the following
+definitions:
+
 Largest Unacked:
 : The largest packet number among all received ack-eliciting packets.
 
@@ -344,21 +355,11 @@ than or equal to the Reordering Threshold value. Sending this additional ACK wil
 reset the `max_ack_delay` timer and `Ack-Eliciting Threshold` counter as any ACK
 would do.
 
-In order to ensure timely loss detection, it is optimal to send a Reordering
-Threshold value of 1 less than the packet threshold used by the data sender for
-loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
-packet can be declared lost based on the packet threshold. If the value is
-larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
-recommends a default packet threshold for loss detection of 3, equivalent to
-a Reordering Threshold of 2.
+See {{examples}} for examples explaining this behavior. See {{set-threshold}}
+for guidance on how to choose the reordering threshold value when sending
+ACK_FREQUENCY frames.
 
-If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
-Threshold` value of 0, the endpoint SHOULD NOT send an immediate
-acknowledgement in response to packets received out of order, and instead
-rely on the peer's `Ack-Eliciting Threshold` and `max_ack_delay` thresholds
-for sending acknowledgements.
-
-### Examples
+### Examples {#examples}
 
 When the reordering threshold is 1, any time a packet is received
 and there is a missing packet, an immediate ACK is sent.
@@ -387,6 +388,16 @@ If the reordering threshold is 5 and ACKs are only sent due to reordering:
   Receive 9 -> Send ACK because of 4
 ~~~
 
+## Setting the Reordering Threshold value {#set-threshold}
+
+In order to ensure timely loss detection, it is optimal to send a Reordering
+Threshold value of 1 less than the packet threshold used by the data sender for
+loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
+packet can be declared lost based on the packet threshold. If the value is
+larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
+recommends a default packet threshold for loss detection of 3, equivalent to
+a Reordering Threshold of 2.
+
 ## Expediting Congestion Signals {#congestion}
 
 An endpoint SHOULD send an immediate acknowledgement when a packet marked
@@ -398,7 +409,6 @@ reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
 congestion controllers (e.g. {{?I-D.ietf-tsvwg-aqm-dualq-coupled}}) that mark
 more frequently than classic ECN {{?RFC3168}}.
-
 
 ## Batch Processing of Packets {#batch}
 
