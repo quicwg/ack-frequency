@@ -280,7 +280,7 @@ A sender can use an ACK_FREQUENCY frame to reduce the number of acknowledgements
 sent by a receiver, but doing so increases the likelihood that time-sensitive
 feedback is delayed as well. For example, as described in {{loss}}, delaying
 acknowledgements can increase the time it takes for a sender to detect packet
-loss. Sending an IMMEDIATE_ACK can help mitigate this mitigate this problem.
+loss. Sending an IMMEDIATE_ACK can help to mitigate this problem.
 
 An IMMEDIATE_ACK frame can be useful in other situations as well. For example,
 if a sender wants an immediate RTT measurement or if a sender wants to establish
@@ -459,7 +459,8 @@ round trip, though if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
 max ack delay.
 
-Note that the congestion window and the RTT are dynamic (can change over the lifetime of a connection) and therefore might require
+Note that the congestion window and the RTT are dynamic (can change over the
+lifetime of a connection) and therefore might require
 sending frequent ACK_FREQUENCY frames to ensure optimal performance.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
