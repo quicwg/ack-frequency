@@ -468,8 +468,8 @@ ensure optimal performance.
 It is possible that the RTT is smaller than the receiver's timer granularity,
 as communicated via the 'min_ack_delay' transport parameter, preventing the
 receiver from sending an acknowledgment every RTT in time unless packets are
-acknowledged immediately.  Additionally, Reordering Threshold values other than 1
-can be harmful, because it can delay loss detection more than an RTT.
+acknowledged immediately.  In these cases, Reordering Threshold values other than 1
+can can delay loss detection more than an RTT.
 
 ### Application-Limited Connections
 
