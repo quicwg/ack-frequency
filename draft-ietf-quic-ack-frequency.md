@@ -451,11 +451,13 @@ To limit the consequences of reduced acknowledgement frequency, a sender
 SHOULD cause a receiver to send an acknowledgement at least once per RTT if
 there are unacknowledged ack-eliciting packets in flight.
 
-A sender can accomplish this by setting the Ack-Eliciting Threshold
-to a value no larger than the current congestion window or the Request Max Ack
-Delay value to no more than the estimated round trip. Alternatively,
-a sender can accomplish this by sending an IMMEDIATE_ACK frame once per
-round trip, though if the packet containing an IMMEDIATE_ACK is lost,
+A sender can accomplish this by setting the Request Max Ack
+Delay value to no more than the estimated round trip time.
+The sender can also improve feedback and robustness to
+variation in the path RTT by setting the Ack-Eliciting Threshold
+to a value no larger than the current congestion window. Alternatively,
+a sender can accomplish this by sending an IMMEDIATE_ACK frame once each
+round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
 max ack delay.
 
