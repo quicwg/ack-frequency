@@ -471,8 +471,8 @@ round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
 max ack delay.
 
-Note that the congestion window and the RTT are changing over the lifetime of a
-connectionand therefore might require sending frequent ACK_FREQUENCY frames to
+Note that the congestion window and the RTT change over the lifetime of a
+connection and therefore might require sending frequent ACK_FREQUENCY frames to
 ensure optimal performance.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
