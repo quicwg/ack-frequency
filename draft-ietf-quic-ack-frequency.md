@@ -471,7 +471,9 @@ receiver from sending an acknowledgment every RTT in time unless packets are
 acknowledged immediately.  Additionally, Reordering Threshold values other than 1
 can be harmful, because it can delay loss detection more than an RTT.
 
-A congestion controller that is congestion window limited relies upon receiving
+### Application-Limited Connections
+
+A congestion controller that is limited by the congestion window relies upon receiving
 acknowledgements to send additional data into the network.  An increase in
 acknowledgement delay increases the delay in sending data, which can reduce the
 achieved throughput.  Congestion window growth can also depend upon receiving
