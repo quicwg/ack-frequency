@@ -154,7 +154,7 @@ endpoint performance in the following ways:
 
 
 As discussed in {{implementation}} however, there can be undesirable consequences
-to congestion control and loss recovery if a receiver uniltaerally reduces the
+to congestion control and loss recovery if a receiver unilitaerally reduces the
 acknowledgment frequency. A sender's constraints on the acknowledgement
 frequency need to be taken into account to maximize congestion controller and
 loss recovery performance.
