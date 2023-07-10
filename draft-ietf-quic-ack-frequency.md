@@ -148,7 +148,7 @@ endpoint performance in the following ways:
   higher connection throughput, lower the impact on other flows or optimise the
   overall use of transmission resources {{Cus22}}.
 
-- The rate of acknowledgment packets can impact link efficiency, including
+- The rate of acknowledgment packets can reduce link efficiency, including
   transmission opportunities or battery life, as well as transmission
   opportunities available to other flows sharing the same link.
 
@@ -248,7 +248,7 @@ Request Max Ack Delay:
   microseconds, unlike the 'max_ack_delay' transport parameter, which is in
   milliseconds. Sending a value smaller than the `min_ack_delay` advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
-  connection error of type PROTOCOL_VIOLATION. On receiving a valid value in
+  connection error of type TRANSPORT_PARAMETER_ERROR. On receiving a valid value in
   this field, the endpoint MUST update its `max_ack_delay` to the value provided
   by the peer.
 
@@ -257,35 +257,35 @@ Reordering Threshold:
 : A variable-length integer that indicates the maximum packet
   reordering before eliciting an immediate ACK, as specified in {#out-of-order}.
   If no ACK_FREQUENCY frames have been received, the endpoint immediately
-  acknowledges any subsequent packets that are received out of order, as specified
+  acknowledges any subsequent packets that are received out-of-order, as specified
   in {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
-  A value of 0 indicates out-of-order packets do not elicit an immediate ACKs.
+  A value of 0 indicates out-of-order packets do not elicit an immediate ACK.
 
 ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
 the sender is encouraged to send another ACK_FREQUENCY frame, unless an
 ACK_FREQUENCY frame with a larger Sequence Number value has already been sent.
 However, it is not forbidden to retransmit the lost frame (see Section 13.3 of
-{{QUIC-TRANSPORT}}), as the receiver will ignore duplicate or out-of-order
+{{QUIC-TRANSPORT}}), because the receiver will ignore duplicate or out-of-order
 ACK_FREQUENCY frames based on the Sequence Number.
 
 An endpoint can send multiple ACK_FREQUENCY frames with different values within a
 connection. A sending endpoint MUST send monotonically increasing values in the
 Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
 out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
-Sequence Number value in the frame is smaller than the largest processed thus far.
+Sequence Number value in the frame is smaller than the largest currently processed value.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
 A sender can use an ACK_FREQUENCY frame to reduce the number of acknowledgements
-sent by a receiver, but doing so increases the chances that time-sensitive
+sent by a receiver, but doing so increases the likelihood that time-sensitive
 feedback is delayed as well. For example, as described in {{loss}}, delaying
 acknowledgements can increase the time it takes for a sender to detect packet
-loss. The IMMEDIATE_ACK frame helps mitigate this problem.
+loss. Sending an IMMEDIATE_ACK frame can help mitigate this problem.
 
 An IMMEDIATE_ACK frame can be useful in other situations as well. For example,
 if a sender wants an immediate RTT measurement or if a sender wants to establish
 receiver liveness as quickly as possible. PING frames
-({{Section 19.2 of QUIC-TRANSPORT}}) are ack-eliciting but if a PING frame is
+({{Section 19.2 of QUIC-TRANSPORT}}) are ack-eliciting, but if a PING frame is
 sent without an IMMEDIATE_ACK frame, the receiver might not immediately send
 an ACK based on its local ACK strategy.
 
@@ -352,8 +352,8 @@ An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
 than or equal to the Reordering Threshold value. Sending this additional ACK will
-reset the `max_ack_delay` timer and `Ack-Eliciting Threshold` counter as any ACK
-would do.
+reset the `max_ack_delay` timer and `Ack-Eliciting Threshold` counter (as any ACK
+would do).
 
 See {{examples}} for examples explaining this behavior. See {{set-threshold}}
 for guidance on how to choose the reordering threshold value when sending
@@ -390,7 +390,7 @@ If the reordering threshold is 5 and ACKs are only sent due to reordering:
 
 ## Setting the Reordering Threshold value {#set-threshold}
 
-In order to ensure timely loss detection, it is optimal to send a Reordering
+To ensure timely loss detection, it is optimal to send a Reordering
 Threshold value of 1 less than the packet threshold used by the data sender for
 loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
 packet can be declared lost based on the packet threshold. If the value is
@@ -398,7 +398,7 @@ larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
 recommends a default packet threshold for loss detection of 3, equivalent to
 a Reordering Threshold of 2.
 
-## Expediting Congestion Signals {#congestion}
+## Expediting Explicit Congestion Notification (ECN) Signals {#congestion}
 
 An endpoint SHOULD send an immediate acknowledgement when a packet marked
 with the ECN Congestion Experienced (CE) {{?RFC3168}} codepoint in the IP
@@ -422,10 +422,10 @@ On sending an update to the peer's `max_ack_delay`, an endpoint can use this new
 value in later computations of its Probe Timeout (PTO) period; see {{Section 5.2.1
 of QUIC-RECOVERY}}.
 
-Until the frame is acknowledged, the endpoint MUST use the greater of the
-current `max_ack_delay` and the value that is in flight when computing the PTO
-period. Doing so avoids spurious PTOs that can be caused by an update that
-increases the peer's `max_ack_delay`.
+Until the packet carrying this frame is acknowledged, the endpoint MUST use the
+greater of the current `max_ack_delay` and the value that is in flight when
+computing the PTO period. Doing so avoids spurious PTOs that can be caused by an
+update that increases the peer's `max_ack_delay`.
 
 While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
@@ -461,24 +461,29 @@ To limit the consequences of reduced acknowledgement frequency, a sender
 SHOULD cause a receiver to send an acknowledgement at least once per RTT if
 there are unacknowledged ack-eliciting packets in flight.
 
-A sender can accomplish this by setting the Ack-Eliciting Threshold
-to a value no larger than the current congestion window or the Request Max Ack
-Delay value to no more than the estimated round trip. Alternatively,
-a sender can accomplish this by sending an IMMEDIATE_ACK frame once per
-round trip, though if the packet containing an IMMEDIATE_ACK is lost,
+A sender can accomplish this by setting the Request Max Ack
+Delay value to no more than the estimated round trip time.
+The sender can also improve feedback and robustness to
+variation in the path RTT by setting the Ack-Eliciting Threshold
+to a value no larger than the current congestion window. Alternatively,
+a sender can accomplish this by sending an IMMEDIATE_ACK frame once each
+round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
 max ack delay.
 
-Note that the congestion window and the RTT are dynamic and therefore might require
-sending frequent ACK_FREQUENCY frames to ensure optimal performance.
+Note that the congestion window and the RTT are changing over the lifetime of a
+connectionand therefore might require sending frequent ACK_FREQUENCY frames to
+ensure optimal performance.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
 as communicated via the 'min_ack_delay' transport parameter, preventing the
 receiver from sending an acknowledgment every RTT in time unless packets are
-acknowledged immediately.  Additionally, Reordering Threshold values other than 1
-can be harmful, because it can delay loss detection more than an RTT.
+acknowledged immediately.  In these cases, Reordering Threshold values other than 1
+can can delay loss detection more than an RTT.
 
-A congestion controller that is congestion window limited relies upon receiving
+### Application-Limited Connections
+
+A congestion controller that is limited by the congestion window relies upon receiving
 acknowledgements to send additional data into the network.  An increase in
 acknowledgement delay increases the delay in sending data, which can reduce the
 achieved throughput.  Congestion window growth can also depend upon receiving
@@ -530,11 +535,12 @@ frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can send only an
 IMMEDIATE_ACK frame, which is a non-probing frame.
 
 An endpoint's congestion controller and RTT estimator are reset upon
-confirmation of migration ({{Section 9.4 of QUIC-TRANSPORT}}), which can impact
-the number of acknowledgements received after migration. An endpoint that has
-sent an ACK_FREQUENCY frame earlier in the connection SHOULD update and send a
-new ACK_FREQUENCY frame immediately upon confirmation of connection migration.
+confirmation of migration (Section 9.4 of [QUIC-TRANSPORT]);
+this changes the pattern of acknowledgements received after migration.
 
+Therefore, an endpoint that has sent an ACK_FREQUENCY frame earlier in the
+connection ought to send a new ACK_FREQUENCY frame upon confirmation of
+connection migration with updated information, e.g. to consider the new RTT estimate.
 
 # Security Considerations
 
