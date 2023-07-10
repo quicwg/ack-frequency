@@ -248,7 +248,7 @@ Request Max Ack Delay:
   microseconds, unlike the 'max_ack_delay' transport parameter, which is in
   milliseconds. Sending a value smaller than the `min_ack_delay` advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
-  connection error of type PROTOCOL_VIOLATION. On receiving a valid value in
+  connection error of type TRANSPORT_PARAMETER_ERROR. On receiving a valid value in
   this field, the endpoint MUST update its `max_ack_delay` to the value provided
   by the peer.
 
