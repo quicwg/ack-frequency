@@ -458,8 +458,8 @@ can delay a sender's response to network congestion or cause it to underutilize
 the available bandwidth.
 
 To limit the consequences of reduced acknowledgement frequency, a sender
-SHOULD cause a receiver to send an acknowledgement at least once per RTT if
-there are unacknowledged ack-eliciting packets in flight.
+can cause a receiver to send an acknowledgement at least once per round trip
+when there are ack-eliciting packets in flight.
 
 A sender can accomplish this by setting the Request Max Ack
 Delay value to no more than the estimated round trip time.
