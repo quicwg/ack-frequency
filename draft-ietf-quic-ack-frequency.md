@@ -459,7 +459,7 @@ the available bandwidth.
 
 To limit the consequences of reduced acknowledgement frequency, a sender
 can cause a receiver to send an acknowledgement at least once per round trip
-there are ack-eliciting packets in flight.
+when there are ack-eliciting packets in flight.
 
 A sender can accomplish this by setting the Request Max Ack
 Delay value to no more than the estimated round trip time.
