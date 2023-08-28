@@ -345,7 +345,7 @@ Largest Acked:
 : The Largest Acknowledged value sent in an ACK frame.
 
 Unreported Missing:
-: Packets with packet numbers have not yet been received starting from
+: Packets with packet numbers that have not (yet) been received starting from
   Largest Acked upto the Largest Unacked.
 
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
