@@ -322,9 +322,9 @@ strategy.
 
 ## Response to long idle periods
 
-When no acknowledgements have been sent in a long time, receiving feedback as soon
-as possible is important to e.g. update stale RTT measurements.  To encounter this problem, 
-receivers are encouraged to send an acknowledgement immediately upon receiving an
+When no acknowledgements have been sent in a long time, receiving timely feedback
+is important to e.g. update stale RTT measurements.  To mitigate this problem, 
+receivers are encouraged to send an acknowledgement earlier soon after receiving an
 ack-eliciting packet when no acknowledgement has been sent in over one smoothed
 round trip time.  This is not an issue specific to this document, but the mechanisms 
 specified herein could exacerbate the issue by adding feedback delays.
