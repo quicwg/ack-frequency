@@ -320,6 +320,15 @@ acknowledgement when one of the following conditions are met:
 {{out-of-order}}, {{congestion}}, and {{batch}} describe exceptions to this
 strategy.
 
+## Response to long idle periods
+
+It is important to receive timely feedback after long idle periods,
+e.g. update stale RTT measurements. When no acknowledgement has been sent in
+over one smoothed round trip time, receivers are encouraged to send an
+acknowledgement soon after receiving an ack-eliciting packet. This is not an
+issue specific to this document, but the mechanisms specified herein could
+create excessive delays.
+
 ## Response to Out-of-Order Packets {#out-of-order}
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
