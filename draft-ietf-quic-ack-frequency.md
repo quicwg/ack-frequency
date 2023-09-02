@@ -322,13 +322,12 @@ strategy.
 
 ## Response to long idle periods
 
-When no acknowledgements have been sent in long time, the sender can
-have a stale round trip time measurement.  It is RECOMMENDED that receivers
-negotiating this extension send an acknowledgement immediately upon receiving an
-ack-eliciting packet when an acknowledgement has not been sent in over one smoothed
-round trip time.  This is not an issue specific to this document, but the
-ACK_FREQUENCY frame allows sending many fewer acknowledgements, which can
-exacerbate the issue.
+When no acknowledgements have been sent in a long time, receiving feedback as soon
+as possible is important to e.g. update stale RTT measurements.  To encounter this problem, 
+receivers are encouraged to send an acknowledgement immediately upon receiving an
+ack-eliciting packet when no acknowledgement has been sent in over one smoothed
+round trip time.  This is not an issue specific to this document, but the mechanisms 
+specified herein could exacerbate the issue by adding feedback delays.
 
 ## Response to Out-of-Order Packets {#out-of-order}
 
