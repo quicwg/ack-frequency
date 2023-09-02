@@ -501,7 +501,7 @@ a round trip when sending resumes. The Max Ack Delay and Ack-Eliciting Threshold
 values used by the receiver can further delay acknowledgements.  In this case, the
 sender can include an IMMEDIATE_ACK or ACK_FREQUENCY frame in the first
 Ack-Eliciting packet to avoid waiting for substantially more than a round trip
-for feedback.
+for an acknowledgement.
 
 ## Burst Mitigation
 
