@@ -496,6 +496,13 @@ unnecessarily when entering idle periods. Therefore, if no further data is
 buffered to be sent, a sender can send an IMMEDIATE_ACK frame with the last data
 packet before an idle period to avoid waiting for the ack delay.
 
+If there are no inflight packets, no acknowledgements will be received for at least
+a round trip when sending resumes. The Max Ack Delay and Ack-Eliciting Threshold
+values used by the receiver can further delay acknowledgements.  In this case, the
+sender can include an IMMEDIATE_ACK or ACK_FREQUENCY frame in the first
+Ack-Eliciting packet to avoid waiting for substantially more than a round trip
+for an acknowledgement.
+
 ## Burst Mitigation
 
 Receiving an acknowledgement can allow a sender to release new packets into the
