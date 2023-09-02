@@ -322,12 +322,12 @@ strategy.
 
 ## Response to long idle periods
 
-When no acknowledgements have been sent in a long time, receiving timely feedback
-is important to e.g. update stale RTT measurements.  To mitigate this problem,
-receivers are encouraged to send an acknowledgement soon after receiving an
-ack-eliciting packet when no acknowledgement has been sent in over one smoothed
-round trip time.  This is not an issue specific to this document, but the mechanisms
-specified herein could create excessive delays.
+It is important to receive timely feedback after long idle periods,
+e.g. update stale RTT measurements. When no acknowledgement has been sent in
+over one smoothed round trip time, receivers are encouraged to send an
+acknowledgement soon after receiving an ack-eliciting packet. This is not an
+issue specific to this document, but the mechanisms specified herein could
+create excessive delays.
 
 ## Response to Out-of-Order Packets {#out-of-order}
 
