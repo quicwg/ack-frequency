@@ -353,9 +353,13 @@ Largest Unacked:
 Largest Acked:
 : The Largest Acknowledged value sent in an ACK frame.
 
+Largest Reported:
+: The largest packet number that could be declared lost with the specified
+  Reordering Threshold, which is Largest Acked - Reordering Threshold + 1.
+
 Unreported Missing:
-: Packets with packet numbers between the Largest Unacked and Largest Acked that
-  have not yet been received.
+: Packets with packet numbers between the Largest Unacked and Largest Reported
+  that have not yet been received.
 
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK when the gap
