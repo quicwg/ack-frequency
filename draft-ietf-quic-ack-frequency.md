@@ -480,7 +480,7 @@ round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
 max ack delay.
 
-When setting the Request Max Ack Delay as a function of RTT, it is typically
+When setting the Request Max Ack Delay as a function of RTT, it is usually
 better to use the Smoothed RTT ({{Section 5.3 of QUIC-RECOVERY}}) or another
 estimate of the typical round trip time than Min RTT. This avoids eliciting an
 excessive number of acknowledgemtents when min_rtt is much smaller than
