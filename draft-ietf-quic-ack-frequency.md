@@ -212,7 +212,7 @@ ACK_FREQUENCY frame, shown below:
 
 ~~~
 ACK_FREQUENCY Frame {
-  Type (i) = 0xaccf,
+  Type (i) = 0xaf,
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
   Request Max Ack Delay (i),
@@ -221,7 +221,7 @@ ACK_FREQUENCY Frame {
 ~~~
 
 Following the common frame format described in {{Section 12.4 of
-QUIC-TRANSPORT}}, ACK_FREQUENCY frames have a type of 0xaccf, and contain the
+QUIC-TRANSPORT}}, ACK_FREQUENCY frames have a type of 0xaf, and contain the
 following fields:
 
 Sequence Number:
@@ -298,7 +298,7 @@ endpoint is under heavy load.
 
 ~~~
 IMMEDIATE_ACK Frame {
-  Type (i) = 0xac,
+  Type (i) = 0x1e,
 }
 ~~~
 
@@ -576,8 +576,8 @@ registry under the "QUIC Protocol" heading.
 
 Value      | Frame Name          | Specification
 -----------|---------------------|-----------------
-0xaccf     | ACK_FREQUENCY       | {{ack-frequency-frame}}
-0xac       | IMMEDIATE_ACK       | {{immediate-ack-frame}}
+0xaf       | ACK_FREQUENCY       | {{ack-frequency-frame}}
+0x1e       | IMMEDIATE_ACK       | {{immediate-ack-frame}}
 {: #frame-types title="Addition to QUIC Frame Types Entries"}
 
 --- back
