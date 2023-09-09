@@ -451,11 +451,10 @@ will wait 'max_ack_delay', increasing the chances of a premature PTO.
 Therefore, if Ignore Order is enabled, the PTO MUST be larger than the peer's
 'max_ack_delay'.
 
-When sending PTO packets, one can either skip a sufficient number of packet numbers
-or include an IMMEDIATE_ACK frame to elicit an immediate acknowledgement. This
-avoids waiting for the ack delay for acknowledgements of PTO packets, reducing
-tail latency and allowing the sender to exclude the peer's 'max_ack_delay' from
-subsequent PTO calculations.
+When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
+immediate acknowledgement. This avoids waiting the ack delay for
+acknowledgements of PTO packets, reducing tail latency and allowing the sender
+to exclude the peer's 'max_ack_delay' from subsequent PTO calculations.
 
 # Determining Acknowledgement Frequency {#implementation}
 
