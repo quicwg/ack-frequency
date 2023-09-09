@@ -483,7 +483,7 @@ max ack delay.
 When setting the Request Max Ack Delay as a function of RTT, it is usually
 better to use the Smoothed RTT ({{Section 5.3 of QUIC-RECOVERY}}) or another
 estimate of the typical round trip time, but not Min RTT. This avoids eliciting an
-excessive number of acknowledgemtents when min_rtt is much smaller than
+unnecessarily high number of acknowledgements when min_rtt is much smaller than
 smoothed_rtt.
 
 Note that the congestion window and the RTT change over the lifetime of a
