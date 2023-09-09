@@ -298,7 +298,7 @@ endpoint is under heavy load.
 
 ~~~
 IMMEDIATE_ACK Frame {
-  Type (i) = 0x1e,
+  Type (i) = 0x1f,
 }
 ~~~
 
@@ -577,7 +577,7 @@ registry under the "QUIC Protocol" heading.
 Value      | Frame Name          | Specification
 -----------|---------------------|-----------------
 0xaf       | ACK_FREQUENCY       | {{ack-frequency-frame}}
-0x1e       | IMMEDIATE_ACK       | {{immediate-ack-frame}}
+0x1f       | IMMEDIATE_ACK       | {{immediate-ack-frame}}
 {: #frame-types title="Addition to QUIC Frame Types Entries"}
 
 --- back
