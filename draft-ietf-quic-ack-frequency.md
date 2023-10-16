@@ -561,7 +561,9 @@ extension described in this document and two new frame types to registered
 by IANQ in the respective "QUIC Protocol" registries under
 [https://www.iana.org/assignments/quic/quic.xhtml](https://www.iana.org/assignments/quic/quic.xhtml).
 
-The following entry in {{transport-parameters}} should be added to
+## QUIC Transport Parameter
+
+The following entry in {{transport-parameters}} has been proviosnally added to
 the "QUIC Transport Parameters" registry under the "QUIC Protocol" heading.
 
 Value                        | Parameter Name.   | Specification
@@ -569,16 +571,22 @@ Value                        | Parameter Name.   | Specification
 0xff04de1b                   | min_ack_delay     | {{nego}}
 {: #transport-parameters title="Addition to QUIC Transport Parameters Entries"}
 
+When this document is approved, IANA is requested to assign a permanent allocation
+of a codepoint in the 0-63 range to replace the provisional codepoint described above.
 
-The following frame types should be added to the "QUIC Frame Types"
+## QUIC Frame Types
+
+The following frame types have provionsally be added to the "QUIC Frame Types"
 registry under the "QUIC Protocol" heading.
-
 
 Value      | Frame Name          | Specification
 -----------|---------------------|-----------------
 0xaf       | ACK_FREQUENCY       | {{ack-frequency-frame}}
 0x1f       | IMMEDIATE_ACK       | {{immediate-ack-frame}}
 {: #frame-types title="Addition to QUIC Frame Types Entries"}
+
+When this document is approved, IANA is requested to change the registration to
+a permanent allocation of these frame types with the values described above.
 
 --- back
 
