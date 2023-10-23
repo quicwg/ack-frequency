@@ -563,7 +563,7 @@ by IANQ in the respective "QUIC Protocol" registries under
 
 ## QUIC Transport Parameter
 
-The following entry in {{transport-parameters}} has been proviosnally added to
+The following entry in {{transport-parameters}} has been requested to be provisionally added to
 the "QUIC Transport Parameters" registry under the "QUIC Protocol" heading.
 
 Value                        | Parameter Name.   | Specification
@@ -576,7 +576,7 @@ of a codepoint in the 0-63 range to replace the provisional codepoint described 
 
 ## QUIC Frame Types
 
-The following frame types have provionsally be added to the "QUIC Frame Types"
+The following frame types have requested to be provisionally added to the "QUIC Frame Types"
 registry under the "QUIC Protocol" heading.
 
 Value      | Frame Name          | Specification
