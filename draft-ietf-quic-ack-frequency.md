@@ -216,7 +216,7 @@ ACK_FREQUENCY Frame {
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
   Request Max Ack Delay (i),
-  Reordering Threshold (i)
+  Reordering Threshold (i),
 }
 ~~~
 
@@ -255,7 +255,7 @@ Request Max Ack Delay:
 Reordering Threshold:
 
 : A variable-length integer that indicates the maximum packet
-  reordering before eliciting an immediate ACK, as specified in {#out-of-order}.
+  reordering before eliciting an immediate ACK, as specified in {{out-of-order}}.
   If no ACK_FREQUENCY frames have been received, the endpoint immediately
   acknowledges any subsequent packets that are received out-of-order, as specified
   in {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
