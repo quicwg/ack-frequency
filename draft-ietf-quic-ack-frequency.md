@@ -264,12 +264,12 @@ Reordering Threshold:
   in {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
   A value of 0 indicates out-of-order packets do not elicit an immediate ACK.
 
-ACK_FREQUENCY frames are ack-eliciting. When an ACK_FREQUENCY frame is lost,
-the sender is encouraged to send another ACK_FREQUENCY frame, unless an
-ACK_FREQUENCY frame with a larger Sequence Number value has already been sent.
-However, it is not forbidden to retransmit the lost frame (see Section 13.3 of
-{{QUIC-TRANSPORT}}), because the receiver will ignore duplicate or out-of-order
-ACK_FREQUENCY frames based on the Sequence Number.
+ACK_FREQUENCY frames are ack-eliciting and congestion controlled. When an
+ACK_FREQUENCY frame is lost, the sender is encouraged to send another
+ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame with a larger Sequence Number
+value has already been sent. However, it is not forbidden to retransmit the lost
+frame (see Section 13.3 of {{QUIC-TRANSPORT}}), because the receiver will ignore
+duplicate or out-of-order ACK_FREQUENCY frames based on the Sequence Number.
 
 An endpoint can send multiple ACK_FREQUENCY frames with different values within a
 connection. A sending endpoint MUST send monotonically increasing values in the
@@ -292,12 +292,12 @@ receiver liveness as quickly as possible. PING frames
 sent without an IMMEDIATE_ACK frame, the receiver might not immediately send
 an ACK based on its local ACK strategy.
 
-By definition IMMEDIATE_ACK frames are ack-eliciting.
-An endpoint SHOULD send a packet containing an ACK frame immediately upon
-receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending an ACK frame
-despite receiving an IMMEDIATE_ACK frame. For example, an endpoint might do this
-if a large number of received packets contain an IMMEDIATE_ACK or if the
-endpoint is under heavy load.
+By definition IMMEDIATE_ACK frames are ack-eliciting and they are also
+congestion controlled. An endpoint SHOULD send a packet containing an ACK frame
+immediately upon receiving an IMMEDIATE_ACK frame. An endpoint MAY delay sending
+an ACK frame despite receiving an IMMEDIATE_ACK frame. For example, an endpoint
+might do this if a large number of received packets contain an IMMEDIATE_ACK or
+if the endpoint is under heavy load.
 
 ~~~
 IMMEDIATE_ACK Frame {
