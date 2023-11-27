@@ -452,11 +452,11 @@ When the number of in-flight ack-eliciting packets is larger than the
 ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
 wait for its `max_ack_delay` period before sending an acknowledgement. In such
 cases, the endpoint MAY therefore exclude the peer's 'max_ack_delay' from its PTO
-calculation.  When Ignore Order is enabled and loss causes the peer to not
-receive enough packets to trigger an immediate acknowledgement, the receiver
+calculation.  When Reordering Threshold is set to 0 and loss causes the peer to
+not receive enough packets to trigger an immediate acknowledgement, the receiver
 will wait 'max_ack_delay', increasing the chances of a premature PTO.
-Therefore, if Ignore Order is enabled, the PTO MUST be larger than the peer's
-'max_ack_delay'.
+Therefore, if Reordering Threshold is set to 0, the PTO MUST be larger than the
+peer's 'max_ack_delay'.
 
 When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
 immediate acknowledgement. This avoids waiting the ack delay for
