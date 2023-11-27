@@ -194,10 +194,8 @@ receiving ACK_FREQUENCY frames.  If an endpoint sends the transport parameter,
 the peer is allowed to send ACK_FREQUENCY frames independent of whether it also
 sends the min_ack_delay transport parameter or not.
 
-Receiving a min_ack_delay transport parameter indicates that the peer might send
-ACK_FREQUENCY frames in the future. Until an ACK_FREQUENCY frame is received,
-receiving this transport parameter does not cause the endpoint to
-change its acknowledgement behavior.
+Until an ACK_FREQUENCY frame is received, sending the min_ack_delay transport
+parameter does not cause the endpoint to change its acknowledgement behavior.
 
 Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
 they received for use in a subsequent connection. Consequently, ACK_FREQUENCY
