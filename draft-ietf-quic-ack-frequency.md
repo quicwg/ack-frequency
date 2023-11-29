@@ -120,9 +120,6 @@ In the rest of this document, "sender" refers to a QUIC data sender (and
 acknowledgement receiver). Similarly, "receiver" refers to a QUIC data receiver
 (and acknowledgement sender).
 
-An "acknowledgement packet" refers to a QUIC packet that contains only an ACK
-frame.
-
 This document uses terms, definitions, and notational conventions described in
 {{Section 1.2 and Section 1.3 of QUIC-TRANSPORT}}.
 
