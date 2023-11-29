@@ -271,8 +271,9 @@ duplicate or out-of-order ACK_FREQUENCY frames based on the Sequence Number.
 An endpoint can send multiple ACK_FREQUENCY frames with different values within a
 connection. A sending endpoint MUST send monotonically increasing values in the
 Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
-out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame if the
-Sequence Number value in the frame is smaller than the largest currently processed value.
+out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame
+unless the Sequence Number value in the frame is greater than the largest currently
+processed value.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
