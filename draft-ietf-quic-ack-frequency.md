@@ -404,7 +404,7 @@ If the reordering threshold is 5 and ACKs are only sent due to reordering:
 
 To ensure timely loss detection, it is optimal to send a Reordering
 Threshold value of 1 less than the packet threshold used by the data sender for
-loss detection. If the threshold is smaller, an ACK_FRAME is sent before the
+loss detection. If the threshold is smaller, an ACK frame is sent before the
 packet can be declared lost based on the packet threshold. If the value is
 larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
 recommends a default packet threshold for loss detection of 3, equivalent to
