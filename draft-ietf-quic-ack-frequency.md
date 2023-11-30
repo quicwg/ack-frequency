@@ -68,7 +68,7 @@ normative:
 informative:
 
   Cus22:
-    title: "Reducing the acknowledgment frequency in IETF QUIC"
+    title: "Reducing the acknowledgement frequency in IETF QUIC"
     date: 2022-10
     seriesinfo:
       DOI: 10.1002/sat.1466
