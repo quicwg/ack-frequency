@@ -434,10 +434,10 @@ On sending an update to the peer's `max_ack_delay`, an endpoint can use this new
 value in later computations of its Probe Timeout (PTO) period; see {{Section 5.2.1
 of QUIC-RECOVERY}}.
 
-Until the packet carrying the ACK_FREQUENCY frame is acknowledged, the endpoint MUST use the
-greater of the current `max_ack_delay` and the value that is in flight when
-computing the PTO period. Doing so avoids spurious PTOs that can be caused by an
-update that decreases the peer's `max_ack_delay`.
+Until the packet carrying the ACK_FREQUENCY frame is acknowledged, the endpoint
+MUST use the greater of the current `max_ack_delay` and the value that is in flight
+when computing the PTO period. Doing so avoids spurious PTOs that can be caused by
+an update that decreases the peer's `max_ack_delay`.
 
 While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
