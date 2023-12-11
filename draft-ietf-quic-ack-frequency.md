@@ -226,7 +226,9 @@ Sequence Number:
 
 : A variable-length integer representing the sequence number assigned to the
   ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
-  frames.
+  frames.  A sending endpoint MUST send monotonically increasing values in
+  the Sequence Number field to allow obsolete ACK_FREQUENCY frames to be
+  ignored when packets are processed out of order.
 
 Ack-Eliciting Threshold:
 
@@ -266,12 +268,9 @@ value has already been sent. However, it is not forbidden to retransmit the lost
 frame (see Section 13.3 of {{QUIC-TRANSPORT}}), because the receiver will ignore
 duplicate or out-of-order ACK_FREQUENCY frames based on the Sequence Number.
 
-An endpoint can send multiple ACK_FREQUENCY frames with different values within a
-connection. A sending endpoint MUST send monotonically increasing values in the
-Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
-out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame
-unless the Sequence Number value in the frame is greater than the largest currently
-processed value.
+A receiving endpoint MUST ignore a received ACK_FREQUENCY frame unless the
+Sequence Number value in the frame is greater than the largest processed
+value.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
