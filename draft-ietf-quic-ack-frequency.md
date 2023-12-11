@@ -268,10 +268,9 @@ value has already been sent. However, it is not forbidden to retransmit the lost
 frame (see Section 13.3 of {{QUIC-TRANSPORT}}), because the receiver will ignore
 duplicate or out-of-order ACK_FREQUENCY frames based on the Sequence Number.
 
-An endpoint can send multiple ACK_FREQUENCY frames with different values within a
-connection. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame
-unless the Sequence Number value in the frame is greater than the largest currently
-processed value.
+A receiving endpoint MUST ignore a received ACK_FREQUENCY frame unless the
+Sequence Number value in the frame is greater than the largest currently processed
+value.
 
 # IMMEDIATE_ACK Frame {#immediate-ack-frame}
 
