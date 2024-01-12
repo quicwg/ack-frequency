@@ -196,7 +196,8 @@ parameter does not cause the endpoint to change its acknowledgment behavior.
 
 Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
 they received for use in a subsequent connection. Consequently, ACK_FREQUENCY
-frames cannot be sent in 0-RTT packets, as per {{Section 7.4.1 of QUIC-TRANSPORT}}.
+and IMMEDIATE_ACK frames cannot be sent in 0-RTT packets, as per 
+{{Section 7.4.1 of QUIC-TRANSPORT}}.
 
 This Transport Parameter is encoded as per {{Section 18 of QUIC-TRANSPORT}}.
 
