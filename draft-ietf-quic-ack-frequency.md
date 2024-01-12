@@ -583,7 +583,7 @@ an increase in the acknowledgment rate, but cannot enforce it.
 attacks that could abuse control frames, including ACK frames as well as the newly herein specified
 ACK_FREQUENCY and IMMEDIATE_ACK frame, to cause disproportional
 processing costs without observable impact on the state of the connection.
-Espcially, the IMMEDIATE_ACK frame does not only imply processing cost for receiving
+Especially, the IMMEDIATE_ACK frame does not only imply processing cost for receiving
 and processing the control frame itself but can also cause additional sending of
 packets. However, in general, with this extension, a sender cannot force a receiver to acknowledge
 more frequently than the receiver considers safe based on its resource constraints.
