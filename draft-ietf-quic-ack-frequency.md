@@ -488,7 +488,7 @@ Max Ack Delay.
 
 When setting the Requested Max Ack Delay as a function of the RTT, it is usually
 better to use the Smoothed RTT (smoothed_rtt) ({{Section 5.3 of QUIC-RECOVERY}}) or another
-estimate of the typical RTT, but not the minimum RTT (min_rtt) 
+estimate of the typical RTT, but not the minimum RTT (min_rtt)
 ({{Section 5.2 of QUIC-RECOVERY}}). This avoids eliciting an
 unnecessarily high number of acknowledgments when min_rtt is much smaller than
 smoothed_rtt.
