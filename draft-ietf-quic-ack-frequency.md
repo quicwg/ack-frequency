@@ -572,14 +572,20 @@ connection migration with updated information, e.g. to consider the new RTT esti
 
 # Security Considerations
 
-An improperly configured or malicious data sender could cause a
+An improperly configured or malicious data sender could request a
 data receiver to acknowledge more frequently than its available resources
 permit. However, there are two limits that make such an attack largely
 inconsequential. First, the acknowledgment rate is bounded by the rate at which
 data is received. Second, ACK_FREQUENCY and IMMEDIATE_ACK frames can only request
-an increase in the acknowledgment rate, but cannot force it.
+an increase in the acknowledgment rate, but cannot enforce it.
 
-In general, with this extension, a sender cannot force a receiver to acknowledge
+{{Section 21.9 of QUIC-TRANSPORT}} provides further guidance on peer denial of service
+attacks that could abuse control frames, including ACK frames as well as the newly herein specified
+ACK_FREQUENCY and IMMEDIATE_ACK frame, to cause disproportional
+processing costs without observable impact on the state of the connection.
+Espcially, the IMMEDIATE_ACK frame does not only imply processing cost for receiving
+and processing the control frame itself but can also cause additional sending of
+packets. However, in general, with this extension, a sender cannot force a receiver to acknowledge
 more frequently than the receiver considers safe based on its resource constraints.
 
 # IANA Considerations {#iana}
