@@ -12,21 +12,21 @@
        This document describes a QUIC extension for an endpoint to control its peer's
 delaying of acknowledgments. 
     " name="description">
-<meta content="xml2rfc 3.18.2" name="generator">
+<meta content="xml2rfc 3.19.0" name="generator">
 <meta content="draft-ietf-quic-ack-frequency-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.2
+  xml2rfc 3.19.0
     Python 3.11.6
-    ConfigArgParse 1.5.3
+    ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
     platformdirs 4.1.0
     pycountry 22.3.5
-    PyYAML 6.0
+    PyYAML 6.0.1
     requests 2.31.0
-    setuptools 67.7.2
+    setuptools 68.2.2
     six 1.16.0
     wcwidth 0.2.12
 -->
@@ -1027,11 +1027,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">QUIC Acknowledgment Frequency</td>
-<td class="right">December 2023</td>
+<td class="right">January 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Iyengar, et al.</td>
-<td class="center">Expires 13 June 2024</td>
+<td class="center">Expires 15 July 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-quic-ack-frequency-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-12-11" class="published">11 December 2023</time>
+<time datetime="2024-01-12" class="published">12 January 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-06-13">13 June 2024</time></dd>
+<dd class="expires"><time datetime="2024-07-15">15 July 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ code and issues list for this draft can be found at
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1112,7 +1112,7 @@ code and issues list for this draft can be found at
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1378,7 +1378,9 @@ following fields:<a href="#section-4-3" class="pilcrow">¶</a></p>
         <dd style="margin-left: 1.5em" id="section-4-4.2">
           <p id="section-4-4.2.1">A variable-length integer representing the sequence number assigned to the
 ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
-frames.<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
+frames.  A sending endpoint MUST send monotonically increasing values in
+the Sequence Number field to allow obsolete ACK_FREQUENCY frames to be
+ignored when packets are processed out of order.<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-4-4.3">Ack-Eliciting Threshold:</dt>
@@ -1422,12 +1424,9 @@ ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame with a larger Sequence Number
 value has already been sent. However, it is not forbidden to retransmit the lost
 frame (see Section 13.3 of <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>), because the receiver will ignore
 duplicate or out-of-order ACK_FREQUENCY frames based on the Sequence Number.<a href="#section-4-5" class="pilcrow">¶</a></p>
-<p id="section-4-6">An endpoint can send multiple ACK_FREQUENCY frames with different values within a
-connection. A sending endpoint MUST send monotonically increasing values in the
-Sequence Number field, since this field allows ACK_FREQUENCY frames to be processed
-out of order. A receiving endpoint MUST ignore a received ACK_FREQUENCY frame
-unless the Sequence Number value in the frame is greater than the largest currently
-processed value.<a href="#section-4-6" class="pilcrow">¶</a></p>
+<p id="section-4-6">A receiving endpoint MUST ignore a received ACK_FREQUENCY frame unless the
+Sequence Number value in the frame is greater than the largest processed
+value.<a href="#section-4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="immediate-ack-frame">
@@ -1678,7 +1677,8 @@ when there are ack-eliciting packets in flight.<a href="#section-8.1-2" class="p
 Delay value to no more than the estimated round trip time.
 The sender can also improve feedback and robustness to
 variation in the path RTT by setting the Ack-Eliciting Threshold
-to a value no larger than the current congestion window. Alternatively,
+to a value no larger than number of maximum-sized packets that fit
+into the current congestion window. Alternatively,
 a sender can accomplish this by sending an IMMEDIATE_ACK frame once each
 round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the reordering threshold or requested
@@ -1917,7 +1917,7 @@ a permanent allocation of these frame types with the values described above.<a h
 <dl class="references">
 <dt id="Cus22">[Cus22]</dt>
         <dd>
-<span class="refAuthor">Custura, A.</span>, <span class="refAuthor">Jones, T.</span>, <span class="refAuthor">Secchi, R.</span>, and <span class="refAuthor">G. Fairhurst</span>, <span class="refTitle">"Reducing the acknowledgment frequency in IETF QUIC"</span>, <span class="seriesInfo">DOI 10.1002/sat.1466</span>, <span class="seriesInfo">name IJSCN</span>, <time datetime="2022-10" class="refDate">October 2022</time>, <span>&lt;<a href="https://doi.org/10.1002/sat.1466">https://doi.org/10.1002/sat.1466</a>&gt;</span>. </dd>
+<span class="refAuthor">Custura, A.</span>, <span class="refAuthor">Jones, T.</span>, <span class="refAuthor">Secchi, R.</span>, and <span class="refAuthor">G. Fairhurst</span>, <span class="refTitle">"Reducing the acknowledgement frequency in IETF QUIC"</span>, <span class="seriesInfo">DOI 10.1002/sat.1466</span>, <span class="seriesInfo">name IJSCN</span>, <time datetime="2022-10" class="refDate">October 2022</time>, <span>&lt;<a href="https://doi.org/10.1002/sat.1466">https://doi.org/10.1002/sat.1466</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC3449">[RFC3449]</dt>
         <dd>
