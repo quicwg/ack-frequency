@@ -317,7 +317,7 @@ acknowledgment when one of the following conditions are met:
 
 Further, the enpoint may send an acknowledgment earlier based on the value
 of the Reordering Threshold when a gap in the packet number order is detected,
-see {{out-of-order}}. 
+see {{out-of-order}}.
 
 {{congestion}} and {{batch}} describe exceptions to this strategy.
 
