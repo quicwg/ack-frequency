@@ -167,6 +167,11 @@ extension provides a mechanism to solve this problem.
 
 # Negotiating Extension Use {#nego}
 
+After the successful negotiation of this extension two new frames can be used
+to provide guidance about delaying and sending of ACK frames to its peer. These
+frames are the ACK_FREQUENCY Frame (see {{ack-frequency-frame}}) and the 
+IMMEDIATE_ACK Frame (see {{immediate-ack-frame}}).
+
 Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
 
