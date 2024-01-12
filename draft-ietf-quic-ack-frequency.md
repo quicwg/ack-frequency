@@ -89,8 +89,8 @@ informative:
 
 --- abstract
 
-This document describes a QUIC extension for an endpoint to control its peer's
-delaying of acknowledgments.
+This document specifies a QUIC extension for an endpoint to 
+request its peer to change its behavior in sending or delaying of acknowledgments.
 
 --- note_Note_to_Readers
 
@@ -106,8 +106,16 @@ Working Group information can be found at [](https://github.com/quicwg).
 
 # Introduction
 
-This document describes a QUIC extension for an endpoint to control its peer's
-delaying of acknowledgments.
+The {{Section 13.2 of QUIC-TRANSPORT}} recommends to send an ACK frame
+after receiving at least two ack-eliciting packets but leaves the determination
+of how frequently to send acknowledgments in response to ack-eliciting packets
+to the data receiver without any ability for the data sender to impact this
+behavior. This document specifies a QUIC extension for an endpoint to 
+request its peer to change its behavior in sending or delaying of acknowledgments.
+
+This document defines a new transport parameter to announce the support of this
+extension and specifies two new frame types to request changes the peer's 
+acknowledgement behavior.
 
 ## Terms and Definitions
 
