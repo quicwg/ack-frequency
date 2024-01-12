@@ -139,7 +139,8 @@ endpoint performance in the following ways:
   critical for high bandwidth connections.
 
 - Similarly, receiving and processing UDP packets can also be CPU intensive, and
-  reducing acknowledgment frequency reduces this cost at a data sender.
+  reducing number of packets that only contain acknowledgments also reduces
+  this cost at a acknowledgments receiver which is the data sender.
 
 - For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
   connection throughput in the forward path can become constrained
