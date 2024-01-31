@@ -107,7 +107,7 @@ Table of Contents
 
    This document defines a new transport parameter to announce the
    support of this extension and specifies two new frame types to
-   request changes the peer's acknowledgement behavior.
+   request changes to the peer's acknowledgement behavior.
 
 1.1.  Terms and Definitions
 
