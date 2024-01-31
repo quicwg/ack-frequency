@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 15 July 2024                                             Google
+Expires: 3 August 2024                                            Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         12 January 2024
+                                                         31 January 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 July 2024.
+   This Internet-Draft will expire on 3 August 2024.
 
 Copyright Notice
 
@@ -596,7 +596,7 @@ Table of Contents
    Section 21.9 of [QUIC-TRANSPORT] provides further guidance on peer
    denial of service attacks that could abuse control frames, including
    ACK frames as well as the newly herein specified ACK_FREQUENCY and
-   IMMEDIATE_ACK frame, to cause disproportional processing costs
+   IMMEDIATE_ACK frames, to cause disproportional processing costs
    without observable impact on the state of the connection.
    Especially, the IMMEDIATE_ACK frame does not only imply processing
    cost for receiving and processing the control frame itself but can
