@@ -89,8 +89,8 @@ informative:
 
 --- abstract
 
-This document specifies a QUIC extension for an endpoint to
-request its peer to change its behavior in sending or delaying of acknowledgments.
+This document specifies an extension to QUIC that permits an endpoint to
+request that its peer changes its behavior when sending or delaying acknowledgments.
 
 --- note_Note_to_Readers
 
