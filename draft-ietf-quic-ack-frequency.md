@@ -547,7 +547,7 @@ Reducing acknowledgment frequency reduces the number of RTT samples that a
 sender receives (Section 5 of {{QUIC-RECOVERY}}), making a sender's RTT estimate
 less responsive to changes in the path's RTT. As a result, any mechanisms that
 rely on an accurate RTT estimate, such as time-threshold-based loss detection (Section
-6.1.2 of {{QUIC-RECOVERY}}) or teh Probe Timeout (PTO) (Section 6.2 of {{QUIC-RECOVERY}}),
+6.1.2 of {{QUIC-RECOVERY}}) or the Probe Timeout (PTO) (Section 6.2 of {{QUIC-RECOVERY}}),
 will be less responsive to changes in the path's RTT, resulting in either
 delayed or unnecessary packet transmissions.
 
