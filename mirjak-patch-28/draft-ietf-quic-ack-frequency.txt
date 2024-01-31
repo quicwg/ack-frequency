@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 15 July 2024                                             Google
+Expires: 3 August 2024                                            Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         12 January 2024
+                                                         31 January 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 July 2024.
+   This Internet-Draft will expire on 3 August 2024.
 
 Copyright Notice
 
@@ -165,8 +165,8 @@ Table of Contents
 
    After the successful negotiation of this extension two new frames can
    be used to provide guidance about delaying and sending of ACK frames
-   to its peer.  These frames are the ACK_FREQUENCY Frame (see
-   Section 4) and the IMMEDIATE_ACK Frame (see Section 5).
+   to its peer.  These frames are the ACK_FREQUENCY frame (see
+   Section 4) and the IMMEDIATE_ACK frame (see Section 5).
 
    Endpoints advertise their support of the extension described in this
    document by sending the following transport parameter (Section 7.2 of
