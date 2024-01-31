@@ -132,7 +132,7 @@ Table of Contents
 
    *  Similarly, receiving UDP datagrams can also be CPU intensive.  A
       data sender can decrease its CPU usage by reducing the number of
-      acknowledgments that it has to receive and process.
+      acknowledgment-only packets that it has to receive and process.
 
    *  For asymmetric link technologies, such as DOCSIS, LTE, and
       satellite, connection throughput in the forward path can become
