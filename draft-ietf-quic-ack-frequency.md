@@ -110,8 +110,8 @@ The QUIC transport protocol recommends to send an ACK frame
 after receiving at least two ack-eliciting packets; see  {{Section 13.2 of QUIC-TRANSPORT}}. However, it leaves the determination
 of how frequently to send acknowledgments in response to ack-eliciting packets
 to the data receiver without any ability for the data sender to impact this
-behavior. This document specifies a QUIC extension for an endpoint to
-request its peer to change its behavior in sending or delaying of acknowledgments.
+behavior. This document specifies an extension to QUIC that permits an endpoint to
+request that its peer changes its behavior when sending or delaying acknowledgments.
 
 This document defines a new transport parameter to announce the support of this
 extension and specifies two new frame types to request changes the peer's
