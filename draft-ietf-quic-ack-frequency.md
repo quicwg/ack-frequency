@@ -581,7 +581,7 @@ an increase in the acknowledgment rate, but cannot enforce it.
 
 {{Section 21.9 of QUIC-TRANSPORT}} provides further guidance on peer denial of service
 attacks that could abuse control frames, including ACK frames as well as the newly herein specified
-ACK_FREQUENCY and IMMEDIATE_ACK frame, to cause disproportional
+ACK_FREQUENCY and IMMEDIATE_ACK frames, to cause disproportional
 processing costs without observable impact on the state of the connection.
 Especially, the IMMEDIATE_ACK frame does not only imply processing cost for receiving
 and processing the control frame itself but can also cause additional sending of
