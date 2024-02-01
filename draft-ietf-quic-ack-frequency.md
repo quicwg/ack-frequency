@@ -188,10 +188,10 @@ min_ack_delay is specified in microseconds.
 
 The min_ack_delay transport parameter is a unilateral indication of support for
 receiving ACK_FREQUENCY frames.  If an endpoint sends the transport parameter,
-the peer is allowed to send ACK_FREQUENCY frames independent of whether it also
-sends the min_ack_delay transport parameter or not.
+the peer is allowed to send ACK_FREQUENCY and IMMEDIATE_ACK frames independent
+of whether it also sends the min_ack_delay transport parameter or not.
 
-Until an ACK_FREQUENCY frame is received, sending the min_ack_delay transport
+Until an ACK_FREQUENCY or IMMEDIATE_ACK frame is received, sending the min_ack_delay transport
 parameter does not cause the endpoint to change its acknowledgment behavior.
 
 Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
