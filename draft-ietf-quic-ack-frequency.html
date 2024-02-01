@@ -1346,7 +1346,8 @@ sends the min_ack_delay transport parameter or not.<a href="#section-3-4" class=
 parameter does not cause the endpoint to change its acknowledgment behavior.<a href="#section-3-5" class="pilcrow">¶</a></p>
 <p id="section-3-6">Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
 they received for use in a subsequent connection. Consequently, ACK_FREQUENCY
-frames cannot be sent in 0-RTT packets, as per <span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4.1" class="relref">Section 7.4.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-6" class="pilcrow">¶</a></p>
+and IMMEDIATE_ACK frames cannot be sent in 0-RTT packets, as per
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4.1" class="relref">Section 7.4.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-6" class="pilcrow">¶</a></p>
 <p id="section-3-7">This Transport Parameter is encoded as per <span><a href="https://rfc-editor.org/rfc/rfc9000#section-18" class="relref">Section 18</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
