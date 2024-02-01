@@ -175,8 +175,8 @@ min_ack_delay (0xff04de1b):
 : A variable-length integer representing the minimum amount of time in
   microseconds by which the endpoint that is sending this value is able to
   delay an acknowledgment. This limit could be based on the receiver's clock
-  or timer granularity. 'min_ack_delay' is used by the peer to avoid requesting
-  too small a value in the Request Max Ack Delay field of the ACK_FREQUENCY
+  or timer granularity. min_ack_delay is used by the peer to avoid requesting
+  too small a value in the Requested Max Ack Delay field of the ACK_FREQUENCY
   frame.
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
@@ -213,7 +213,7 @@ ACK_FREQUENCY Frame {
   Type (i) = 0xaf,
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
-  Request Max Ack Delay (i),
+  Requested Max Ack Delay (i),
   Reordering Threshold (i),
 }
 ~~~
@@ -240,16 +240,16 @@ Ack-Eliciting Threshold:
   endpoint sends an ACK frame for every other ack-eliciting packet, as specified in
   {{Section 13.2.2 of QUIC-TRANSPORT}}, which corresponds to a value of 1.
 
-Request Max Ack Delay:
+Requested Max Ack Delay:
 
 : A variable-length integer representing the value to which the endpoint
-  requests the peer update its `max_ack_delay`
+  requests the peer update its max_ack_delay
   ({{Section 18.2 of QUIC-TRANSPORT}}). The value of this field is in
-  microseconds, unlike the 'max_ack_delay' transport parameter, which is in
-  milliseconds. Sending a value smaller than the `min_ack_delay` advertised
+  microseconds, unlike the max_ack_delay transport parameter, which is in
+  milliseconds. Sending a value smaller than the min_ack_delay advertised
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
   connection error of type TRANSPORT_PARAMETER_ERROR. On receiving a valid value in
-  this field, the endpoint MUST update its `max_ack_delay` to the value provided
+  this field, the endpoint MUST update its max_ack_delay to the value provided
   by the peer.
 
 Reordering Threshold:
@@ -305,14 +305,14 @@ IMMEDIATE_ACK Frame {
 Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgments as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
-On receiving an ACK_FREQUENCY frame and updating its `max_ack_delay`
-and `Ack-Eliciting Threshold` values ({{ack-frequency-frame}}), the endpoint sends an
+On receiving an ACK_FREQUENCY frame and updating its max_ack_delay
+and Ack-Eliciting Threshold values ({{ack-frequency-frame}}), the endpoint sends an
 acknowledgment when one of the following conditions are met:
 
 - Since the last acknowledgment was sent, the number of received ack-eliciting
-  packets is greater than the `Ack-Eliciting Threshold`.
+  packets is greater than the Ack-Eliciting Threshold.
 
-- Since the last acknowledgment was sent, `max_ack_delay` amount of time has
+- Since the last acknowledgment was sent, max_ack_delay amount of time has
   passed.
 
 {{out-of-order}}, {{congestion}}, and {{batch}} describe exceptions to this
@@ -334,14 +334,14 @@ send an acknowledgment immediately on receiving a reordered ack-eliciting
 packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 has been received.
 
-If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
-Threshold` value of 0, the endpoint SHOULD NOT send an immediate
+If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
+Threshold value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgment in response to packets received out of order, and instead
-rely on the peer's `Ack-Eliciting Threshold` and `max_ack_delay` thresholds
+rely on the peer's Ack-Eliciting Threshold and Requested Max Ack Delay
 for sending acknowledgments.
 
-If the most recent ACK_FREQUENCY frame received from the peer has a `Reordering
-Threshold` value larger than 1, the endpoint tests the amount of reordering
+If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
+Threshold value larger than 1, the endpoint tests the amount of reordering
 before deciding to send an acknowledgment. The specification uses the following
 definitions:
 
@@ -363,7 +363,7 @@ An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
 than or equal to the Reordering Threshold value. Sending this additional ACK will
-reset the `max_ack_delay` timer and `Ack-Eliciting Threshold` counter (as any ACK
+reset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK
 would do).
 
 See {{examples}} for examples explaining this behavior. See {{set-threshold}}
@@ -373,9 +373,9 @@ ACK_FREQUENCY frames.
 ### Examples {#examples}
 
 When the reordering threshold is 1, any time a packet is received
-and there is a missing packet, an immediate ACK is sent.
+and there is a missing packet, an immediate acknowledgement is sent.
 
-If the reordering theshold is 3 and ACKs are only sent due to reordering:
+If the reordering theshold is 3 and acknowledgements are only sent due to reordering:
 
 ~~~
   Receive 1
@@ -387,7 +387,7 @@ If the reordering theshold is 3 and ACKs are only sent due to reordering:
   Receive 10 -> Send ACK because of 7
 ~~~
 
-If the reordering threshold is 5 and ACKs are only sent due to reordering:
+If the reordering threshold is 5 and acknowledgements are only sent due to reordering:
 
 ~~~
   Receive 1
@@ -403,7 +403,7 @@ If the reordering threshold is 5 and ACKs are only sent due to reordering:
 
 To ensure timely loss detection, it is optimal to send a Reordering
 Threshold value of 1 less than the packet threshold used by the data sender for
-loss detection. If the threshold is smaller, an ACK frame is sent before the
+loss detection. If the threshold is smaller, an acknowledgement is (unnecessarily) sent before the
 packet can be declared lost based on the packet threshold. If the value is
 larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
 recommends a default packet threshold for loss detection of 3, equivalent to
@@ -429,34 +429,34 @@ in response, as stated in {{Section 13.2.2 of QUIC-TRANSPORT}}.
 
 # Computation of Probe Timeout Period
 
-On sending an update to the peer's `max_ack_delay`, an endpoint can use this new
+On sending an update to the peer's max_ack_delay, an endpoint can use this new
 value in later computations of its Probe Timeout (PTO) period; see {{Section 5.2.1
 of QUIC-RECOVERY}}.
 
 Until the packet carrying the ACK_FREQUENCY frame is acknowledged, the endpoint
-MUST use the greater of the current `max_ack_delay` and the value that is in flight
+MUST use the greater of the current max_ack_delay and the value that is in flight
 when computing the PTO period. Doing so avoids spurious PTOs that can be caused by
-an update that decreases the peer's `max_ack_delay`.
+an update that decreases the peer's max_ack_delay.
 
 While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
-in flight. When using `max_ack_delay` for PTO computations, endpoints MUST use
+in flight. When using max_ack_delay for PTO computations, endpoints MUST use
 the maximum of the current value and all those in flight.
 
 When the number of in-flight ack-eliciting packets is larger than the
 ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
-wait for its `max_ack_delay` period before sending an acknowledgment. In such
-cases, the endpoint MAY therefore exclude the peer's 'max_ack_delay' from its PTO
+wait for its max_ack_delay period before sending an acknowledgment. In such
+cases, the endpoint MAY therefore exclude the peer's max_ack_delay from its PTO
 calculation.  When Reordering Threshold is set to 0 and loss causes the peer to
 not receive enough packets to trigger an immediate acknowledgment, the receiver
-will wait 'max_ack_delay', increasing the chances of a premature PTO.
+will wait max_ack_delay, increasing the chances of a premature PTO.
 Therefore, if Reordering Threshold is set to 0, the PTO MUST be larger than the
-peer's 'max_ack_delay'.
+peer's max_ack_delay.
 
 When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
 immediate acknowledgment. This avoids waiting the ack delay for
 acknowledgments of PTO packets, reducing tail latency and allowing the sender
-to exclude the peer's 'max_ack_delay' from subsequent PTO calculations.
+to exclude the peer's max_ack_delay from subsequent PTO calculations.
 
 # Determining Acknowledgment Frequency {#implementation}
 
@@ -476,19 +476,20 @@ To limit the consequences of reduced acknowledgment frequency, a sender
 can cause a receiver to send an acknowledgment at least once per round trip
 when there are ack-eliciting packets in flight.
 
-A sender can accomplish this by setting the Request Max Ack
+A sender can accomplish this by setting the Requested Max Ack
 Delay value to no more than the estimated round trip time.
 The sender can also improve feedback and robustness to
 variation in the path RTT by setting the Ack-Eliciting Threshold
 to a value no larger than the current congestion window. Alternatively,
 a sender can accomplish this by sending an IMMEDIATE_ACK frame once each
 round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
-detection of that loss will be delayed by the reordering threshold or requested
-max ack delay.
+detection of that loss will be delayed by the Reordering Threshold or Requested
+Max Ack Delay.
 
-When setting the Request Max Ack Delay as a function of RTT, it is usually
-better to use the Smoothed RTT ({{Section 5.3 of QUIC-RECOVERY}}) or another
-estimate of the typical round trip time, but not Min RTT. This avoids eliciting an
+When setting the Requested Max Ack Delay as a function of the RTT, it is usually
+better to use the Smoothed RTT (smoothed_rtt) ({{Section 5.3 of QUIC-RECOVERY}}) or another
+estimate of the typical RTT, but not the minimum RTT (min_rtt)
+({{Section 5.2 of QUIC-RECOVERY}}). This avoids eliciting an
 unnecessarily high number of acknowledgments when min_rtt is much smaller than
 smoothed_rtt.
 
@@ -497,7 +498,7 @@ connection and therefore might require sending frequent ACK_FREQUENCY frames to
 ensure optimal performance.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
-as communicated via the 'min_ack_delay' transport parameter, preventing the
+as communicated via the min_ack_delay transport parameter, preventing the
 receiver from sending an acknowledgment every RTT in time unless packets are
 acknowledged immediately.  In these cases, Reordering Threshold values other than 1
 can delay loss detection more than an RTT.
@@ -518,7 +519,7 @@ buffered to be sent, a sender can send an IMMEDIATE_ACK frame with the last data
 packet before an idle period to avoid waiting for the ack delay.
 
 If there are no inflight packets, no acknowledgments will be received for at least
-a round trip when sending resumes. The Max Ack Delay and Ack-Eliciting Threshold
+a round trip when sending resumes. The max_ack_delay and Ack-Eliciting Threshold
 values used by the receiver can further delay acknowledgments.  In this case, the
 sender can include an IMMEDIATE_ACK or ACK_FREQUENCY frame in the first
 Ack-Eliciting packet to avoid waiting for substantially more than a round trip
@@ -545,8 +546,8 @@ acknowledgment therefore delays this method of detecting losses.
 Reducing acknowledgment frequency reduces the number of RTT samples that a
 sender receives ({{Section 5 of QUIC-RECOVERY}}), making a sender's RTT estimate
 less responsive to changes in the path's RTT. As a result, any mechanisms that
-rely on an accurate RTT estimate, such as time-threshold loss detection ({{Section
-6.1.2 of QUIC-RECOVERY}}) or Probe Timeout ({{Section 6.2 of QUIC-RECOVERY}}),
+rely on an accurate RTT estimate, such as time-threshold-based loss detection ({{Section
+6.1.2 of QUIC-RECOVERY}}) or the Probe Timeout (PTO) ({{Section 6.2 of QUIC-RECOVERY}}),
 will be less responsive to changes in the path's RTT, resulting in either
 delayed or unnecessary packet transmissions.
 
