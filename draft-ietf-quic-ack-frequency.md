@@ -161,7 +161,7 @@ loss recovery performance.
 
 {{QUIC-TRANSPORT}} specifies a simple delayed acknowledgment mechanism that a
 receiver can use: send an acknowledgment for every other packet, and for every
-packet that is received out of order (Section 13.2.1 of {{QUIC-TRANSPORT}}).
+packet that is received out of order ({{Section 13.2.1 of QUIC-TRANSPORT}}).
 This does not allow a sender to signal its preferences or constraints. This
 extension provides a mechanism to solve this problem.
 
@@ -265,7 +265,7 @@ ACK_FREQUENCY frames are ack-eliciting and congestion controlled. When an
 ACK_FREQUENCY frame is lost, the sender is encouraged to send another
 ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame with a larger Sequence Number
 value has already been sent. However, it is not forbidden to retransmit the lost
-frame (see Section 13.3 of {{QUIC-TRANSPORT}}), because the receiver will ignore
+frame (see {{Section 13.3 of QUIC-TRANSPORT}}), because the receiver will ignore
 duplicate or out-of-order ACK_FREQUENCY frames based on the Sequence Number.
 
 A receiving endpoint MUST ignore a received ACK_FREQUENCY frame unless the
@@ -530,7 +530,7 @@ for an acknowledgment.
 Receiving an acknowledgment can allow a sender to release new packets into the
 network. If a sender is designed to rely on the timing of peer acknowledgments
 ("ACK clock"), delaying acknowledgments can cause undesirable bursts of data
-into the network. In keeping with Section 7.7 of {{QUIC-RECOVERY}}, a sender
+into the network. In keeping with {{Section 7.7 of QUIC-RECOVERY}}, a sender
 can either employ pacing or limit bursts to the initial congestion window.
 
 ## Loss Detection and Timers {#loss}
@@ -540,14 +540,14 @@ delaying or reducing the frequency of acknowledgments can cause loss detection
 at the sender to be delayed.
 
 A QUIC sender detects loss using packet thresholds on receiving an
-acknowledgment (Section 6.1.1 of {{QUIC-RECOVERY}}); delaying the
+acknowledgment ({{Section 6.1.1 of QUIC-RECOVERY}}); delaying the
 acknowledgment therefore delays this method of detecting losses.
 
 Reducing acknowledgment frequency reduces the number of RTT samples that a
-sender receives (Section 5 of {{QUIC-RECOVERY}}), making a sender's RTT estimate
+sender receives ({{Section 5 of QUIC-RECOVERY}}), making a sender's RTT estimate
 less responsive to changes in the path's RTT. As a result, any mechanisms that
-rely on an accurate RTT estimate, such as time-threshold-based loss detection (Section
-6.1.2 of {{QUIC-RECOVERY}}) or the Probe Timeout (PTO) (Section 6.2 of {{QUIC-RECOVERY}}),
+rely on an accurate RTT estimate, such as time-threshold-based loss detection ({{Section
+6.1.2 of QUIC-RECOVERY}}) or the Probe Timeout (PTO) ({{Section 6.2 of QUIC-RECOVERY}}),
 will be less responsive to changes in the path's RTT, resulting in either
 delayed or unnecessary packet transmissions.
 
@@ -564,7 +564,7 @@ frame ({{Section 9.2 of QUIC-TRANSPORT}}) it sends or it can send only an
 IMMEDIATE_ACK frame, which is a non-probing frame.
 
 An endpoint's congestion controller and RTT estimator are reset upon
-confirmation of migration (Section 9.4 of [QUIC-TRANSPORT]);
+confirmation of migration ({{Section 9.4 of QUIC-TRANSPORT}});
 this changes the pattern of acknowledgments received after migration.
 
 Therefore, an endpoint that has sent an ACK_FREQUENCY frame earlier in the
