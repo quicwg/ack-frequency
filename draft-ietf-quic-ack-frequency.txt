@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 4 August 2024                                            Google
+Expires: 5 August 2024                                            Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         1 February 2024
+                                                         2 February 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 August 2024.
+   This Internet-Draft will expire on 5 August 2024.
 
 Copyright Notice
 
@@ -149,7 +149,7 @@ Table of Contents
 
    As discussed in Section 8 however, there can be undesirable
    consequences to congestion control and loss recovery if a receiver
-   unilitaerally reduces the acknowledgment frequency.  A sender's
+   unilaterally reduces the acknowledgment frequency.  A sender's
    constraints on the acknowledgment frequency need to be taken into
    account to maximize congestion controller and loss recovery
    performance.
