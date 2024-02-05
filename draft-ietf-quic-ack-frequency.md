@@ -498,7 +498,7 @@ Note that the average congestion window and the smoothed RTT change over the lif
 connection and therefore might require sending frequent ACK_FREQUENCY frames to
 ensure optimal performance. As both the congestion window and RTT estimates
 may change continuously, of course not every change should trigger an update.
-Usually, it is not nessecary to send an ACK_FREQUENCY frame more than once per
+Usually, it is not necessary to send an ACK_FREQUENCY frame more than once per
 RTT and likely it needs to be sent even less frequently.
 Ideally, an ACK_FREQUENCY frame is sent only if a relevant change in the
 average congestion window or RTT estimates is detected that impacts the local
