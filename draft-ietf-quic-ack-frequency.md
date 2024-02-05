@@ -338,7 +338,7 @@ when the packet has a packet number larger than the highest-numbered ack-eliciti
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgment immediately on receiving a reordered ack-eliciting
-packet. 
+packet.
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgment immediately on receipt of a reordered ack-eliciting
