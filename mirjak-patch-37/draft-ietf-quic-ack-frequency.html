@@ -1501,61 +1501,55 @@ create excessive delays.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
         <h3 id="name-response-to-out-of-order-pa">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-response-to-out-of-order-pa" class="section-name selfRef">Response to Out-of-Order Packets</a>
         </h3>
-<p id="section-6.2-1">In order to assist loss detection at the sender, an endpoint SHOULD generate and send an ACK frame without delay when it receives an ack-eliciting packet either:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">when the received packet has a packet number less than another ack-eliciting packet that has been received, or
-when the packet has a packet number larger than the highest-numbered ack-eliciting packet that has been received and there are missing packets between that packet and this packet.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.2-3">As specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints are expected to
-send an acknowledgment immediately on receiving a reordered ack-eliciting
-packet.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.2-4">As specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints are expected to
+<p id="section-6.2-1">As specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints are expected to
 send an acknowledgment immediately on receipt of a reordered ack-eliciting
 packet with a smaller packet number than the highest-numbered ack-eliciting packet
 or with a higher packet number when there are missing packets between that packet
 and the highest-numbered ack-eliciting packet.
 This extension modifies that behavior when an ACK_FREQUENCY frame with
-a Reordering Threshold value other than 1 has been received.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
-<p id="section-6.2-5">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
+a Reordering Threshold value other than 1 has been received.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
 Threshold value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgment in response to packets received out of order, and instead
 rely on the peer's Ack-Eliciting Threshold and Requested Max Ack Delay
-for sending acknowledgments.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
-<p id="section-6.2-6">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
+for sending acknowledgments.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
 Threshold value larger than 1, the endpoint tests the amount of reordering
 before deciding to send an acknowledgment. The specification uses the following
-definitions:<a href="#section-6.2-6" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-7">
-          <dt id="section-6.2-7.1">Largest Unacked:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-7.2">
-            <p id="section-6.2-7.2.1">The largest packet number among all received ack-eliciting packets.<a href="#section-6.2-7.2.1" class="pilcrow">¶</a></p>
+definitions:<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.2-4">
+          <dt id="section-6.2-4.1">Largest Unacked:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-4.2">
+            <p id="section-6.2-4.2.1">The largest packet number among all received ack-eliciting packets.<a href="#section-6.2-4.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-7.3">Largest Acked:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-7.4">
-            <p id="section-6.2-7.4.1">The Largest Acknowledged value sent in an ACK frame.<a href="#section-6.2-7.4.1" class="pilcrow">¶</a></p>
+<dt id="section-6.2-4.3">Largest Acked:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-4.4">
+            <p id="section-6.2-4.4.1">The Largest Acknowledged value sent in an ACK frame.<a href="#section-6.2-4.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-7.5">Largest Reported:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-7.6">
-            <p id="section-6.2-7.6.1">The largest packet number that could be declared lost with the specified
-Reordering Threshold, which is Largest Acked - Reordering Threshold + 1.<a href="#section-6.2-7.6.1" class="pilcrow">¶</a></p>
+<dt id="section-6.2-4.5">Largest Reported:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-4.6">
+            <p id="section-6.2-4.6.1">The largest packet number that could be declared lost with the specified
+Reordering Threshold, which is Largest Acked - Reordering Threshold + 1.<a href="#section-6.2-4.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-7.7">Unreported Missing:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-7.8">
-            <p id="section-6.2-7.8.1">Packets with packet numbers between the Largest Unacked and Largest Reported
-that have not yet been received.<a href="#section-6.2-7.8.1" class="pilcrow">¶</a></p>
+<dt id="section-6.2-4.7">Unreported Missing:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.2-4.8">
+            <p id="section-6.2-4.8.1">Packets with packet numbers between the Largest Unacked and Largest Reported
+that have not yet been received.<a href="#section-6.2-4.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.2-8">An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
+<p id="section-6.2-5">An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
 than or equal to the Reordering Threshold value. Sending this additional ACK will
 reset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK
-would do).<a href="#section-6.2-8" class="pilcrow">¶</a></p>
-<p id="section-6.2-9">See <a href="#examples" class="auto internal xref">Section 6.2.1</a> for examples explaining this behavior. See <a href="#set-threshold" class="auto internal xref">Section 6.3</a>
+would do).<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2-6">See <a href="#examples" class="auto internal xref">Section 6.2.1</a> for examples explaining this behavior. See <a href="#set-threshold" class="auto internal xref">Section 6.3</a>
 for guidance on how to choose the reordering threshold value when sending
-ACK_FREQUENCY frames.<a href="#section-6.2-9" class="pilcrow">¶</a></p>
+ACK_FREQUENCY frames.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
 <div id="examples">
 <section id="section-6.2.1">
           <h4 id="name-examples">
