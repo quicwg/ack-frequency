@@ -494,9 +494,15 @@ estimate of the typical RTT, but not the minimum RTT (min_rtt)
 unnecessarily high number of acknowledgments when min_rtt is much smaller than
 smoothed_rtt.
 
-Note that the congestion window and the RTT change over the lifetime of a
+Note that the average congestion window and the smoothed RTT change over the lifetime of a
 connection and therefore might require sending frequent ACK_FREQUENCY frames to
-ensure optimal performance.
+ensure optimal performance. As both the congestion window and RTT estimates
+change continiously, of course not every change should trigger an update.
+Usually, it is not nessecary to send an ACK_FREQUENCY frame more than once per
+RTT. Ideally, an ACK_FREQUENCY frame is sent only if a relevant change in the
+average congestion window or RTT estimates is detected that impacts the local
+setting of the reordering threshold or local-selected calculation of the
+Ack-Eliciting Threshold or Requested Max Ack Delay.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
 as communicated via the min_ack_delay transport parameter, preventing the
