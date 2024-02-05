@@ -393,7 +393,7 @@ that reports both packets 6 and 7 as missing. However,
 the receipt of packet 10 needs to trigger another immediate ACK
 because only with the reporting of the successful receiption of
 packet 10, the sender will be able to declare packet 7 as lost
-(with a reordering threshold of 3). 
+(with a reordering threshold of 3).
 
 If the reordering threshold is 5 and acknowledgements are only sent due to reordering:
 
