@@ -502,7 +502,7 @@ Usually, it is not nessecary to send an ACK_FREQUENCY frame more than once per
 RTT and likely it needs to be sent even less frequently.
 Ideally, an ACK_FREQUENCY frame is sent only if a relevant change in the
 average congestion window or RTT estimates is detected that impacts the local
-setting of the reordering threshold or local-selected calculation of the
+setting of the reordering threshold or locally-selected calculation of the
 Ack-Eliciting Threshold or Requested Max Ack Delay.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
