@@ -330,16 +330,6 @@ create excessive delays.
 
 ## Response to Out-of-Order Packets {#out-of-order}
 
-In order to assist loss detection at the sender, an endpoint SHOULD generate and send an ACK frame without delay when it receives an ack-eliciting packet either:
-
-when the received packet has a packet number less than another ack-eliciting packet that has been received, or
-when the packet has a packet number larger than the highest-numbered ack-eliciting packet that has been received and there are missing packets between that packet and this packet.
-
-
-As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
-send an acknowledgment immediately on receiving a reordered ack-eliciting
-packet.
-
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an acknowledgment immediately on receipt of a reordered ack-eliciting
 packet with a smaller packet number than the highest-numbered ack-eliciting packet
