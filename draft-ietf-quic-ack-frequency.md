@@ -412,9 +412,14 @@ a Reordering Threshold of 2.
 
 ## Expediting Explicit Congestion Notification (ECN) Signals {#congestion}
 
-An endpoint SHOULD send an immediate acknowledgment when a packet marked
-with the ECN Congestion Experienced (CE) {{?RFC3168}} codepoint in the IP
-header is received and the previously received packet was not marked CE.
+If the Ack-Eliciting Threshold is larger than 1, an endpoint SHOULD send
+an immediate acknowledgement when a packet marked with the ECN Congestion
+Experienced (CE) {{?RFC3168}} codepoint in the IP header is received and
+the previously received packet was not marked CE. From there on, if multiple
+CE-marked packets are received in a row or only non-CE-marked packet received,
+the endpoint resumes to sending acknowledgements based on the Ack-Eliciting
+Threshold or max_ack_delay. That means only when a transition from non-CE-marked
+to CE-marked occurs an immediate acknowledgement is sent.
 
 Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
