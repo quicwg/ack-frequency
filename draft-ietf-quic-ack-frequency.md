@@ -494,7 +494,7 @@ estimate of the typical RTT, but not the minimum RTT (min_rtt)
 unnecessarily high number of acknowledgments when min_rtt is much smaller than
 smoothed_rtt.
 
-Note that the average congestion window and the smoothed RTT change over the lifetime of a
+Note that the congestion window and the RTT estimate change over the lifetime of a
 connection and therefore might require sending frequent ACK_FREQUENCY frames to
 ensure optimal performance. As both the congestion window and RTT estimates
 may change continuously, of course not every change should trigger an update.
