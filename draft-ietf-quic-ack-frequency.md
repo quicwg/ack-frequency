@@ -107,7 +107,7 @@ Working Group information can be found at [](https://github.com/quicwg).
 # Introduction
 
 The QUIC transport protocol recommends to send an ACK frame
-after receiving at least two ack-eliciting packets; see 
+after receiving at least two ack-eliciting packets; see
 {{Section 13.2 of QUIC-TRANSPORT}}. However, it leaves the determination
 of how frequently to send acknowledgments in response to ack-eliciting packets
 to the data receiver without any ability for the data sender to impact this
