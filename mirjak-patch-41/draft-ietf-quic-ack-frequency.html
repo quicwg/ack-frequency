@@ -12,10 +12,10 @@
        This document describes a QUIC extension for an endpoint to control its peer's
 delaying of acknowledgments. 
     " name="description">
-<meta content="xml2rfc 3.19.2" name="generator">
+<meta content="xml2rfc 3.19.4" name="generator">
 <meta content="draft-ietf-quic-ack-frequency-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.19.2
+  xml2rfc 3.19.4
     Python 3.11.6
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -1027,11 +1027,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">QUIC Acknowledgment Frequency</td>
-<td class="right">February 2024</td>
+<td class="right">March 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Iyengar, et al.</td>
-<td class="center">Expires 8 August 2024</td>
+<td class="center">Expires 2 September 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-quic-ack-frequency-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-05" class="published">5 February 2024</time>
+<time datetime="2024-03-01" class="published">1 March 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-08">8 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-09-02">2 September 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ code and issues list for this draft can be found at
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 September 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1607,8 +1607,9 @@ Experienced (CE) <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>
 the previously received packet was not marked CE. From there on, if multiple
 CE-marked packets are received in a row or only non-CE-marked packet received,
 the endpoint resumes to sending acknowledgements based on the Ack-Eliciting
-Threshold or max_ack_delay. That means only when a transition from non-CE-marked
-to CE-marked occurs an immediate acknowledgement is sent.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+Threshold or max_ack_delay. This results in sending an immediate
+acknowledgement only when there is a transition from non-CE-marked
+to CE-marked.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> during
 extreme congestion or when peers are using DCTCP <span>[<a href="#RFC8257" class="cite xref">RFC8257</a>]</span> or other

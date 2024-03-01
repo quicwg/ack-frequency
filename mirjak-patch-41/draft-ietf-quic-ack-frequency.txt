@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 8 August 2024                                            Google
+Expires: 2 September 2024                                         Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         5 February 2024
+                                                            1 March 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2024.
+   This Internet-Draft will expire on 2 September 2024.
 
 Copyright Notice
 
@@ -415,8 +415,8 @@ Table of Contents
    there on, if multiple CE-marked packets are received in a row or only
    non-CE-marked packet received, the endpoint resumes to sending
    acknowledgements based on the Ack-Eliciting Threshold or
-   max_ack_delay.  That means only when a transition from non-CE-marked
-   to CE-marked occurs an immediate acknowledgement is sent.
+   max_ack_delay.  This results in sending an immediate acknowledgement
+   only when there is a transition from non-CE-marked to CE-marked.
 
    Doing this maintains the peer's response time to congestion events,
    while also reducing the ACK rate compared to Section 13.2.1 of
