@@ -265,7 +265,7 @@ Requested Max Ack Delay:
   by the peer is invalid. Receipt of an invalid value MUST be treated as a
   connection error of type TRANSPORT_PARAMETER_ERROR. On receiving a valid value in
   this field, the endpoint MUST update its max_ack_delay to the value provided
-  by the peer.
+  by the peer. Note that values of 2^14 or greater are invalid for max_ack_delay.
 
 Reordering Threshold:
 
