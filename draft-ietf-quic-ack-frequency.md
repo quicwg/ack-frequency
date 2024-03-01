@@ -138,9 +138,9 @@ endpoint performance in the following ways:
   acknowledgement-only packets that it sends. Experience shows that this
   reduction can be critical for high bandwidth connections.
 
-- Similarly, receiving UDP datagrams can also be CPU intensive. A data sender
-  can decrease its CPU usage by reducing the number of acknowledgment-only
-  packets that it has to receive and process.
+- Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
+  acknowledgement frequency therefore also reduces the CPU usage at the data
+  sender as it has to receive and process less acknowledgment-only packets.
 
 - For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
   connection throughput in the forward path can become constrained
