@@ -1318,37 +1318,41 @@ extension provides a mechanism to solve this problem.<a href="#section-2-5" clas
       <h2 id="name-negotiating-extension-use">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-negotiating-extension-use" class="section-name selfRef">Negotiating Extension Use</a>
       </h2>
-<p id="section-3-1">Endpoints advertise their support of the extension described in this document by
-sending the following transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>):<a href="#section-3-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-3-2">
-        <dt id="section-3-2.1">min_ack_delay (0xff04de1b):</dt>
-        <dd style="margin-left: 1.5em" id="section-3-2.2">
-          <p id="section-3-2.2.1">A variable-length integer representing the minimum amount of time in
+<p id="section-3-1">After the successful negotiation of this extension two new frames can be used
+to provide guidance about delaying and sending of ACK frames to its peer. These
+frames are the ACK_FREQUENCY frame (see <a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>) and the
+IMMEDIATE_ACK frame (see <a href="#immediate-ack-frame" class="auto internal xref">Section 5</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Endpoints advertise their support of the extension described in this document by
+sending the following transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>):<a href="#section-3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3-3">
+        <dt id="section-3-3.1">min_ack_delay (0xff04de1b):</dt>
+        <dd style="margin-left: 1.5em" id="section-3-3.2">
+          <p id="section-3-3.2.1">A variable-length integer representing the minimum amount of time in
 microseconds by which the endpoint that is sending this value is able to
 delay an acknowledgment. This limit could be based on the receiver's clock
 or timer granularity. min_ack_delay is used by the peer to avoid requesting
 too small a value in the Requested Max Ack Delay field of the ACK_FREQUENCY
-frame.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
+frame.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-3-3">An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
+<p id="section-3-4">An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
 is greater than the received max_ack_delay as a connection error of type
 TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
 transport parameter is in milliseconds (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-18.2" class="relref">Section 18.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>),
-min_ack_delay is specified in microseconds.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">The min_ack_delay transport parameter is a unilateral indication of support for
+min_ack_delay is specified in microseconds.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The min_ack_delay transport parameter is a unilateral indication of support for
 receiving ACK_FREQUENCY frames.  If an endpoint sends the transport parameter,
 the peer is allowed to send ACK_FREQUENCY and IMMEDIATE_ACK frames independent
-of whether it also sends the min_ack_delay transport parameter or not.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">Until an ACK_FREQUENCY or IMMEDIATE_ACK frame is received, sending the min_ack_delay transport
-parameter does not cause the endpoint to change its acknowledgment behavior.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
+of whether it also sends the min_ack_delay transport parameter or not.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">Until an ACK_FREQUENCY or IMMEDIATE_ACK frame is received, sending the min_ack_delay transport
+parameter does not cause the endpoint to change its acknowledgment behavior.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
 they received for use in a subsequent connection. Consequently, ACK_FREQUENCY
 and IMMEDIATE_ACK frames cannot be sent in 0-RTT packets, as per
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4.1" class="relref">Section 7.4.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">This Transport Parameter is encoded as per <span><a href="https://rfc-editor.org/rfc/rfc9000#section-18" class="relref">Section 18</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4.1" class="relref">Section 7.4.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">This Transport Parameter is encoded as per <span><a href="https://rfc-editor.org/rfc/rfc9000#section-18" class="relref">Section 18</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ack-frequency-frame">
