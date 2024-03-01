@@ -509,7 +509,7 @@ variation in the path RTT by setting the Ack-Eliciting Threshold
 to a value no larger than number of maximum-sized packets that fit
 into the current congestion window.
 Alternatively, a sender can send an IMMEDIATE_ACK frame if no acknowledgement
-has been receive for more than one round trip time.  Although if the
+has been received for more than one round trip time.  Although if the
 packet containing an IMMEDIATE_ACK is lost, detection of that loss
 will be delayed by the Reordering Threshold or Requested Max Ack Delay.
 
