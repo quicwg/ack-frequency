@@ -1580,8 +1580,14 @@ and there is a missing packet, an immediate acknowledgement is sent.<a href="#se
   Receive 10 -&gt; Send ACK because of 7
 </pre><a href="#section-6.2.1-3" class="pilcrow">¶</a>
 </div>
-<p id="section-6.2.1-4">If the reordering threshold is 5 and acknowledgements are only sent due to reordering:<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.2.1-5">
+<p id="section-6.2.1-4">Note that in this example, the receipt of packet 9 triggers an ACK
+that reports both packets 6 and 7 as missing. However,
+the receipt of packet 10 needs to trigger another immediate ACK
+because only with the reporting of the successful receiption of
+packet 10, the sender will be able to declare packet 7 as lost
+(with a reordering threshold of 3).<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-5">If the reordering threshold is 5 and acknowledgements are only sent due to reordering:<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2.1-6">
 <pre>
   Receive 1
   Receive 3 -&gt; 2 Missing
@@ -1590,7 +1596,7 @@ and there is a missing packet, an immediate acknowledgement is sent.<a href="#se
   Receive 7 -&gt; Send ACK because of 2, 4 Missing
   Receive 8 -&gt; 4 Missing
   Receive 9 -&gt; Send ACK because of 4
-</pre><a href="#section-6.2.1-5" class="pilcrow">¶</a>
+</pre><a href="#section-6.2.1-6" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
