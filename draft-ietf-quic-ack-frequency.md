@@ -481,7 +481,8 @@ A sender can accomplish this by setting the Requested Max Ack
 Delay value to no more than the estimated round trip time.
 The sender can also improve feedback and robustness to
 variation in the path RTT by setting the Ack-Eliciting Threshold
-to a value no larger than the current congestion window. Alternatively,
+to a value no larger than number of maximum-sized packets that fit
+into the current congestion window. Alternatively,
 a sender can accomplish this by sending an IMMEDIATE_ACK frame once each
 round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
 detection of that loss will be delayed by the Reordering Threshold or Requested
