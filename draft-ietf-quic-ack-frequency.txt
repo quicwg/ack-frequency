@@ -330,8 +330,11 @@ Table of Contents
    *  Since the last acknowledgment was sent, max_ack_delay amount of
       time has passed.
 
-   Section 6.2, Section 6.4, and Section 6.5 describe exceptions to this
-   strategy.
+   Further, the enpoint may send an acknowledgment earlier based on the
+   value of the Reordering Threshold when a gap in the packet number
+   order is detected, see Section 6.2.
+
+   Section 6.4 and Section 6.5 describe exceptions to this strategy.
 
 6.1.  Response to long idle periods
 
