@@ -405,6 +405,16 @@ If the reordering theshold is 3 and acknowledgements are only sent due to reorde
   Receive 10 -> Send ACK because of 7
 ~~~
 
+Received packet|Largest Unacked|Largest Acked|Largest Reported|Unreported Missing|Send ACK
+---|---|---|---|---|---|
+  1|  1|  -|  -|  -| No|
+  3|  3|  -|  -|  2| No|
+  4|  4|  -|  -|  2| No|
+  5|  5|  -|  -|  2|Yes (5 - 2 >= 3) |
+  8|  8|  5|  3|6,7| No|
+  9|  9|  5|  3|6,7|Yes (9 - 6 >= 3) |
+ 10| 10|  9|  7|  7|Yes (10 - 7 >= 3) |
+
 Note that in this example, the receipt of packet 9 triggers an ACK
 that reports both packets 6 and 7 as missing. However,
 the receipt of packet 10 needs to trigger another immediate ACK
@@ -423,6 +433,16 @@ If the reordering threshold is 5 and acknowledgements are only sent due to reord
   Receive 8 -> 4 Missing
   Receive 9 -> Send ACK because of 4
 ~~~
+
+Received packet|Largest Unacked|Largest Acked|Largest Reported|Unreported Missing|Send ACK
+---|---|---|---|---|---|
+  1|  1|  -|  -|  -| No|
+  3|  3|  -|  -|  2| No|
+  5|  5|  -|  -|2,4| No|
+  6|  6|  -|  -|2,4| No|
+  7|  7|  -|  -|2,4|Yes (7 - 2 >= 5)|
+  8|  8|  7|  3|  4| No|
+  9|  9|  7|  3|  4|Yes (9 - 4 >= 5)|
 
 ## Setting the Reordering Threshold value {#set-threshold}
 
