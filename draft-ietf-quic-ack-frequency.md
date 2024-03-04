@@ -500,7 +500,7 @@ the available bandwidth.
 To limit the consequences of reduced acknowledgment frequency, a sender
 can use the extension in this draft to request a receiver
 to send an acknowledgment at least once per round trip,
-when there are ack-eliciting packets in flight, the following ways:
+when there are ack-eliciting packets in flight, in the following ways:
 
 A sender can set the Requested Max Ack Delay value
 to no more than the estimated round trip time.
