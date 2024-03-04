@@ -193,10 +193,11 @@ min_ack_delay (0xff04de1b):
   too small a value in the Requested Max Ack Delay field of the ACK_FREQUENCY
   frame.
 
-An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
-Endpoints that support this extension MUST treat receipt of a min_ack_delay that
-is greater than the received max_ack_delay as a connection error of type
-TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
+An endpoint's minumum acknowledgement delay MUST NOT be greater than its maximum
+acknowledgement delay. Endpoints that support this extension MUST treat receipt
+of a min_ack_delay that is greater than the maximum acknowledgement delay (whether
+received in max_ack_delay, or the default assumed due to omission) as a connection
+error of type TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
 transport parameter is in milliseconds ({{Section 18.2 of QUIC-TRANSPORT}}),
 min_ack_delay is specified in microseconds.
 
