@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 2 September 2024                                         Google
+Expires: 5 September 2024                                         Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            1 March 2024
+                                                            4 March 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
@@ -132,8 +132,8 @@ Table of Contents
 
    *  Similarly, receiving UDP datagrams can also be CPU intensive.
       Reducing the acknowledgement frequency therefore also reduces the
-      CPU usage at the data sender as it has to receive and process less
-      acknowledgment-only packets.
+      CPU usage at the data sender as it has to receive and process
+      fewer acknowledgment-only packets.
 
    *  For asymmetric link technologies, such as DOCSIS, LTE, and
       satellite, connection throughput in the forward path can become
