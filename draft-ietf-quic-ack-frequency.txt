@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 2 September 2024                                         Google
+Expires: 5 September 2024                                         Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            1 March 2024
+                                                            4 March 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
@@ -349,10 +349,13 @@ Table of Contents
 6.2.  Response to Out-of-Order Packets
 
    As specified in Section 13.2.1 of [QUIC-TRANSPORT], endpoints are
-   expected to send an acknowledgment immediately on receiving a
-   reordered ack-eliciting packet.  This extension modifies that
-   behavior when an ACK_FREQUENCY frame with a Reordering Threshold
-   value other than 1 has been received.
+   expected to send an acknowledgment immediately on receipt of a
+   reordered ack-eliciting packet with a smaller packet number than the
+   highest-numbered ack-eliciting packet or with a higher packet number
+   when there are missing packets between that packet and the highest-
+   numbered ack-eliciting packet.  This extension modifies that behavior
+   when an ACK_FREQUENCY frame with a Reordering Threshold value other
+   than 1 has been received.
 
    If the most recent ACK_FREQUENCY frame received from the peer has a
    Reordering Threshold value of 0, the endpoint SHOULD NOT send an
