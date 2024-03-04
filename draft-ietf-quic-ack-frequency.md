@@ -195,7 +195,7 @@ min_ack_delay (0xff04de1b):
 
 An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
-is greater than the received max_ack_delay as a connection error of type
+is greater than the max_ack_delay as a connection error of type
 TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
 transport parameter is in milliseconds ({{Section 18.2 of QUIC-TRANSPORT}}),
 min_ack_delay is specified in microseconds.
