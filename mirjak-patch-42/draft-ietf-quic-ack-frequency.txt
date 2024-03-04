@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 2 September 2024                                         Google
+Expires: 5 September 2024                                         Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            1 March 2024
+                                                            4 March 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
@@ -504,9 +504,9 @@ Table of Contents
    cause it to underutilize the available bandwidth.
 
    To limit the consequences of reduced acknowledgment frequency, a
-   sender can utilize the extension in this draft to request a receiver
-   to send an acknowledgment at least once per round trip, when there
-   are ack-eliciting packets in flight, the following ways:
+   sender can use the extension in this draft to request a receiver to
+   send an acknowledgment at least once per round trip, when there are
+   ack-eliciting packets in flight, the following ways:
 
    A sender can set the Requested Max Ack Delay value to no more than
    the estimated round trip time.  The sender can also improve feedback
