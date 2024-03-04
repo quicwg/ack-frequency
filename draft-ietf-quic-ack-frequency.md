@@ -499,8 +499,8 @@ connection and therefore might require sending frequent ACK_FREQUENCY frames to
 ensure optimal performance, though not every change should trigger an update.
 Usually, it is not necessary to send an ACK_FREQUENCY frame more than once per
 RTT and likely it needs to be sent even less frequently.
-Ideally, an ACK_FREQUENCY frame is sent only if a relevant change in the
-average congestion window or RTT estimates is detected that impacts the local
+Ideally, an ACK_FREQUENCY frame is sent only if a relevant change
+in the congestion window or smoothed RTT is detected that impacts the local
 setting of the reordering threshold or locally-selected calculation of the
 Ack-Eliciting Threshold or Requested Max Ack Delay.
 
