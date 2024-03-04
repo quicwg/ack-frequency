@@ -502,7 +502,7 @@ RTT and likely it needs to be sent even less frequently.
 Ideally, an ACK_FREQUENCY frame is sent only when a relevant change
 in the congestion window or smoothed RTT is detected that impacts the local
 setting of the reordering threshold or locally-selected calculation of the
-Ack-Eliciting Threshold or Requested Max Ack Delay.
+either Ack-Eliciting Threshold or the Requested Max Ack Delay.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
 as communicated via the min_ack_delay transport parameter, preventing the
