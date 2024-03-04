@@ -1286,14 +1286,15 @@ sender, and CPU utilization at both a data sender and a data receiver.<a href="#
 endpoint performance in the following ways:<a href="#section-2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2-3.1">
-          <p id="section-2-3.1.1">Sending UDP packets can be very CPU intensive on some platforms. Reducing
-the number of packets that only contain acknowledgments reduces the CPU
-consumed at a data receiver. Experience shows that this reduction can be
-critical for high bandwidth connections.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.1.1">Sending UDP datagrams can be very CPU intensive on some platforms. A data
+receiver can decrease its CPU usage by reducing the number of
+acknowledgement-only packets that it sends. Experience shows that this
+reduction can be critical for high bandwidth connections.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.2">
-          <p id="section-2-3.2.1">Similarly, receiving and processing UDP packets can also be CPU intensive, and
-reducing acknowledgment frequency reduces this cost at a data sender.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.2.1">Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
+acknowledgement frequency therefore also reduces the CPU usage at the data
+sender as it has to receive and process fewer acknowledgment-only packets.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.3">
           <p id="section-2-3.3.1">For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
