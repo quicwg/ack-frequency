@@ -495,7 +495,7 @@ unnecessarily high number of acknowledgments when min_rtt is much smaller than
 smoothed_rtt.
 
 Note that the congestion window and the RTT estimate change over the lifetime of a
-connection and therefore might require sending frequent ACK_FREQUENCY frames to
+connection and therefore might require sending updates in an ACK_FREQUENCY frames to
 ensure optimal performance, though not every change should trigger an update.
 Usually, it is not necessary to send an ACK_FREQUENCY frame more than once per
 RTT and likely it needs to be sent even less frequently.
