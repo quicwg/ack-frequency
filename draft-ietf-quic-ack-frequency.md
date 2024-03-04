@@ -498,7 +498,7 @@ can delay a sender's response to network congestion or cause it to underutilize
 the available bandwidth.
 
 To limit the consequences of reduced acknowledgment frequency, a sender
-can utilize the extension in this draft to request a receiver
+can use the extension in this draft to request a receiver
 to send an acknowledgment at least once per round trip,
 when there are ack-eliciting packets in flight, the following ways:
 
