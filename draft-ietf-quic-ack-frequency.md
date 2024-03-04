@@ -263,8 +263,8 @@ Requested Max Ack Delay:
   microseconds, unlike the max_ack_delay transport parameter, which is in
   milliseconds. On receipt of a valid value, the endpoint SHOULD update
   its max_ack_delay to the value provided by the peer. Note that values
-  of 2^14 or greater are invalid for max_ack_delay. Sending a value smaller
-  than the min_ack_delay advertised by the peer is invalid. Receipt of an
+  of 2^14 or greater are invalid for max_ack_delay. A value smaller than
+  the min_ack_delay advertised by the peer is also invalid. Receipt of an
   invalid value MUST be treated as a connection error of type
   FRAME_ENCODING_ERROR. 
 
