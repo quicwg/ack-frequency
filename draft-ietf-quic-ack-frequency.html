@@ -1626,9 +1626,15 @@ a Reordering Threshold of 2.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
         <h3 id="name-expediting-explicit-congest">
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-expediting-explicit-congest" class="section-name selfRef">Expediting Explicit Congestion Notification (ECN) Signals</a>
         </h3>
-<p id="section-6.4-1">An endpoint SHOULD send an immediate acknowledgment when a packet marked
-with the ECN Congestion Experienced (CE) <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> codepoint in the IP
-header is received and the previously received packet was not marked CE.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">If the Ack-Eliciting Threshold is larger than 1, an endpoint SHOULD send
+an immediate acknowledgement when a packet marked with the ECN Congestion
+Experienced (CE) <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> codepoint in the IP header is received and
+the previously received packet was not marked CE. From there on, if multiple
+CE-marked packets are received in a row or only non-CE-marked packet received,
+the endpoint resumes sending acknowledgements based on the Ack-Eliciting
+Threshold or max_ack_delay. This results in sending an immediate
+acknowledgement only when there is a transition from non-CE-marked
+to CE-marked.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> during
 extreme congestion or when peers are using DCTCP <span>[<a href="#RFC8257" class="cite xref">RFC8257</a>]</span> or other
