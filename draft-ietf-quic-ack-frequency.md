@@ -142,13 +142,14 @@ sender, and CPU utilization at both a data sender and a data receiver.
 Reducing the frequency of acknowledgments can improve connection and
 endpoint performance in the following ways:
 
-- Sending UDP packets can be very CPU intensive on some platforms. Reducing
-  the number of packets that only contain acknowledgments reduces the CPU
-  consumed at a data receiver. Experience shows that this reduction can be
-  critical for high bandwidth connections.
+- Sending UDP datagrams can be very CPU intensive on some platforms. A data
+  receiver can decrease its CPU usage by reducing the number of
+  acknowledgement-only packets that it sends. Experience shows that this
+  reduction can be critical for high bandwidth connections.
 
-- Similarly, receiving and processing UDP packets can also be CPU intensive, and
-  reducing acknowledgment frequency reduces this cost at a data sender.
+- Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
+  acknowledgement frequency therefore also reduces the CPU usage at the data
+  sender as it has to receive and process fewer acknowledgment-only packets.
 
 - For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
   connection throughput in the forward path can become constrained
