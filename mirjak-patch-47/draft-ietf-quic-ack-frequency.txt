@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 8 August 2024                                            Google
+Expires: 13 September 2024                                        Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         5 February 2024
+                                                           12 March 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -16,8 +16,9 @@ Expires: 8 August 2024                                            Google
 
 Abstract
 
-   This document describes a QUIC extension for an endpoint to control
-   its peer's delaying of acknowledgments.
+   This document specifies an extension to QUIC that permits an endpoint
+   to request that its peer changes its behavior when sending or
+   delaying acknowledgments.
 
 Note to Readers
 
@@ -44,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2024.
+   This Internet-Draft will expire on 13 September 2024.
 
 Copyright Notice
 
@@ -95,8 +96,18 @@ Table of Contents
 
 1.  Introduction
 
-   This document describes a QUIC extension for an endpoint to control
-   its peer's delaying of acknowledgments.
+   The QUIC transport protocol recommends to send an ACK frame after
+   receiving at least two ack-eliciting packets; see Section 13.2 of
+   [QUIC-TRANSPORT].  However, it leaves the determination of how
+   frequently to send acknowledgments in response to ack-eliciting
+   packets to the data receiver without any ability for the data sender
+   to impact this behavior.  This document specifies an extension to
+   QUIC that permits an endpoint to request that its peer changes its
+   behavior when sending or delaying acknowledgments.
+
+   This document defines a new transport parameter to announce the
+   support of this extension and specifies two new frame types to
+   request changes to the peer's acknowledgement behavior.
 
 1.1.  Terms and Definitions
 
@@ -124,15 +135,16 @@ Table of Contents
    Reducing the frequency of acknowledgments can improve connection and
    endpoint performance in the following ways:
 
-   *  Sending UDP packets can be very CPU intensive on some platforms.
-      Reducing the number of packets that only contain acknowledgments
-      reduces the CPU consumed at a data receiver.  Experience shows
+   *  Sending UDP datagrams can be very CPU intensive on some platforms.
+      A data receiver can decrease its CPU usage by reducing the number
+      of acknowledgement-only packets that it sends.  Experience shows
       that this reduction can be critical for high bandwidth
       connections.
 
-   *  Similarly, receiving and processing UDP packets can also be CPU
-      intensive, and reducing acknowledgment frequency reduces this cost
-      at a data sender.
+   *  Similarly, receiving UDP datagrams can also be CPU intensive.
+      Reducing the acknowledgement frequency therefore also reduces the
+      CPU usage at the data sender as it has to receive and process
+      fewer acknowledgment-only packets.
 
    *  For asymmetric link technologies, such as DOCSIS, LTE, and
       satellite, connection throughput in the forward path can become
@@ -163,6 +175,11 @@ Table of Contents
 
 3.  Negotiating Extension Use
 
+   After the successful negotiation of this extension two new frames can
+   be used to provide guidance about delaying and sending of ACK frames
+   to its peer.  These frames are the ACK_FREQUENCY frame (see
+   Section 4) and the IMMEDIATE_ACK frame (see Section 5).
+
    Endpoints advertise their support of the extension described in this
    document by sending the following transport parameter (Section 7.2 of
    [QUIC-TRANSPORT]):
@@ -177,11 +194,11 @@ Table of Contents
 
    An endpoint's min_ack_delay MUST NOT be greater than its
    max_ack_delay.  Endpoints that support this extension MUST treat
-   receipt of a min_ack_delay that is greater than the received
-   max_ack_delay as a connection error of type
-   TRANSPORT_PARAMETER_ERROR.  Note that while the endpoint's
-   max_ack_delay transport parameter is in milliseconds (Section 18.2 of
-   [QUIC-TRANSPORT]), min_ack_delay is specified in microseconds.
+   receipt of a min_ack_delay that is greater than the max_ack_delay as
+   a connection error of type TRANSPORT_PARAMETER_ERROR.  Note that
+   while the endpoint's max_ack_delay transport parameter is in
+   milliseconds (Section 18.2 of [QUIC-TRANSPORT]), min_ack_delay is
+   specified in microseconds.
 
    The min_ack_delay transport parameter is a unilateral indication of
    support for receiving ACK_FREQUENCY frames.  If an endpoint sends the
@@ -243,13 +260,12 @@ Table of Contents
       value to which the endpoint requests the peer update its
       max_ack_delay (Section 18.2 of [QUIC-TRANSPORT]).  The value of
       this field is in microseconds, unlike the max_ack_delay transport
-      parameter, which is in milliseconds.  Sending a value smaller than
-      the min_ack_delay advertised by the peer is invalid.  Receipt of
-      an invalid value MUST be treated as a connection error of type
-      TRANSPORT_PARAMETER_ERROR.  On receiving a valid value in this
-      field, the endpoint MUST update its max_ack_delay to the value
-      provided by the peer.  Note that values of 2^14 or greater are
-      invalid for max_ack_delay.
+      parameter, which is in milliseconds.  On receipt of a valid value,
+      the endpoint SHOULD update its max_ack_delay to the value provided
+      by the peer.  Note that values of 2^14 or greater are invalid for
+      max_ack_delay.  A value smaller than the min_ack_delay advertised
+      by the peer is also invalid.  Receipt of an invalid value MUST be
+      treated as a connection error of type FRAME_ENCODING_ERROR.
 
    Reordering Threshold:  A variable-length integer that indicates the
       maximum packet reordering before eliciting an immediate ACK, as
@@ -315,8 +331,11 @@ Table of Contents
    *  Since the last acknowledgment was sent, max_ack_delay amount of
       time has passed.
 
-   Section 6.2, Section 6.4, and Section 6.5 describe exceptions to this
-   strategy.
+   Further, the enpoint may send an acknowledgment earlier based on the
+   value of the Reordering Threshold when a gap in the packet number
+   order is detected, see Section 6.2.
+
+   Section 6.4 and Section 6.5 describe exceptions to this strategy.
 
 6.1.  Response to long idle periods
 
@@ -330,10 +349,13 @@ Table of Contents
 6.2.  Response to Out-of-Order Packets
 
    As specified in Section 13.2.1 of [QUIC-TRANSPORT], endpoints are
-   expected to send an acknowledgment immediately on receiving a
-   reordered ack-eliciting packet.  This extension modifies that
-   behavior when an ACK_FREQUENCY frame with a Reordering Threshold
-   value other than 1 has been received.
+   expected to send an acknowledgment immediately on receipt of a
+   reordered ack-eliciting packet with a smaller packet number than the
+   highest-numbered ack-eliciting packet or with a higher packet number
+   when there are missing packets between that packet and the highest-
+   numbered ack-eliciting packet.  This extension modifies that behavior
+   when an ACK_FREQUENCY frame with a Reordering Threshold value other
+   than 1 has been received.
 
    If the most recent ACK_FREQUENCY frame received from the peer has a
    Reordering Threshold value of 0, the endpoint SHOULD NOT send an
@@ -385,6 +407,13 @@ Table of Contents
      Receive 9 -> Send ACK because of 6, 7 Missing
      Receive 10 -> Send ACK because of 7
 
+   Note that in this example, the receipt of packet 9 triggers an ACK
+   that reports both packets 6 and 7 as missing.  However, the receipt
+   of packet 10 needs to trigger another immediate ACK because only with
+   the reporting of the successful receiption of packet 10, the sender
+   will be able to declare packet 7 as lost (with a reordering threshold
+   of 3).
+
    If the reordering threshold is 5 and acknowledgements are only sent
    due to reordering:
 
@@ -409,10 +438,15 @@ Table of Contents
 
 6.4.  Expediting Explicit Congestion Notification (ECN) Signals
 
-   An endpoint SHOULD send an immediate acknowledgment when a packet
-   marked with the ECN Congestion Experienced (CE) [RFC3168] codepoint
-   in the IP header is received and the previously received packet was
-   not marked CE.
+   If the Ack-Eliciting Threshold is larger than 1, an endpoint SHOULD
+   send an immediate acknowledgement when a packet marked with the ECN
+   Congestion Experienced (CE) [RFC3168] codepoint in the IP header is
+   received and the previously received packet was not marked CE.  From
+   there on, if multiple CE-marked packets are received in a row or only
+   non-CE-marked packet received, the endpoint resumes sending
+   acknowledgements based on the Ack-Eliciting Threshold or
+   max_ack_delay.  This results in sending an immediate acknowledgement
+   only when there is a transition from non-CE-marked to CE-marked.
 
    Doing this maintains the peer's response time to congestion events,
    while also reducing the ACK rate compared to Section 13.2.1 of
@@ -478,18 +512,20 @@ Table of Contents
    cause it to underutilize the available bandwidth.
 
    To limit the consequences of reduced acknowledgment frequency, a
-   sender can cause a receiver to send an acknowledgment at least once
-   per round trip when there are ack-eliciting packets in flight.
+   sender can use the extension in this draft to request a receiver to
+   send an acknowledgment at least once per round trip, when there are
+   ack-eliciting packets in flight, in the following ways:
 
-   A sender can accomplish this by setting the Requested Max Ack Delay
-   value to no more than the estimated round trip time.  The sender can
-   also improve feedback and robustness to variation in the path RTT by
-   setting the Ack-Eliciting Threshold to a value no larger than the
-   current congestion window.  Alternatively, a sender can accomplish
-   this by sending an IMMEDIATE_ACK frame once each round trip time,
-   although if the packet containing an IMMEDIATE_ACK is lost, detection
-   of that loss will be delayed by the Reordering Threshold or Requested
-   Max Ack Delay.
+   A sender can set the Requested Max Ack Delay value to no more than
+   the estimated round trip time.  The sender can also improve feedback
+   and robustness to variation in the path RTT by setting the Ack-
+   Eliciting Threshold to a value no larger than number of maximum-sized
+   packets that fit into the current congestion window.  Alternatively,
+   a sender can send an IMMEDIATE_ACK frame if no acknowledgement has
+   been received for more than one round trip time.  Although if the
+   packet containing an IMMEDIATE_ACK is lost, detection of that loss
+   will be delayed by the Reordering Threshold or Requested Max Ack
+   Delay.
 
    When setting the Requested Max Ack Delay as a function of the RTT, it
    is usually better to use the Smoothed RTT (smoothed_rtt) (Section 5.3
@@ -498,9 +534,16 @@ Table of Contents
    avoids eliciting an unnecessarily high number of acknowledgments when
    min_rtt is much smaller than smoothed_rtt.
 
-   Note that the congestion window and the RTT change over the lifetime
-   of a connection and therefore might require sending frequent
-   ACK_FREQUENCY frames to ensure optimal performance.
+   Note that the congestion window and the RTT estimate change over the
+   lifetime of a connection and therefore might require sending updates
+   in an ACK_FREQUENCY frames to ensure optimal performance, though not
+   every change should trigger an update.  Usually, it is not necessary
+   to send an ACK_FREQUENCY frame more than once per RTT and likely it
+   needs to be sent even less frequently.  Ideally, an ACK_FREQUENCY
+   frame is sent only when a relevant change in the congestion window or
+   smoothed RTT is detected that impacts the local setting of the
+   reordering threshold or locally-selected calculation of the either
+   Ack-Eliciting Threshold or the Requested Max Ack Delay.
 
    It is possible that the RTT is smaller than the receiver's timer
    granularity, as communicated via the min_ack_delay transport
@@ -587,17 +630,25 @@ Table of Contents
 
 9.  Security Considerations
 
-   An improperly configured or malicious data sender could cause a data
-   receiver to acknowledge more frequently than its available resources
-   permit.  However, there are two limits that make such an attack
-   largely inconsequential.  First, the acknowledgment rate is bounded
-   by the rate at which data is received.  Second, ACK_FREQUENCY and
-   IMMEDIATE_ACK frames can only request an increase in the
-   acknowledgment rate, but cannot force it.
+   An improperly configured or malicious data sender could request a
+   data receiver to acknowledge more frequently than its available
+   resources permit.  However, there are two limits that make such an
+   attack largely inconsequential.  First, the acknowledgment rate is
+   bounded by the rate at which data is received.  Second, ACK_FREQUENCY
+   and IMMEDIATE_ACK frames can only request an increase in the
+   acknowledgment rate, but cannot enforce it.
 
-   In general, with this extension, a sender cannot force a receiver to
-   acknowledge more frequently than the receiver considers safe based on
-   its resource constraints.
+   Section 21.9 of [QUIC-TRANSPORT] provides further guidance on peer
+   denial of service attacks that could abuse control frames, including
+   ACK frames as well as the newly herein specified ACK_FREQUENCY and
+   IMMEDIATE_ACK frames, to cause disproportional processing costs
+   without observable impact on the state of the connection.
+   Especially, the IMMEDIATE_ACK frame does not only imply processing
+   cost for receiving and processing the control frame itself but can
+   also cause additional sending of packets.  However, in general, with
+   this extension, a sender cannot force a receiver to acknowledge more
+   frequently than the receiver considers safe based on its resource
+   constraints.
 
 10.  IANA Considerations
 
@@ -709,6 +760,10 @@ Acknowledgments
 
    The following people directly contributed key ideas that shaped this
    draft: Bob Briscoe, Kazuho Oku, Marten Seemann.
+
+   Thanks for the in-depth reviews by Lucas Pardue, Martin Thomson,
+   Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst and
+   Ingemar Johansson!
 
 Authors' Addresses
 
