@@ -669,12 +669,6 @@ a permanent allocation of these frame types with the values described above.
 
 --- back
 
-# Change Log
-
-> **RFC Editor's Note:** Please remove this section prior to publication of a
-> final version of this document.
-
-
 # Acknowledgments
 {:numbered="false"}
 
