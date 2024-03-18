@@ -683,5 +683,5 @@ Bob Briscoe, Kazuho Oku, Marten Seemann.
 
 Thanks for the in-depth reviews by Lucas Pardue, Martin Thomson,
 Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst and
-Ingemar Johansson!
+Ingemar Johansson.
 
