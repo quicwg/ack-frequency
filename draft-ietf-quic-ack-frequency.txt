@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 19 September 2024                                        Google
+Expires: 22 September 2024                                        Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                           18 March 2024
+                                                           21 March 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 September 2024.
+   This Internet-Draft will expire on 22 September 2024.
 
 Copyright Notice
 
@@ -754,6 +754,10 @@ Acknowledgments
 
    The following people directly contributed key ideas that shaped this
    draft: Bob Briscoe, Kazuho Oku, Marten Seemann.
+
+   Thanks for the in-depth reviews by Lucas Pardue, Martin Thomson,
+   Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst and
+   Ingemar Johansson.
 
 Authors' Addresses
 
