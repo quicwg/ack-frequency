@@ -35,7 +35,7 @@ normative:
     seriesinfo:
       RFC: 9000
       DOI: 10.17487/RFC9000
-    author:
+    author: 
       -
         ins: J. Iyengar
         name: Jana Iyengar
@@ -134,22 +134,22 @@ This document uses terms, definitions, and notational conventions described in
 
 # Motivation
 
-A receiver acknowledges received packets, but it can delay sending these
-acknowledgments. Delaying acknowledgments can impact connection
-throughput, loss detection and congestion controller performance at a data
-sender, and CPU utilization at both a data sender and a data receiver.
+A receiver acknowledges received packets, but can delay sending these
+acknowledgments. Delaying acknowledgments can impact a data sender's
+throughput, loss detection and congestion controller performance, as well
+as CPU utilization at both endpoints.
 
 Reducing the frequency of acknowledgments can improve connection and
 endpoint performance in the following ways:
 
-- Sending UDP datagrams can be very CPU intensive on some platforms. A data
+- Sending UDP datagrams is very CPU intensive on some platforms. A data
   receiver can decrease its CPU usage by reducing the number of
-  acknowledgement-only packets that it sends. Experience shows that this
+  acknowledgement-only packets sent. Experience shows that this
   reduction can be critical for high bandwidth connections.
 
 - Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
-  acknowledgement frequency therefore also reduces the CPU usage at the data
-  sender as it has to receive and process fewer acknowledgment-only packets.
+  acknowledgement frequency also reduces the data sender's CPU usage because
+  it receives and processes fewer acknowledgment-only packets.
 
 - For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
   connection throughput in the forward path can become constrained
@@ -163,17 +163,15 @@ endpoint performance in the following ways:
   opportunities available to other flows sharing the same link.
 
 
-As discussed in {{implementation}} however, there can be undesirable consequences
-to congestion control and loss recovery if a receiver unilaterally reduces the
-acknowledgment frequency. A sender's constraints on the acknowledgment
-frequency need to be taken into account to maximize congestion controller and
-loss recovery performance.
+However, As discussed in {{implementation}}, a unilateral reduction in
+acknowledgement frequency can lead to undesirable consequences for congestion
+control and loss recovery.
 
-{{QUIC-TRANSPORT}} specifies a simple delayed acknowledgment mechanism that a
-receiver can use: send an acknowledgment for every other packet, and for every
-packet that is received out of order ({{Section 13.2.1 of QUIC-TRANSPORT}}).
-This does not allow a sender to signal its preferences or constraints. This
-extension provides a mechanism to solve this problem.
+{{QUIC-TRANSPORT}} specifies a simple delayed acknowledgment mechanism
+({{Section 13.2.1 of QUIC-TRANSPORT}}).  A data sender's constraints on the
+acknowledgment frequency need to be taken into account to maximize
+congestion controller and loss recovery performance. This extension provides
+a mechanism for a data sender to signal its preferences and constraints.
 
 # Negotiating Extension Use {#nego}
 
