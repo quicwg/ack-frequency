@@ -9,14 +9,14 @@
 <meta content="Ian Swett" name="author">
 <meta content="Mirja Kühlewind" name="author">
 <meta content="
-       This document specifies an extension to QUIC that permits an endpoint to
-request that its peer changes its behavior when sending or delaying acknowledgments. 
+       This document specifies an extension to QUIC that enables an endpoint to
+request its peer change its behavior when sending or delaying acknowledgments. 
     " name="description">
-<meta content="xml2rfc 3.19.4" name="generator">
+<meta content="xml2rfc 3.20.1" name="generator">
 <meta content="draft-ietf-quic-ack-frequency-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.19.4
-    Python 3.11.6
+  xml2rfc 3.20.1
+    Python 3.11.8
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Iyengar, et al.</td>
-<td class="center">Expires 2 September 2024</td>
+<td class="center">Expires 2 October 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-quic-ack-frequency-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-03-01" class="published">1 March 2024</time>
+<time datetime="2024-03-31" class="published">31 March 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-09-02">2 September 2024</time></dd>
+<dd class="expires"><time datetime="2024-10-02">2 October 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1070,8 +1070,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">QUIC Acknowledgment Frequency</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies an extension to QUIC that permits an endpoint to
-request that its peer changes its behavior when sending or delaying acknowledgments.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document specifies an extension to QUIC that enables an endpoint to
+request its peer change its behavior when sending or delaying acknowledgments.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note" id="section-note.1">
       <h2 id="name-note-to-readers">
@@ -1103,7 +1103,7 @@ code and issues list for this draft can be found at
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 September 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 October 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1228,13 +1228,10 @@ code and issues list for this draft can be found at
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-change-log" class="internal xref">Change Log</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1286,14 +1283,15 @@ sender, and CPU utilization at both a data sender and a data receiver.<a href="#
 endpoint performance in the following ways:<a href="#section-2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2-3.1">
-          <p id="section-2-3.1.1">Sending UDP packets can be very CPU intensive on some platforms. Reducing
-the number of packets that only contain acknowledgments reduces the CPU
-consumed at a data receiver. Experience shows that this reduction can be
-critical for high bandwidth connections.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.1.1">Sending UDP datagrams can be very CPU intensive on some platforms. A data
+receiver can decrease its CPU usage by reducing the number of
+acknowledgement-only packets that it sends. Experience shows that this
+reduction can be critical for high bandwidth connections.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.2">
-          <p id="section-2-3.2.1">Similarly, receiving and processing UDP packets can also be CPU intensive, and
-reducing acknowledgment frequency reduces this cost at a data sender.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.2.1">Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
+acknowledgement frequency therefore also reduces the CPU usage at the data
+sender as it has to receive and process fewer acknowledgment-only packets.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.3">
           <p id="section-2-3.3.1">For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
@@ -1310,13 +1308,13 @@ opportunities available to other flows sharing the same link.<a href="#section-2
 </li>
       </ul>
 <p id="section-2-4">As discussed in <a href="#implementation" class="auto internal xref">Section 8</a> however, there can be undesirable consequences
-to congestion control and loss recovery if a receiver unilitaerally reduces the
+to congestion control and loss recovery if a receiver unilaterally reduces the
 acknowledgment frequency. A sender's constraints on the acknowledgment
 frequency need to be taken into account to maximize congestion controller and
 loss recovery performance.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> specifies a simple delayed acknowledgment mechanism that a
 receiver can use: send an acknowledgment for every other packet, and for every
-packet that is received out of order (Section 13.2.1 of <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>).
+packet that is received out of order (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>).
 This does not allow a sender to signal its preferences or constraints. This
 extension provides a mechanism to solve this problem.<a href="#section-2-5" class="pilcrow">¶</a></p>
 </section>
@@ -1326,36 +1324,41 @@ extension provides a mechanism to solve this problem.<a href="#section-2-5" clas
       <h2 id="name-negotiating-extension-use">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-negotiating-extension-use" class="section-name selfRef">Negotiating Extension Use</a>
       </h2>
-<p id="section-3-1">Endpoints advertise their support of the extension described in this document by
-sending the following transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>):<a href="#section-3-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-3-2">
-        <dt id="section-3-2.1">min_ack_delay (0xff04de1b):</dt>
-        <dd style="margin-left: 1.5em" id="section-3-2.2">
-          <p id="section-3-2.2.1">A variable-length integer representing the minimum amount of time in
+<p id="section-3-1">After the successful negotiation of this extension two new frames can be used
+to provide guidance about delaying and sending of ACK frames to its peer. These
+frames are the ACK_FREQUENCY frame (see <a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>) and the
+IMMEDIATE_ACK frame (see <a href="#immediate-ack-frame" class="auto internal xref">Section 5</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Endpoints advertise their support of the extension described in this document by
+sending the following transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>):<a href="#section-3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3-3">
+        <dt id="section-3-3.1">min_ack_delay (0xff04de1b):</dt>
+        <dd style="margin-left: 1.5em" id="section-3-3.2">
+          <p id="section-3-3.2.1">A variable-length integer representing the minimum amount of time in
 microseconds by which the endpoint that is sending this value is able to
 delay an acknowledgment. This limit could be based on the receiver's clock
-or timer granularity. 'min_ack_delay' is used by the peer to avoid requesting
-too small a value in the Request Max Ack Delay field of the ACK_FREQUENCY
-frame.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
+or timer granularity. min_ack_delay is used by the peer to avoid requesting
+too small a value in the Requested Max Ack Delay field of the ACK_FREQUENCY
+frame.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-3-3">An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
+<p id="section-3-4">An endpoint's min_ack_delay MUST NOT be greater than its max_ack_delay.
 Endpoints that support this extension MUST treat receipt of a min_ack_delay that
-is greater than the received max_ack_delay as a connection error of type
+is greater than the max_ack_delay as a connection error of type
 TRANSPORT_PARAMETER_ERROR. Note that while the endpoint's max_ack_delay
 transport parameter is in milliseconds (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-18.2" class="relref">Section 18.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>),
-min_ack_delay is specified in microseconds.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">The min_ack_delay transport parameter is a unilateral indication of support for
+min_ack_delay is specified in microseconds.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The min_ack_delay transport parameter is a unilateral indication of support for
 receiving ACK_FREQUENCY frames.  If an endpoint sends the transport parameter,
-the peer is allowed to send ACK_FREQUENCY frames independent of whether it also
-sends the min_ack_delay transport parameter or not.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">Until an ACK_FREQUENCY frame is received, sending the min_ack_delay transport
-parameter does not cause the endpoint to change its acknowledgment behavior.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
+the peer is allowed to send ACK_FREQUENCY and IMMEDIATE_ACK frames independent
+of whether it also sends the min_ack_delay transport parameter or not.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">Until an ACK_FREQUENCY or IMMEDIATE_ACK frame is received, sending the min_ack_delay transport
+parameter does not cause the endpoint to change its acknowledgment behavior.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Endpoints MUST NOT remember the value of the min_ack_delay transport parameter
 they received for use in a subsequent connection. Consequently, ACK_FREQUENCY
-frames cannot be sent in 0-RTT packets, as per <span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4.1" class="relref">Section 7.4.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">This Transport Parameter is encoded as per <span><a href="https://rfc-editor.org/rfc/rfc9000#section-18" class="relref">Section 18</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-7" class="pilcrow">¶</a></p>
+and IMMEDIATE_ACK frames cannot be sent in 0-RTT packets, as per
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4.1" class="relref">Section 7.4.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">This Transport Parameter is encoded as per <span><a href="https://rfc-editor.org/rfc/rfc9000#section-18" class="relref">Section 18</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-3-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ack-frequency-frame">
@@ -1374,7 +1377,7 @@ ACK_FREQUENCY Frame {
   Type (i) = 0xaf,
   Sequence Number (i),
   Ack-Eliciting Threshold (i),
-  Request Max Ack Delay (i),
+  Requested Max Ack Delay (i),
   Reordering Threshold (i),
 }
 </pre><a href="#section-4-2" class="pilcrow">¶</a>
@@ -1402,17 +1405,18 @@ endpoint sends an ACK frame for every other ack-eliciting packet, as specified i
 <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.2" class="relref">Section 13.2.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, which corresponds to a value of 1.<a href="#section-4-4.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-4-4.5">Request Max Ack Delay:</dt>
+<dt id="section-4-4.5">Requested Max Ack Delay:</dt>
         <dd style="margin-left: 1.5em" id="section-4-4.6">
           <p id="section-4-4.6.1">A variable-length integer representing the value to which the endpoint
-requests the peer update its <code>max_ack_delay</code>
+requests the peer update its max_ack_delay
 (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-18.2" class="relref">Section 18.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>). The value of this field is in
-microseconds, unlike the 'max_ack_delay' transport parameter, which is in
-milliseconds. Sending a value smaller than the <code>min_ack_delay</code> advertised
-by the peer is invalid. Receipt of an invalid value MUST be treated as a
-connection error of type TRANSPORT_PARAMETER_ERROR. On receiving a valid value in
-this field, the endpoint MUST update its <code>max_ack_delay</code> to the value provided
-by the peer.<a href="#section-4-4.6.1" class="pilcrow">¶</a></p>
+microseconds, unlike the max_ack_delay transport parameter, which is in
+milliseconds. On receipt of a valid value, the endpoint SHOULD update
+its max_ack_delay to the value provided by the peer. Note that values
+of 2^14 or greater are invalid for max_ack_delay. A value smaller than
+the min_ack_delay advertised by the peer is also invalid. Receipt of an
+invalid value MUST be treated as a connection error of type
+FRAME_ENCODING_ERROR.<a href="#section-4-4.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-4-4.7">Reordering Threshold:</dt>
@@ -1430,7 +1434,7 @@ A value of 0 indicates out-of-order packets do not elicit an immediate ACK.<a hr
 ACK_FREQUENCY frame is lost, the sender is encouraged to send another
 ACK_FREQUENCY frame, unless an ACK_FREQUENCY frame with a larger Sequence Number
 value has already been sent. However, it is not forbidden to retransmit the lost
-frame (see Section 13.3 of <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>), because the receiver will ignore
+frame (see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.3" class="relref">Section 13.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>), because the receiver will ignore
 duplicate or out-of-order ACK_FREQUENCY frames based on the Sequence Number.<a href="#section-4-5" class="pilcrow">¶</a></p>
 <p id="section-4-6">A receiving endpoint MUST ignore a received ACK_FREQUENCY frame unless the
 Sequence Number value in the frame is greater than the largest processed
@@ -1475,21 +1479,23 @@ IMMEDIATE_ACK Frame {
       </h2>
 <p id="section-6-1">Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgments as
 specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">On receiving an ACK_FREQUENCY frame and updating its <code>max_ack_delay</code>
-and <code>Ack-Eliciting Threshold</code> values (<a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>), the endpoint sends an
+<p id="section-6-2">On receiving an ACK_FREQUENCY frame and updating its max_ack_delay
+and Ack-Eliciting Threshold values (<a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>), the endpoint sends an
 acknowledgment when one of the following conditions are met:<a href="#section-6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-3.1">
           <p id="section-6-3.1.1">Since the last acknowledgment was sent, the number of received ack-eliciting
-packets is greater than the <code>Ack-Eliciting Threshold</code>.<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
+packets is greater than the Ack-Eliciting Threshold.<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-3.2">
-          <p id="section-6-3.2.1">Since the last acknowledgment was sent, <code>max_ack_delay</code> amount of time has
+          <p id="section-6-3.2.1">Since the last acknowledgment was sent, max_ack_delay amount of time has
 passed.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-6-4"><a href="#out-of-order" class="auto internal xref">Section 6.2</a>, <a href="#congestion" class="auto internal xref">Section 6.4</a>, and <a href="#batch" class="auto internal xref">Section 6.5</a> describe exceptions to this
-strategy.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-4">Further, the enpoint may send an acknowledgment earlier based on the value
+of the Reordering Threshold when a gap in the packet number order is detected,
+see <a href="#out-of-order" class="auto internal xref">Section 6.2</a>.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5"><a href="#congestion" class="auto internal xref">Section 6.4</a> and <a href="#batch" class="auto internal xref">Section 6.5</a> describe exceptions to this strategy.<a href="#section-6-5" class="pilcrow">¶</a></p>
 <div id="response-to-long-idle-periods">
 <section id="section-6.1">
         <h3 id="name-response-to-long-idle-perio">
@@ -1509,16 +1515,19 @@ create excessive delays.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-response-to-out-of-order-pa" class="section-name selfRef">Response to Out-of-Order Packets</a>
         </h3>
 <p id="section-6.2-1">As specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints are expected to
-send an acknowledgment immediately on receiving a reordered ack-eliciting
-packet. This extension modifies that behavior when an ACK_FREQUENCY frame with
+send an acknowledgment immediately on receipt of a reordered ack-eliciting
+packet with a smaller packet number than the highest-numbered ack-eliciting packet
+or with a higher packet number when there are missing packets between that packet
+and the highest-numbered ack-eliciting packet.
+This extension modifies that behavior when an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 has been received.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">If the most recent ACK_FREQUENCY frame received from the peer has a <code>Reordering
-Threshold</code> value of 0, the endpoint SHOULD NOT send an immediate
+<p id="section-6.2-2">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
+Threshold value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgment in response to packets received out of order, and instead
-rely on the peer's <code>Ack-Eliciting Threshold</code> and <code>max_ack_delay</code> thresholds
+rely on the peer's Ack-Eliciting Threshold and Requested Max Ack Delay
 for sending acknowledgments.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.2-3">If the most recent ACK_FREQUENCY frame received from the peer has a <code>Reordering
-Threshold</code> value larger than 1, the endpoint tests the amount of reordering
+<p id="section-6.2-3">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
+Threshold value larger than 1, the endpoint tests the amount of reordering
 before deciding to send an acknowledgment. The specification uses the following
 definitions:<a href="#section-6.2-3" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-6.2-4">
@@ -1549,7 +1558,7 @@ that have not yet been received.<a href="#section-6.2-4.8.1" class="pilcrow">¶<
 Threshold value SHOULD send an immediate ACK when the gap
 between the smallest Unreported Missing packet and the Largest Unacked is greater
 than or equal to the Reordering Threshold value. Sending this additional ACK will
-reset the <code>max_ack_delay</code> timer and <code>Ack-Eliciting Threshold</code> counter (as any ACK
+reset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK
 would do).<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 <p id="section-6.2-6">See <a href="#examples" class="auto internal xref">Section 6.2.1</a> for examples explaining this behavior. See <a href="#set-threshold" class="auto internal xref">Section 6.3</a>
 for guidance on how to choose the reordering threshold value when sending
@@ -1560,8 +1569,8 @@ ACK_FREQUENCY frames.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
           </h4>
 <p id="section-6.2.1-1">When the reordering threshold is 1, any time a packet is received
-and there is a missing packet, an immediate ACK is sent.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-2">If the reordering theshold is 3 and ACKs are only sent due to reordering:<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+and there is a missing packet, an immediate acknowledgement is sent.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">If the reordering theshold is 3 and acknowledgements are only sent due to reordering:<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.2.1-3">
 <pre>
   Receive 1
@@ -1573,8 +1582,14 @@ and there is a missing packet, an immediate ACK is sent.<a href="#section-6.2.1-
   Receive 10 -&gt; Send ACK because of 7
 </pre><a href="#section-6.2.1-3" class="pilcrow">¶</a>
 </div>
-<p id="section-6.2.1-4">If the reordering threshold is 5 and ACKs are only sent due to reordering:<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.2.1-5">
+<p id="section-6.2.1-4">Note that in this example, the receipt of packet 9 triggers an ACK
+that reports both packets 6 and 7 as missing. However,
+the receipt of packet 10 needs to trigger another immediate ACK
+because only with the reporting of the successful receiption of
+packet 10, the sender will be able to declare packet 7 as lost
+(with a reordering threshold of 3).<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-5">If the reordering threshold is 5 and acknowledgements are only sent due to reordering:<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2.1-6">
 <pre>
   Receive 1
   Receive 3 -&gt; 2 Missing
@@ -1583,7 +1598,7 @@ and there is a missing packet, an immediate ACK is sent.<a href="#section-6.2.1-
   Receive 7 -&gt; Send ACK because of 2, 4 Missing
   Receive 8 -&gt; 4 Missing
   Receive 9 -&gt; Send ACK because of 4
-</pre><a href="#section-6.2.1-5" class="pilcrow">¶</a>
+</pre><a href="#section-6.2.1-6" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1596,7 +1611,7 @@ and there is a missing packet, an immediate ACK is sent.<a href="#section-6.2.1-
         </h3>
 <p id="section-6.3-1">To ensure timely loss detection, it is optimal to send a Reordering
 Threshold value of 1 less than the packet threshold used by the data sender for
-loss detection. If the threshold is smaller, an ACK frame is sent before the
+loss detection. If the threshold is smaller, an acknowledgement is (unnecessarily) sent before the
 packet can be declared lost based on the packet threshold. If the value is
 larger, it causes unnecessary delays. (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-18.2" class="relref">Section 18.2</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>)
 recommends a default packet threshold for loss detection of 3, equivalent to
@@ -1608,9 +1623,15 @@ a Reordering Threshold of 2.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
         <h3 id="name-expediting-explicit-congest">
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-expediting-explicit-congest" class="section-name selfRef">Expediting Explicit Congestion Notification (ECN) Signals</a>
         </h3>
-<p id="section-6.4-1">An endpoint SHOULD send an immediate acknowledgment when a packet marked
-with the ECN Congestion Experienced (CE) <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> codepoint in the IP
-header is received and the previously received packet was not marked CE.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">If the Ack-Eliciting Threshold is larger than 1, an endpoint SHOULD send
+an immediate acknowledgement when a packet marked with the ECN Congestion
+Experienced (CE) <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> codepoint in the IP header is received and
+the previously received packet was not marked CE. From there on, if multiple
+CE-marked packets are received in a row or only non-CE-marked packet received,
+the endpoint resumes sending acknowledgements based on the Ack-Eliciting
+Threshold or max_ack_delay. This results in sending an immediate
+acknowledgement only when there is a transition from non-CE-marked
+to CE-marked.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> during
 extreme congestion or when peers are using DCTCP <span>[<a href="#RFC8257" class="cite xref">RFC8257</a>]</span> or other
@@ -1635,29 +1656,29 @@ in response, as stated in <span><a href="https://rfc-editor.org/rfc/rfc9000#sect
       <h2 id="name-computation-of-probe-timeou">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-computation-of-probe-timeou" class="section-name selfRef">Computation of Probe Timeout Period</a>
       </h2>
-<p id="section-7-1">On sending an update to the peer's <code>max_ack_delay</code>, an endpoint can use this new
+<p id="section-7-1">On sending an update to the peer's max_ack_delay, an endpoint can use this new
 value in later computations of its Probe Timeout (PTO) period; see <span><a href="https://rfc-editor.org/rfc/rfc9002#section-5.2.1" class="relref">Section 5.2.1</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">Until the packet carrying the ACK_FREQUENCY frame is acknowledged, the endpoint
-MUST use the greater of the current <code>max_ack_delay</code> and the value that is in flight
+MUST use the greater of the current max_ack_delay and the value that is in flight
 when computing the PTO period. Doing so avoids spurious PTOs that can be caused by
-an update that decreases the peer's <code>max_ack_delay</code>.<a href="#section-7-2" class="pilcrow">¶</a></p>
+an update that decreases the peer's max_ack_delay.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">While it is expected that endpoints will have only one ACK_FREQUENCY frame in
 flight at any given time, this extension does not prohibit having more than one
-in flight. When using <code>max_ack_delay</code> for PTO computations, endpoints MUST use
+in flight. When using max_ack_delay for PTO computations, endpoints MUST use
 the maximum of the current value and all those in flight.<a href="#section-7-3" class="pilcrow">¶</a></p>
 <p id="section-7-4">When the number of in-flight ack-eliciting packets is larger than the
 ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
-wait for its <code>max_ack_delay</code> period before sending an acknowledgment. In such
-cases, the endpoint MAY therefore exclude the peer's 'max_ack_delay' from its PTO
+wait for its max_ack_delay period before sending an acknowledgment. In such
+cases, the endpoint MAY therefore exclude the peer's max_ack_delay from its PTO
 calculation.  When Reordering Threshold is set to 0 and loss causes the peer to
 not receive enough packets to trigger an immediate acknowledgment, the receiver
-will wait 'max_ack_delay', increasing the chances of a premature PTO.
+will wait max_ack_delay, increasing the chances of a premature PTO.
 Therefore, if Reordering Threshold is set to 0, the PTO MUST be larger than the
-peer's 'max_ack_delay'.<a href="#section-7-4" class="pilcrow">¶</a></p>
+peer's max_ack_delay.<a href="#section-7-4" class="pilcrow">¶</a></p>
 <p id="section-7-5">When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
 immediate acknowledgment. This avoids waiting the ack delay for
 acknowledgments of PTO packets, reducing tail latency and allowing the sender
-to exclude the peer's 'max_ack_delay' from subsequent PTO calculations.<a href="#section-7-5" class="pilcrow">¶</a></p>
+to exclude the peer's max_ack_delay from subsequent PTO calculations.<a href="#section-7-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementation">
@@ -1679,27 +1700,36 @@ a packet loss or an ECN CE marking. Decreasing the acknowledgment frequency
 can delay a sender's response to network congestion or cause it to underutilize
 the available bandwidth.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">To limit the consequences of reduced acknowledgment frequency, a sender
-can cause a receiver to send an acknowledgment at least once per round trip
-when there are ack-eliciting packets in flight.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">A sender can accomplish this by setting the Request Max Ack
-Delay value to no more than the estimated round trip time.
+can use the extension in this draft to request a receiver
+to send an acknowledgment at least once per round trip,
+when there are ack-eliciting packets in flight, in the following ways:<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">A sender can set the Requested Max Ack Delay value
+to no more than the estimated round trip time.
 The sender can also improve feedback and robustness to
 variation in the path RTT by setting the Ack-Eliciting Threshold
-to a value no larger than the current congestion window. Alternatively,
-a sender can accomplish this by sending an IMMEDIATE_ACK frame once each
-round trip time, although if the packet containing an IMMEDIATE_ACK is lost,
-detection of that loss will be delayed by the reordering threshold or requested
-max ack delay.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4">When setting the Request Max Ack Delay as a function of RTT, it is usually
-better to use the Smoothed RTT (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>) or another
-estimate of the typical round trip time, but not Min RTT. This avoids eliciting an
+to a value no larger than number of maximum-sized packets that fit
+into the current congestion window.
+Alternatively, a sender can send an IMMEDIATE_ACK frame if no acknowledgement
+has been received for more than one round trip time.  Although if the
+packet containing an IMMEDIATE_ACK is lost, detection of that loss
+will be delayed by the Reordering Threshold or Requested Max Ack Delay.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">When setting the Requested Max Ack Delay as a function of the RTT, it is usually
+better to use the Smoothed RTT (smoothed_rtt) (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>) or another
+estimate of the typical RTT, but not the minimum RTT (min_rtt)
+(<span><a href="https://rfc-editor.org/rfc/rfc9002#section-5.2" class="relref">Section 5.2</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>). This avoids eliciting an
 unnecessarily high number of acknowledgments when min_rtt is much smaller than
 smoothed_rtt.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
-<p id="section-8.1-5">Note that the congestion window and the RTT change over the lifetime of a
-connection and therefore might require sending frequent ACK_FREQUENCY frames to
-ensure optimal performance.<a href="#section-8.1-5" class="pilcrow">¶</a></p>
+<p id="section-8.1-5">Note that the congestion window and the RTT estimate change over the lifetime of a
+connection and therefore might require sending updates in an ACK_FREQUENCY frames to
+ensure optimal performance, though not every change should trigger an update.
+Usually, it is not necessary to send an ACK_FREQUENCY frame more than once per
+RTT and likely it needs to be sent even less frequently.
+Ideally, an ACK_FREQUENCY frame is sent only when a relevant change
+in the congestion window or smoothed RTT is detected that impacts the local
+setting of the reordering threshold or locally-selected calculation of the
+either Ack-Eliciting Threshold or the Requested Max Ack Delay.<a href="#section-8.1-5" class="pilcrow">¶</a></p>
 <p id="section-8.1-6">It is possible that the RTT is smaller than the receiver's timer granularity,
-as communicated via the 'min_ack_delay' transport parameter, preventing the
+as communicated via the min_ack_delay transport parameter, preventing the
 receiver from sending an acknowledgment every RTT in time unless packets are
 acknowledged immediately.  In these cases, Reordering Threshold values other than 1
 can delay loss detection more than an RTT.<a href="#section-8.1-6" class="pilcrow">¶</a></p>
@@ -1720,7 +1750,7 @@ unnecessarily when entering idle periods. Therefore, if no further data is
 buffered to be sent, a sender can send an IMMEDIATE_ACK frame with the last data
 packet before an idle period to avoid waiting for the ack delay.<a href="#section-8.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1.1-3">If there are no inflight packets, no acknowledgments will be received for at least
-a round trip when sending resumes. The Max Ack Delay and Ack-Eliciting Threshold
+a round trip when sending resumes. The max_ack_delay and Ack-Eliciting Threshold
 values used by the receiver can further delay acknowledgments.  In this case, the
 sender can include an IMMEDIATE_ACK or ACK_FREQUENCY frame in the first
 Ack-Eliciting packet to avoid waiting for substantially more than a round trip
@@ -1737,7 +1767,7 @@ for an acknowledgment.<a href="#section-8.1.1-3" class="pilcrow">¶</a></p>
 <p id="section-8.2-1">Receiving an acknowledgment can allow a sender to release new packets into the
 network. If a sender is designed to rely on the timing of peer acknowledgments
 ("ACK clock"), delaying acknowledgments can cause undesirable bursts of data
-into the network. In keeping with Section 7.7 of <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>, a sender
+into the network. In keeping with <span><a href="https://rfc-editor.org/rfc/rfc9002#section-7.7" class="relref">Section 7.7</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>, a sender
 can either employ pacing or limit bursts to the initial congestion window.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1750,13 +1780,12 @@ can either employ pacing or limit bursts to the initial congestion window.<a hre
 delaying or reducing the frequency of acknowledgments can cause loss detection
 at the sender to be delayed.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.3-2">A QUIC sender detects loss using packet thresholds on receiving an
-acknowledgment (Section 6.1.1 of <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>); delaying the
+acknowledgment (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>); delaying the
 acknowledgment therefore delays this method of detecting losses.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 <p id="section-8.3-3">Reducing acknowledgment frequency reduces the number of RTT samples that a
-sender receives (Section 5 of <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>), making a sender's RTT estimate
+sender receives (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-5" class="relref">Section 5</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>), making a sender's RTT estimate
 less responsive to changes in the path's RTT. As a result, any mechanisms that
-rely on an accurate RTT estimate, such as time-threshold loss detection (Section
-6.1.2 of <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>) or Probe Timeout (Section 6.2 of <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>),
+rely on an accurate RTT estimate, such as time-threshold-based loss detection (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.1.2" class="relref">Section 6.1.2</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>) or the Probe Timeout (PTO) (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.2" class="relref">Section 6.2</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>),
 will be less responsive to changes in the path's RTT, resulting in either
 delayed or unnecessary packet transmissions.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
 <p id="section-8.3-4">A sender might use timers to detect loss of PMTU probe packets
@@ -1775,7 +1804,7 @@ extension, a client can bundle an IMMEDIATE_ACK frame with the first non-probing
 frame (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.2" class="relref">Section 9.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) it sends or it can send only an
 IMMEDIATE_ACK frame, which is a non-probing frame.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 <p id="section-8.4-2">An endpoint's congestion controller and RTT estimator are reset upon
-confirmation of migration (Section 9.4 of <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>);
+confirmation of migration (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>);
 this changes the pattern of acknowledgments received after migration.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
 <p id="section-8.4-3">Therefore, an endpoint that has sent an ACK_FREQUENCY frame earlier in the
 connection ought to send a new ACK_FREQUENCY frame upon confirmation of
@@ -1789,13 +1818,19 @@ connection migration with updated information, e.g. to consider the new RTT esti
       <h2 id="name-security-considerations">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-9-1">An improperly configured or malicious data sender could cause a
+<p id="section-9-1">An improperly configured or malicious data sender could request a
 data receiver to acknowledge more frequently than its available resources
 permit. However, there are two limits that make such an attack largely
 inconsequential. First, the acknowledgment rate is bounded by the rate at which
 data is received. Second, ACK_FREQUENCY and IMMEDIATE_ACK frames can only request
-an increase in the acknowledgment rate, but cannot force it.<a href="#section-9-1" class="pilcrow">¶</a></p>
-<p id="section-9-2">In general, with this extension, a sender cannot force a receiver to acknowledge
+an increase in the acknowledgment rate, but cannot enforce it.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2"><span><a href="https://rfc-editor.org/rfc/rfc9000#section-21.9" class="relref">Section 21.9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> provides further guidance on peer denial of service
+attacks that could abuse control frames, including ACK frames as well as the newly herein specified
+ACK_FREQUENCY and IMMEDIATE_ACK frames, to cause disproportional
+processing costs without observable impact on the state of the connection.
+Especially, the IMMEDIATE_ACK frame does not only imply processing cost for receiving
+and processing the control frame itself but can also cause additional sending of
+packets. However, in general, with this extension, a sender cannot force a receiver to acknowledge
 more frequently than the receiver considers safe based on its resource constraints.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1946,30 +1981,20 @@ a permanent allocation of these frame types with the values described above.<a h
 </section>
 </div>
 </section>
-<div id="change-log">
-<section id="appendix-A">
-      <h2 id="name-change-log">
-<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-change-log" class="section-name selfRef">Change Log</a>
-      </h2>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-A-1.1">
-          <p id="appendix-A-1.1.1"><strong>RFC Editor's Note:</strong> Please remove this section prior to publication of a
-final version of this document.<a href="#appendix-A-1.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-</section>
-</div>
 <div id="acknowledgments">
-<section id="appendix-B">
+<section id="appendix-A">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-B-1">The following people directly contributed key ideas that shaped this draft:
-Bob Briscoe, Kazuho Oku, Marten Seemann.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The following people directly contributed key ideas that shaped this draft:
+Bob Briscoe, Kazuho Oku, Marten Seemann.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Thanks for the in-depth reviews by Lucas Pardue, Martin Thomson,
+Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst and
+Ingemar Johansson.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-C">
+<section id="appendix-B">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
