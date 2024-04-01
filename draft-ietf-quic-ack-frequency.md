@@ -35,7 +35,7 @@ normative:
     seriesinfo:
       RFC: 9000
       DOI: 10.17487/RFC9000
-    author: 
+    author:
       -
         ins: J. Iyengar
         name: Jana Iyengar
