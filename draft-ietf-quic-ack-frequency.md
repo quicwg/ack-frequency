@@ -163,7 +163,7 @@ endpoint performance in the following ways:
   opportunities available to other flows sharing the same link.
 
 
-However, As discussed in {{implementation}}, a unilateral reduction in
+However, as discussed in {{implementation}}, a unilateral reduction in
 acknowledgement frequency can lead to undesirable consequences for congestion
 control and loss recovery.
 
