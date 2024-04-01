@@ -156,7 +156,7 @@ Table of Contents
       transmission opportunities available to other flows sharing the
       same link.
 
-   However, As discussed in Section 8, a unilateral reduction in
+   However, as discussed in Section 8, a unilateral reduction in
    acknowledgement frequency can lead to undesirable consequences for
    congestion control and loss recovery.
 
