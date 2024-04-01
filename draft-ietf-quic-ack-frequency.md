@@ -323,17 +323,17 @@ Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgments as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
 On receiving an ACK_FREQUENCY frame and updating its max_ack_delay
-and Ack-Eliciting Threshold values ({{ack-frequency-frame}}), the endpoint sends an
-acknowledgment when one of the following conditions are met:
+and Ack-Eliciting Threshold values ({{ack-frequency-frame}}), the data receiver
+sends an acknowledgment when one of the following conditions are met since the
+last acknowledgement was sent:
 
-- Since the last acknowledgment was sent, the number of received ack-eliciting
-  packets is greater than the Ack-Eliciting Threshold.
+- The number of received ack-eliciting packets is greater than the
+  Ack-Eliciting Threshold.
 
-- Since the last acknowledgment was sent, max_ack_delay amount of time has
-  passed.
+- max_ack_delay amount of time has passed.
 
-Further, the enpoint may send an acknowledgment earlier based on the value
-of the Reordering Threshold when a gap in the packet number order is detected,
+An acknowledgment can be sent earlier based on the value of the
+Reordering Threshold when a gap in packet numbers is detected,
 see {{out-of-order}}.
 
 {{congestion}} and {{batch}} describe exceptions to this strategy.
@@ -342,19 +342,16 @@ see {{out-of-order}}.
 
 It is important to receive timely feedback after long idle periods,
 e.g. update stale RTT measurements. When no acknowledgment has been sent in
-over one smoothed round trip time, receivers are encouraged to send an
-acknowledgment soon after receiving an ack-eliciting packet. This is not an
-issue specific to this document, but the mechanisms specified herein could
-create excessive delays.
+over one smoothed round trip time ({{Section 5.3 of QUIC-RECOVERY}}),
+receivers are encouraged to send an acknowledgment soon after receiving
+an ack-eliciting packet. This is not an issue specific to this document,
+but the mechanisms specified herein could create excessive delays.
 
 ## Response to Out-of-Order Packets {#out-of-order}
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
-send an acknowledgment immediately on receipt of a reordered ack-eliciting
-packet with a smaller packet number than the highest-numbered ack-eliciting packet
-or with a higher packet number when there are missing packets between that packet
-and the highest-numbered ack-eliciting packet.
-This extension modifies that behavior when an ACK_FREQUENCY frame with
+send an immediate acknowledgment upon receipt of a reordered ack-eliciting
+packet. This extension modifies that response after an ACK_FREQUENCY frame with
 a Reordering Threshold value other than 1 has been received.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
@@ -431,11 +428,11 @@ If the reordering threshold is 5 and acknowledgements are only sent due to reord
 
 ## Setting the Reordering Threshold value {#set-threshold}
 
-To ensure timely loss detection, it is optimal to send a Reordering
-Threshold value of 1 less than the packet threshold used by the data sender for
-loss detection. If the threshold is smaller, an acknowledgement is (unnecessarily) sent before the
-packet can be declared lost based on the packet threshold. If the value is
-larger, it causes unnecessary delays. ({{Section 18.2 of QUIC-RECOVERY}})
+To ensure timely loss detection, a data sender can send a Reordering Threshold
+value of 1 less than the loss detection packet threshold. If the threshold is
+smaller than the packet threshold, an acknowledgement is unnecessarily sent
+before the packet can be declared lost. If the value is larger, it can cause
+unnecessary delays in loss detection. ({{Section 18.2 of QUIC-RECOVERY}})
 recommends a default packet threshold for loss detection of 3, equivalent to
 a Reordering Threshold of 2.
 
@@ -447,9 +444,8 @@ Experienced (CE) {{?RFC3168}} codepoint in the IP header is received and
 the previously received packet was not marked CE. From there on, if multiple
 CE-marked packets are received in a row or only non-CE-marked packet received,
 the endpoint resumes sending acknowledgements based on the Ack-Eliciting
-Threshold or max_ack_delay. This results in sending an immediate
-acknowledgement only when there is a transition from non-CE-marked
-to CE-marked.
+Threshold or max_ack_delay. Therefore, CE-marking only triggers an immediate
+acknowledgement when there is a transition from non-CE-marked to CE-marked.
 
 Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
