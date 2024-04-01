@@ -393,27 +393,19 @@ ACK_FREQUENCY frames.
 When the reordering threshold is 1, any time a packet is received
 and there is a missing packet, an immediate acknowledgement is sent.
 
-If the reordering theshold is 3 and acknowledgements are only sent due to reordering:
+If the reordering theshold is 3 and acknowledgements are only sent due to
+reordering, the sequence in {{ack-reordering-3}} would occur:
 
-~~~
-  Receive 1
-  Receive 3 -> 2 Missing
-  Receive 4 -> 2 Missing
-  Receive 5 -> Send ACK because of 2
-  Receive 8 -> 6,7 Missing
-  Receive 9 -> Send ACK because of 6, 7 Missing
-  Receive 10 -> Send ACK because of 7
-~~~
-
-Received packet|Largest Unacked|Largest Acked|Largest Reported|Unreported Missing|Send ACK
----|---|---|---|---|---|
-  1|  1|  -|  -|  -| No|
-  3|  3|  -|  -|  2| No|
-  4|  4|  -|  -|  2| No|
-  5|  5|  -|  -|  2|Yes (5 - 2 >= 3) |
-  8|  8|  5|  3|6,7| No|
-  9|  9|  5|  3|6,7|Yes (9 - 6 >= 3) |
- 10| 10|  9|  7|  7|Yes (10 - 7 >= 3) |
+| Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
+| -- | -- | -- | -- | --- | --- |
+|  1 |  1 |  - |  - |   - |  No |
+|  3 |  3 |  - |  - |   2 |  No |
+|  4 |  4 |  - |  - |   2 |  No |
+|  5 |  5 |  - |  - |   2 | Yes (5 - 2 >= 3) |
+|  8 |  8 |  5 |  3 | 6,7 |  No |
+|  9 |  9 |  5 |  3 | 6,7 | Yes (9 - 6 >= 3) |
+| 10 | 10 |  9 |  7 |   7 | Yes (10 - 7 >= 3) |
+{: #ack-reordering-3 title="Acknowledgement behavior with a reordering threshold of 3"}
 
 Note that in this example, the receipt of packet 9 triggers an ACK
 that reports both packets 6 and 7 as missing. However,
@@ -422,27 +414,19 @@ because only with the reporting of the successful receiption of
 packet 10, the sender will be able to declare packet 7 as lost
 (with a reordering threshold of 3).
 
-If the reordering threshold is 5 and acknowledgements are only sent due to reordering:
+If the reordering threshold is 5 and acknowledgements are only sent due to
+reordering, the sequence in {{ack-reordering-5}} would occur:
 
-~~~
-  Receive 1
-  Receive 3 -> 2 Missing
-  Receive 5 -> 2 Missing, 4 Missing
-  Receive 6 -> 2 Missing, 4 Missing
-  Receive 7 -> Send ACK because of 2, 4 Missing
-  Receive 8 -> 4 Missing
-  Receive 9 -> Send ACK because of 4
-~~~
-
-Received packet|Largest Unacked|Largest Acked|Largest Reported|Unreported Missing|Send ACK
----|---|---|---|---|---|
-  1|  1|  -|  -|  -| No|
-  3|  3|  -|  -|  2| No|
-  5|  5|  -|  -|2,4| No|
-  6|  6|  -|  -|2,4| No|
-  7|  7|  -|  -|2,4|Yes (7 - 2 >= 5)|
-  8|  8|  7|  3|  4| No|
-  9|  9|  7|  3|  4|Yes (9 - 4 >= 5)|
+| Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
+| -- | -- | -- | -- | --- | --- |
+|  1 |  1 |  - |  - |   - |  No |
+|  3 |  3 |  - |  - |   2 |  No |
+|  5 |  5 |  - |  - | 2,4 |  No |
+|  6 |  6 |  - |  - | 2,4 |  No |
+|  7 |  7 |  - |  - | 2,4 | Yes  (7 - 2 >= 5)|
+|  8 |  8 |  7 |  3 |   4 |  No |
+|  9 |  9 |  7 |  3 |   4 | Yes  (9 - 4 >= 5)|
+{: #ack-reordering-5 title="Acknowledgement behavior with a reordering threshold of 5"}
 
 ## Setting the Reordering Threshold value {#set-threshold}
 
