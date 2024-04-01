@@ -218,10 +218,10 @@ This Transport Parameter is encoded as per {{Section 18 of QUIC-TRANSPORT}}.
 
 # ACK_FREQUENCY Frame {#ack-frequency-frame}
 
-Delaying acknowledgments as much as possible reduces both work done by the
-endpoints and network load. An endpoint's loss detection and congestion control
-mechanisms however need to be tolerant of this delay at the peer. An endpoint
-signals the frequency it wants to receive ACK frames to its peer using an
+Delaying acknowledgments as much as possible reduces work done by the endpoints
+as well as network load. A data sender's loss detection and congestion control
+mechanisms however need to be tolerant of this delay at the peer. A data sender
+signals the conditions under which it wants to receive ACK frames using an
 ACK_FREQUENCY frame, shown below:
 
 ~~~
@@ -241,7 +241,7 @@ following fields:
 Sequence Number:
 
 : A variable-length integer representing the sequence number assigned to the
-  ACK_FREQUENCY frame by the sender to allow receivers to ignore obsolete
+  ACK_FREQUENCY frame by the sender so receivers ignore obsolete
   frames.  A sending endpoint MUST send monotonically increasing values in
   the Sequence Number field to allow obsolete ACK_FREQUENCY frames to be
   ignored when packets are processed out of order.
@@ -250,30 +250,29 @@ Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
   packets the recipient of this frame receives before sending an acknowledgment.
-  A receiving endpoint SHOULD send at least one ACK frame when more than this
-  number of ack-eliciting packets have been received. A value of 0 results in
+  A receiving endpoint SHOULD send at least one ACK frame after receiving more
+  than this many ack-eliciting packets. A value of 0 results in
   a receiver immediately acknowledging every ack-eliciting packet. By default, an
   endpoint sends an ACK frame for every other ack-eliciting packet, as specified in
   {{Section 13.2.2 of QUIC-TRANSPORT}}, which corresponds to a value of 1.
 
 Requested Max Ack Delay:
 
-: A variable-length integer representing the value to which the endpoint
-  requests the peer update its max_ack_delay
+: A variable-length integer representing the value to which the data sender
+  requests the data receiver update its max_ack_delay
   ({{Section 18.2 of QUIC-TRANSPORT}}). The value of this field is in
   microseconds, unlike the max_ack_delay transport parameter, which is in
   milliseconds. On receipt of a valid value, the endpoint SHOULD update
-  its max_ack_delay to the value provided by the peer. Note that values
-  of 2^14 or greater are invalid for max_ack_delay. A value smaller than
-  the min_ack_delay advertised by the peer is also invalid. Receipt of an
-  invalid value MUST be treated as a connection error of type
-  FRAME_ENCODING_ERROR.
+  its max_ack_delay to the value provided by the peer. Values of 2^14 or
+  greater and values smaller than the min_ack_delay advertised by the peer
+  are invalid. Receipt of an invalid value MUST be treated as a connection error
+  of type FRAME_ENCODING_ERROR.
 
 Reordering Threshold:
 
 : A variable-length integer that indicates the maximum packet
   reordering before eliciting an immediate ACK, as specified in {{out-of-order}}.
-  If no ACK_FREQUENCY frames have been received, the endpoint immediately
+  If no ACK_FREQUENCY frames have been received, the data receiver immediately
   acknowledges any subsequent packets that are received out-of-order, as specified
   in {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
   A value of 0 indicates out-of-order packets do not elicit an immediate ACK.
