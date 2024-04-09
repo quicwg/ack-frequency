@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 22 September 2024                                        Google
+Expires: 11 October 2024                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                           21 March 2024
+                                                            9 April 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 September 2024.
+   This Internet-Draft will expire on 11 October 2024.
 
 Copyright Notice
 
@@ -396,15 +396,31 @@ Table of Contents
    there is a missing packet, an immediate acknowledgement is sent.
 
    If the reordering theshold is 3 and acknowledgements are only sent
-   due to reordering:
+   due to reordering, the sequence in Table 1 would occur:
 
-     Receive 1
-     Receive 3 -> 2 Missing
-     Receive 4 -> 2 Missing
-     Receive 5 -> Send ACK because of 2
-     Receive 8 -> 6,7 Missing
-     Receive 9 -> Send ACK because of 6, 7 Missing
-     Receive 10 -> Send ACK because of 7
+   +========+=======+=======+==========+============+=================+
+   |Received|Largest|Largest| Largest  | Unreported | Send            |
+   |Packet  |Unacked|Acked  | Reported | Missing    | Acknowledgement |
+   +========+=======+=======+==========+============+=================+
+   |1       |1      |-      | -        | -          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |3       |3      |-      | -        | 2          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |4       |4      |-      | -        | 2          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |5       |5      |-      | -        | 2          | Yes (5 - 2 >=   |
+   |        |       |       |          |            | 3)              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |8       |8      |5      | 3        | 6,7        | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |9       |9      |5      | 3        | 6,7        | Yes (9 - 6 >=   |
+   |        |       |       |          |            | 3)              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |10      |10     |9      | 7        | 7          | Yes (10 - 7 >=  |
+   |        |       |       |          |            | 3)              |
+   +--------+-------+-------+----------+------------+-----------------+
+
+    Table 1: Acknowledgement behavior with a reordering threshold of 3
 
    Note that in this example, the receipt of packet 9 triggers an ACK
    that reports both packets 6 and 7 as missing.  However, the receipt
@@ -414,15 +430,30 @@ Table of Contents
    of 3).
 
    If the reordering threshold is 5 and acknowledgements are only sent
-   due to reordering:
+   due to reordering, the sequence in Table 2 would occur:
 
-     Receive 1
-     Receive 3 -> 2 Missing
-     Receive 5 -> 2 Missing, 4 Missing
-     Receive 6 -> 2 Missing, 4 Missing
-     Receive 7 -> Send ACK because of 2, 4 Missing
-     Receive 8 -> 4 Missing
-     Receive 9 -> Send ACK because of 4
+   +========+=======+=======+==========+============+=================+
+   |Received|Largest|Largest| Largest  | Unreported | Send            |
+   |Packet  |Unacked|Acked  | Reported | Missing    | Acknowledgement |
+   +========+=======+=======+==========+============+=================+
+   |1       |1      |-      | -        | -          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |3       |3      |-      | -        | 2          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |5       |5      |-      | -        | 2,4        | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |6       |6      |-      | -        | 2,4        | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |7       |7      |-      | -        | 2,4        | Yes (7 - 2 >=   |
+   |        |       |       |          |            | 5)              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |8       |8      |7      | 3        | 4          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
+   |9       |9      |7      | 3        | 4          | Yes (9 - 4 >=   |
+   |        |       |       |          |            | 5)              |
+   +--------+-------+-------+----------+------------+-----------------+
+
+    Table 2: Acknowledgement behavior with a reordering threshold of 5
 
 6.3.  Setting the Reordering Threshold value
 
@@ -659,7 +690,7 @@ Table of Contents
 
 10.1.  QUIC Transport Parameter
 
-   The following entry in Table 1 has been requested to be provisionally
+   The following entry in Table 3 has been requested to be provisionally
    added to the "QUIC Transport Parameters" registry under the "QUIC
    Protocol" heading.
 
@@ -669,7 +700,7 @@ Table of Contents
              | 0xff04de1b | min_ack_delay   | Section 3     |
              +------------+-----------------+---------------+
 
-                   Table 1: Addition to QUIC Transport
+                   Table 3: Addition to QUIC Transport
                             Parameters Entries
 
    When this document is approved, IANA is requested to assign a
@@ -689,7 +720,7 @@ Table of Contents
                  | 0x1f  | IMMEDIATE_ACK | Section 5     |
                  +-------+---------------+---------------+
 
-                   Table 2: Addition to QUIC Frame Types
+                   Table 4: Addition to QUIC Frame Types
                                   Entries
 
    When this document is approved, IANA is requested to change the
