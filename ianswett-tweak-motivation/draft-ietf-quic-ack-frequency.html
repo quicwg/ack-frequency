@@ -1309,13 +1309,12 @@ opportunities available to other flows sharing the same link.<a href="#section-2
       </ul>
 <p id="section-2-4">However, as discussed in <a href="#implementation" class="auto internal xref">Section 8</a>, a unilateral reduction in
 acknowledgement frequency can lead to undesirable consequences for congestion
-control and loss recovery.<a href="#section-2-4" class="pilcrow">¶</a></p>
-<p id="section-2-5"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> specifies a simple delayed acknowledgment mechanism
-(<span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) without any ability for the data
-sender to impact this behavior.  A data sender's constraints on the
-acknowledgment frequency need to be taken into account to maximize
+control and loss recovery. <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> specifies a simple delayed
+acknowledgment mechanism (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) without any
+ability for the data sender to impact this behavior.  A data sender's constraints
+on the acknowledgment frequency need to be taken into account to maximize
 congestion controller and loss recovery performance. This extension provides
-a mechanism for a data sender to signal its preferences and constraints.<a href="#section-2-5" class="pilcrow">¶</a></p>
+a mechanism for a data sender to signal its preferences and constraints.<a href="#section-2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="nego">
