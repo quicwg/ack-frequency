@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 2 October 2024                                           Google
+Expires: 25 October 2024                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                           31 March 2024
+                                                           23 April 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 October 2024.
+   This Internet-Draft will expire on 25 October 2024.
 
 Copyright Notice
 
@@ -97,12 +97,12 @@ Table of Contents
 
    The QUIC transport protocol recommends sending an ACK frame after
    receiving at least two ack-eliciting packets; see Section 13.2 of
-   [QUIC-TRANSPORT].  However, this protocol leaves the data sender
-   unable to indicate how frequently it would prefer the data receiver
-   send acknowledgements in response to ack-eliciting packets.  This
-   document specifies an extension to QUIC enabling an endpoint to
-   request its peer change its behavior when sending or delaying
-   acknowledgments.
+   [QUIC-TRANSPORT].  However, it leaves the determination of how
+   frequently to send acknowledgments in response to ack-eliciting
+   packets to the data receiver, without any ability for the data sender
+   to impact this behavior.  This document specifies an extension to
+   QUIC enabling an endpoint to request its peer change its behavior
+   when sending or delaying acknowledgments.
 
    This document defines a new transport parameter that indicates
    support of this extension and specifies two new frame types to
