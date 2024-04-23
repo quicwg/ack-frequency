@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 11 October 2024                                          Google
+Expires: 25 October 2024                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            9 April 2024
+                                                           23 April 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -16,9 +16,9 @@ Expires: 11 October 2024                                          Google
 
 Abstract
 
-   This document specifies an extension to QUIC that permits an endpoint
-   to request that its peer changes its behavior when sending or
-   delaying acknowledgments.
+   This document specifies an extension to QUIC that enables an endpoint
+   to request its peer change its behavior when sending or delaying
+   acknowledgments.
 
 Note to Readers
 
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 October 2024.
+   This Internet-Draft will expire on 25 October 2024.
 
 Copyright Notice
 
