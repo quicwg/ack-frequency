@@ -1275,23 +1275,23 @@ Section <a href="https://rfc-editor.org/rfc/rfc9000#section-1.2" class="relref">
       <h2 id="name-motivation">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-motivation" class="section-name selfRef">Motivation</a>
       </h2>
-<p id="section-2-1">A receiver acknowledges received packets, but it can delay sending these
-acknowledgments. Delaying acknowledgments can impact connection
-throughput, loss detection and congestion controller performance at a data
-sender, and CPU utilization at both a data sender and a data receiver.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">A receiver acknowledges received packets, but can delay sending these
+acknowledgments. Delaying acknowledgments can impact a data sender's
+throughput, loss detection and congestion controller performance, as well
+as CPU utilization at both endpoints.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">Reducing the frequency of acknowledgments can improve connection and
 endpoint performance in the following ways:<a href="#section-2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2-3.1">
-          <p id="section-2-3.1.1">Sending UDP datagrams can be very CPU intensive on some platforms. A data
+          <p id="section-2-3.1.1">Sending UDP datagrams is very CPU intensive on some platforms. A data
 receiver can decrease its CPU usage by reducing the number of
-acknowledgement-only packets that it sends. Experience shows that this
+acknowledgement-only packets sent. Experience shows that this
 reduction can be critical for high bandwidth connections.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.2">
           <p id="section-2-3.2.1">Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
-acknowledgement frequency therefore also reduces the CPU usage at the data
-sender as it has to receive and process fewer acknowledgment-only packets.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
+acknowledgement frequency also reduces the data sender's CPU usage because
+it receives and processes fewer acknowledgment-only packets.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.3">
           <p id="section-2-3.3.1">For asymmetric link technologies, such as DOCSIS, LTE, and satellite,
@@ -1307,16 +1307,14 @@ transmission opportunities or battery life, as well as transmission
 opportunities available to other flows sharing the same link.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-2-4">As discussed in <a href="#implementation" class="auto internal xref">Section 8</a> however, there can be undesirable consequences
-to congestion control and loss recovery if a receiver unilaterally reduces the
-acknowledgment frequency. A sender's constraints on the acknowledgment
-frequency need to be taken into account to maximize congestion controller and
-loss recovery performance.<a href="#section-2-4" class="pilcrow">¶</a></p>
-<p id="section-2-5"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> specifies a simple delayed acknowledgment mechanism that a
-receiver can use: send an acknowledgment for every other packet, and for every
-packet that is received out of order (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>).
-This does not allow a sender to signal its preferences or constraints. This
-extension provides a mechanism to solve this problem.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-4">However, as discussed in <a href="#implementation" class="auto internal xref">Section 8</a>, a unilateral reduction in
+acknowledgement frequency can lead to undesirable consequences for congestion
+control and loss recovery. <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> specifies a simple delayed
+acknowledgment mechanism (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) without any
+ability for the data sender to impact this behavior.  A data sender's constraints
+on the acknowledgment frequency need to be taken into account to maximize
+congestion controller and loss recovery performance. This extension provides
+a mechanism for a data sender to signal its preferences and constraints.<a href="#section-2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="nego">
