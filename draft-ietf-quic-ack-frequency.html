@@ -1324,21 +1324,22 @@ extension provides a mechanism to solve this problem.<a href="#section-2-5" clas
       <h2 id="name-negotiating-extension-use">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-negotiating-extension-use" class="section-name selfRef">Negotiating Extension Use</a>
       </h2>
-<p id="section-3-1">After the successful negotiation of this extension two new frames can be used
-to provide guidance about delaying and sending of ACK frames to its peer. These
-frames are the ACK_FREQUENCY frame (see <a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>) and the
-IMMEDIATE_ACK frame (see <a href="#immediate-ack-frame" class="auto internal xref">Section 5</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">After a data receiver advertises support for this extension, two new frames
+can be sent by the data sender to provide guidance about delaying and sending
+ACK frames. These frames are the ACK_FREQUENCY frame
+(see <a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>) and the IMMEDIATE_ACK frame
+(see <a href="#immediate-ack-frame" class="auto internal xref">Section 5</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">Endpoints advertise their support of the extension described in this document by
 sending the following transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>):<a href="#section-3-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3-3">
         <dt id="section-3-3.1">min_ack_delay (0xff04de1b):</dt>
         <dd style="margin-left: 1.5em" id="section-3-3.2">
-          <p id="section-3-3.2.1">A variable-length integer representing the minimum amount of time in
-microseconds by which the endpoint that is sending this value is able to
-delay an acknowledgment. This limit could be based on the receiver's clock
-or timer granularity. min_ack_delay is used by the peer to avoid requesting
-too small a value in the Requested Max Ack Delay field of the ACK_FREQUENCY
-frame.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-3-3.2.1">A variable-length integer representing the minimum amount of time, in
+microseconds, that the endpoint sending this value is willing to
+delay an acknowledgment. This limit could be based on the data receiver's
+clock or timer granularity. min_ack_delay is used by the data sender to
+avoid requesting too small a value in the Requested Max Ack Delay field of the
+ACK_FREQUENCY frame.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
