@@ -470,9 +470,9 @@ in response, as stated in {{Section 13.2.2 of QUIC-TRANSPORT}}.
 
 # Computation of Probe Timeout Period
 
-On sending an update to the peer's max_ack_delay, an endpoint can use this new
-value in later computations of its Probe Timeout (PTO) period; see {{Section 5.2.1
-of QUIC-RECOVERY}}.
+After requesting an update to the data receivers's max_ack_delay, a data sender
+can use this new value in later computations of its Probe Timeout (PTO) period;
+see {{Section 5.2.1 of QUIC-RECOVERY}}.
 
 Until the packet carrying the ACK_FREQUENCY frame is acknowledged, the endpoint
 MUST use the greater of the current max_ack_delay and the value that is in flight
@@ -487,16 +487,16 @@ the maximum of the current value and all those in flight.
 When the number of in-flight ack-eliciting packets is larger than the
 ACK-Eliciting Threshold, an endpoint can expect that the peer will not need to
 wait for its max_ack_delay period before sending an acknowledgment. In such
-cases, the endpoint MAY therefore exclude the peer's max_ack_delay from its PTO
-calculation.  When Reordering Threshold is set to 0 and loss causes the peer to
-not receive enough packets to trigger an immediate acknowledgment, the receiver
+cases, the endpoint MAY exclude the peer's max_ack_delay from its PTO
+calculation.  When Reordering Threshold is set to 0 and loss prevents the peer
+from receiving enough packets to trigger an immediate acknowledgment, the receiver
 will wait max_ack_delay, increasing the chances of a premature PTO.
 Therefore, if Reordering Threshold is set to 0, the PTO MUST be larger than the
 peer's max_ack_delay.
 
 When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
-immediate acknowledgment. This avoids waiting the ack delay for
-acknowledgments of PTO packets, reducing tail latency and allowing the sender
+immediate acknowledgment. This avoids delaying acknowledgements of PTO packets
+by the ack delay, reducing tail latency and allowing the sender
 to exclude the peer's max_ack_delay from subsequent PTO calculations.
 
 # Determining Acknowledgment Frequency {#implementation}
@@ -518,14 +518,14 @@ can use the extension in this draft to request a receiver
 to send an acknowledgment at least once per round trip,
 when there are ack-eliciting packets in flight, in the following ways:
 
-A sender can set the Requested Max Ack Delay value
+A data sender can set the Requested Max Ack Delay value
 to no more than the estimated round trip time.
 The sender can also improve feedback and robustness to
 variation in the path RTT by setting the Ack-Eliciting Threshold
 to a value no larger than number of maximum-sized packets that fit
 into the current congestion window.
 Alternatively, a sender can send an IMMEDIATE_ACK frame if no acknowledgement
-has been received for more than one round trip time.  Although if the
+has been received for more than one round trip time.  If the
 packet containing an IMMEDIATE_ACK is lost, detection of that loss
 will be delayed by the Reordering Threshold or Requested Max Ack Delay.
 
@@ -540,11 +540,10 @@ Note that the congestion window and the RTT estimate change over the lifetime of
 connection and therefore might require sending updates in an ACK_FREQUENCY frames to
 ensure optimal performance, though not every change should trigger an update.
 Usually, it is not necessary to send an ACK_FREQUENCY frame more than once per
-RTT and likely it needs to be sent even less frequently.
-Ideally, an ACK_FREQUENCY frame is sent only when a relevant change
-in the congestion window or smoothed RTT is detected that impacts the local
-setting of the reordering threshold or locally-selected calculation of the
-either Ack-Eliciting Threshold or the Requested Max Ack Delay.
+RTT and likely even less frequently. Ideally, an ACK_FREQUENCY frame is sent only
+when a relevant change in the congestion window or smoothed RTT is detected that
+impacts the local setting of the reordering threshold or locally-selected calculation
+of the either Ack-Eliciting Threshold or the Requested Max Ack Delay.
 
 It is possible that the RTT is smaller than the receiver's timer granularity,
 as communicated via the min_ack_delay transport parameter, preventing the
