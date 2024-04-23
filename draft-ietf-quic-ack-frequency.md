@@ -108,11 +108,11 @@ Working Group information can be found at [](https://github.com/quicwg).
 
 The QUIC transport protocol recommends sending an ACK frame after receiving at
 least two ack-eliciting packets; see {{Section 13.2 of QUIC-TRANSPORT}}.
-However, this protocol leaves the data sender unable to indicate how frequently
-it would prefer the data receiver send acknowledgements in response to
-ack-eliciting packets. This document specifies an extension to QUIC enabling
-an endpoint to request its peer change its behavior when sending or delaying
-acknowledgments.
+However, it leaves the determination of how frequently to send acknowledgments
+in response to ack-eliciting packets to the data receiver, without any ability for
+the data sender to impact this behavior. This document specifies an extension to
+QUIC enabling an endpoint to request its peer change its behavior when sending or
+delaying acknowledgments.
 
 This document defines a new transport parameter that indicates support of this
 extension and specifies two new frame types to request changes to the peer's
