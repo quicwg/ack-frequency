@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 3 October 2024                                           Google
+Expires: 27 October 2024                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            1 April 2024
+                                                           25 April 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 October 2024.
+   This Internet-Draft will expire on 27 October 2024.
 
 Copyright Notice
 
@@ -261,10 +261,12 @@ Table of Contents
       of this field is in microseconds, unlike the max_ack_delay
       transport parameter, which is in milliseconds.  On receipt of a
       valid value, the endpoint SHOULD update its max_ack_delay to the
-      value provided by the peer.  Values of 2^14 or greater and values
-      smaller than the min_ack_delay advertised by the peer are invalid.
-      Receipt of an invalid value MUST be treated as a connection error
-      of type FRAME_ENCODING_ERROR.
+      value provided by the peer.  Note that values of 2^14 or greater
+      are invalid for max_ack_delay, as specified in Section 18.2 of
+      [QUIC-TRANSPORT].  A value smaller than the min_ack_delay
+      advertised by the peer is also invalid.  Receipt of an invalid
+      value MUST be treated as a connection error of type
+      FRAME_ENCODING_ERROR.
 
    Reordering Threshold:  A variable-length integer that indicates the
       maximum packet reordering before eliciting an immediate ACK, as
