@@ -263,15 +263,9 @@ Requested Max Ack Delay:
   ({{Section 18.2 of QUIC-TRANSPORT}}). The value of this field is in
   microseconds, unlike the max_ack_delay transport parameter, which is in
   milliseconds. On receipt of a valid value, the endpoint SHOULD update
-  
-  its max_ack_delay to the value provided by the peer. Values of 2^14 or
-  greater and values smaller than the min_ack_delay advertised by the peer
-  are invalid. Receipt of an invalid value MUST be treated as a connection error
-  of type FRAME_ENCODING_ERROR.
-
   its max_ack_delay to the value provided by the peer. Note that values
   of 2^14 or greater are invalid for max_ack_delay, as specified in
-  {{Section 18.2 of QUIC-TRANSPORT}} A value smaller than the min_ack_delay
+  {{Section 18.2 of QUIC-TRANSPORT}}. A value smaller than the min_ack_delay
   advertised by the peer is also invalid. Receipt of an invalid value MUST be
   treated as a connection error of type FRAME_ENCODING_ERROR.
 
