@@ -1516,10 +1516,9 @@ but the mechanisms specified herein could create excessive delays.<a href="#sect
         </h3>
 <p id="section-6.2-1">As specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints are expected to
 send an immediate acknowledgment upon receipt of a reordered ack-eliciting
-packet. After an ACK_FREQUENCY frame
-with a Reordering Threshold value other than 1 has been received,
-this extension delays immediate acknowledgements to reordered
-ack-eliciting packets and the gaps they can create.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+packet. After an ACK_FREQUENCY frame with a Reordering Threshold value other
+than 1 has been received, this extension delays immediate acknowledgements
+to reordered ack-eliciting packets and the gaps they can create.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
 Threshold value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgment in response to packets received out of order, and instead
