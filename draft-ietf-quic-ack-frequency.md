@@ -351,10 +351,9 @@ but the mechanisms specified herein could create excessive delays.
 
 As specified in {{Section 13.2.1 of QUIC-TRANSPORT}}, endpoints are expected to
 send an immediate acknowledgment upon receipt of a reordered ack-eliciting
-packet. After an ACK_FREQUENCY frame
-with a Reordering Threshold value other than 1 has been received,
-this extension delays immediate acknowledgements to reordered
-ack-eliciting packets and the gaps they can create.
+packet. After an ACK_FREQUENCY frame with a Reordering Threshold value other
+than 1 has been received, this extension delays immediate acknowledgements
+to reordered ack-eliciting packets and the gaps they can create.
 
 If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
 Threshold value of 0, the endpoint SHOULD NOT send an immediate
