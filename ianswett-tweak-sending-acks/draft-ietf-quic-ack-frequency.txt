@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 3 October 2024                                           Google
+Expires: 31 October 2024                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            1 April 2024
+                                                           29 April 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 October 2024.
+   This Internet-Draft will expire on 31 October 2024.
 
 Copyright Notice
 
@@ -350,8 +350,9 @@ Table of Contents
 
    As specified in Section 13.2.1 of [QUIC-TRANSPORT], endpoints are
    expected to send an immediate acknowledgment upon receipt of a
-   reordered ack-eliciting packet.  This extension modifies that
-   response after an ACK_FREQUENCY frame with a Reordering Threshold
+   reordered ack-eliciting packet.  This extension delays immediate
+   acknowledgements to reordered ack-eliciting packets and the gaps they
+   can create after an ACK_FREQUENCY frame with a Reordering Threshold
    value other than 1 has been received.
 
    If the most recent ACK_FREQUENCY frame received from the peer has a
