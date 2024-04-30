@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Iyengar, et al.</td>
-<td class="center">Expires 28 October 2024</td>
+<td class="center">Expires 1 November 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-quic-ack-frequency-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-04-26" class="published">26 April 2024</time>
+<time datetime="2024-04-30" class="published">30 April 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-10-28">28 October 2024</time></dd>
+<dd class="expires"><time datetime="2024-11-01">1 November 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ code and issues list for this draft can be found at
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 October 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 November 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1479,20 +1479,20 @@ IMMEDIATE_ACK Frame {
 <p id="section-6-1">Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgments as
 specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">On receiving an ACK_FREQUENCY frame and updating its max_ack_delay
-and Ack-Eliciting Threshold values (<a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>), the endpoint sends an
-acknowledgment when one of the following conditions are met:<a href="#section-6-2" class="pilcrow">¶</a></p>
+and Ack-Eliciting Threshold values (<a href="#ack-frequency-frame" class="auto internal xref">Section 4</a>), the data receiver
+sends an acknowledgment when one of the following conditions are met since the
+last acknowledgement was sent:<a href="#section-6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-3.1">
-          <p id="section-6-3.1.1">Since the last acknowledgment was sent, the number of received ack-eliciting
-packets is greater than the Ack-Eliciting Threshold.<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
+          <p id="section-6-3.1.1">The number of received ack-eliciting packets is greater than the
+Ack-Eliciting Threshold.<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-3.2">
-          <p id="section-6-3.2.1">Since the last acknowledgment was sent, max_ack_delay amount of time has
-passed.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-3.2.1">max_ack_delay amount of time has passed.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-6-4">Further, the enpoint may send an acknowledgment earlier based on the value
-of the Reordering Threshold when a gap in the packet number order is detected,
+<p id="section-6-4">An acknowledgment can be sent earlier based on the value of the
+Reordering Threshold when a gap in packet numbers is detected,
 see <a href="#out-of-order" class="auto internal xref">Section 6.2</a>.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5"><a href="#congestion" class="auto internal xref">Section 6.4</a> and <a href="#batch" class="auto internal xref">Section 6.5</a> describe exceptions to this strategy.<a href="#section-6-5" class="pilcrow">¶</a></p>
 <div id="response-to-long-idle-periods">
@@ -1502,10 +1502,10 @@ see <a href="#out-of-order" class="auto internal xref">Section 6.2</a>.<a href="
         </h3>
 <p id="section-6.1-1">It is important to receive timely feedback after long idle periods,
 e.g. update stale RTT measurements. When no acknowledgment has been sent in
-over one smoothed round trip time, receivers are encouraged to send an
-acknowledgment soon after receiving an ack-eliciting packet. This is not an
-issue specific to this document, but the mechanisms specified herein could
-create excessive delays.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+over one smoothed round trip time (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>),
+receivers are encouraged to send an acknowledgment soon after receiving
+an ack-eliciting packet. This is not an issue specific to this document,
+but the mechanisms specified herein could create excessive delays.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="out-of-order">
@@ -1514,12 +1514,10 @@ create excessive delays.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-response-to-out-of-order-pa" class="section-name selfRef">Response to Out-of-Order Packets</a>
         </h3>
 <p id="section-6.2-1">As specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints are expected to
-send an acknowledgment immediately on receipt of a reordered ack-eliciting
-packet with a smaller packet number than the highest-numbered ack-eliciting packet
-or with a higher packet number when there are missing packets between that packet
-and the highest-numbered ack-eliciting packet.
-This extension modifies that behavior when an ACK_FREQUENCY frame with
-a Reordering Threshold value other than 1 has been received.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+send an immediate acknowledgment upon receipt of a reordered ack-eliciting
+packet. After an ACK_FREQUENCY frame with a Reordering Threshold value other
+than 1 has been received, this extension delays immediate acknowledgements
+to reordered ack-eliciting packets and the gaps they can create.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
 Threshold value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgment in response to packets received out of order, and instead
@@ -1740,11 +1738,11 @@ reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xre
         <h3 id="name-setting-the-reordering-thre">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-setting-the-reordering-thre" class="section-name selfRef">Setting the Reordering Threshold value</a>
         </h3>
-<p id="section-6.3-1">To ensure timely loss detection, it is optimal to send a Reordering
-Threshold value of 1 less than the packet threshold used by the data sender for
-loss detection. If the threshold is smaller, an acknowledgement is (unnecessarily) sent before the
-packet can be declared lost based on the packet threshold. If the value is
-larger, it causes unnecessary delays. (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-18.2" class="relref">Section 18.2</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>)
+<p id="section-6.3-1">To ensure timely loss detection, a data sender can send a Reordering Threshold
+value of 1 less than the loss detection packet threshold. If the threshold is
+smaller than the packet threshold, an acknowledgement is unnecessarily sent
+before the packet can be declared lost. If the value is larger, it can cause
+unnecessary delays in loss detection. (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-18.2" class="relref">Section 18.2</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>)
 recommends a default packet threshold for loss detection of 3, equivalent to
 a Reordering Threshold of 2.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 </section>
@@ -1760,9 +1758,8 @@ Experienced (CE) <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>
 the previously received packet was not marked CE. From there on, if multiple
 CE-marked packets are received in a row or only non-CE-marked packet received,
 the endpoint resumes sending acknowledgements based on the Ack-Eliciting
-Threshold or max_ack_delay. This results in sending an immediate
-acknowledgement only when there is a transition from non-CE-marked
-to CE-marked.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+Threshold or max_ack_delay. Therefore, CE-marking only triggers an immediate
+acknowledgement when there is a transition from non-CE-marked to CE-marked.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">Doing this maintains the peer's response time to congestion events, while also
 reducing the ACK rate compared to <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> during
 extreme congestion or when peers are using DCTCP <span>[<a href="#RFC8257" class="cite xref">RFC8257</a>]</span> or other
