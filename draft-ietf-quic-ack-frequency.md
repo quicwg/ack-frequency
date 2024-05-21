@@ -108,9 +108,9 @@ Working Group information can be found at [](https://github.com/quicwg).
 
 The QUIC transport protocol recommends sending an ACK frame after receiving at
 least two ack-eliciting packets; see {{Section 13.2 of QUIC-TRANSPORT}}.
-However, it leaves the determination of how frequently to send acknowledgments
-in response to ack-eliciting packets to the data receiver, without any ability for
-the data sender to impact this behavior. This document specifies an extension to
+However, the data receiver determines how frequently to send acknowledgments
+in response to ack-eliciting packets, without any ability for the data sender
+to influence this behavior. This document specifies an extension to
 QUIC that enables an endpoint to request its peer change its behavior when sending or
 delaying acknowledgments.
 
@@ -145,7 +145,7 @@ endpoint performance in the following ways:
 - Sending UDP datagrams is very CPU intensive on some platforms. A data
   receiver can decrease its CPU usage by reducing the number of
   acknowledgement-only packets sent. Experience shows that this
-  reduction can be critical for high bandwidth connections.
+  reduction can be critical for high-rate connections.
 
 - Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
   acknowledgement frequency also reduces the data sender's CPU usage because
@@ -167,7 +167,7 @@ However, as discussed in {{implementation}}, a unilateral reduction in
 acknowledgement frequency can lead to undesirable consequences for congestion
 control and loss recovery. {{QUIC-TRANSPORT}} specifies a simple delayed
 acknowledgment mechanism ({{Section 13.2.1 of QUIC-TRANSPORT}}) without any
-ability for the data sender to impact this behavior.  A data sender's constraints
+ability for the data sender to control this behavior.  A data sender's constraints
 on the acknowledgment frequency need to be taken into account to maximize
 congestion controller and loss recovery performance. This extension provides
 a mechanism for a data sender to signal its preferences and constraints.
@@ -411,9 +411,9 @@ reordering, the sequence in {{ack-reordering-3}} would occur:
 Note that in this example, the receipt of packet 9 triggers an ACK
 that reports both packets 6 and 7 as missing. However,
 the receipt of packet 10 needs to trigger another immediate ACK
-because only with the reporting of the successful receiption of
-packet 10, the sender will be able to declare packet 7 as lost
-(with a reordering threshold of 3).
+because the sender will be unable to declare packet 7 as lost
+(with a reordering threshold of 3) until it receives an ACK
+reporting the reception of packet 10.
 
 If the reordering threshold is 5 and acknowledgements are only sent due to
 reordering, the sequence in {{ack-reordering-5}} would occur:
@@ -445,7 +445,7 @@ If the Ack-Eliciting Threshold is larger than 1, an endpoint SHOULD send
 an immediate acknowledgement when a packet marked with the ECN Congestion
 Experienced (CE) {{?RFC3168}} codepoint in the IP header is received and
 the previously received packet was not marked CE. From there on, if multiple
-CE-marked packets are received in a row or only non-CE-marked packet received,
+consecutive CE-marked packets are received or only non-CE-marked packet received,
 the endpoint resumes sending acknowledgements based on the Ack-Eliciting
 Threshold or max_ack_delay. Therefore, CE-marking only triggers an immediate
 acknowledgement when there is a transition from non-CE-marked to CE-marked.
