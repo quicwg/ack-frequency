@@ -145,7 +145,7 @@ endpoint performance in the following ways:
 - Sending UDP datagrams is very CPU intensive on some platforms. A data
   receiver can decrease its CPU usage by reducing the number of
   acknowledgement-only packets sent. Experience shows that this
-  reduction can be critical for high-rate connections.
+  reduction can be critical for high packet rate connections.
 
 - Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
   acknowledgement frequency also reduces the data sender's CPU usage because
