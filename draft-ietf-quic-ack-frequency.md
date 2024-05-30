@@ -167,7 +167,7 @@ However, as discussed in {{implementation}}, a unilateral reduction in
 acknowledgement frequency can lead to undesirable consequences for congestion
 control and loss recovery. {{QUIC-TRANSPORT}} specifies a simple delayed
 acknowledgment mechanism ({{Section 13.2.1 of QUIC-TRANSPORT}}) without any
-ability for the data sender to control this behavior.  A data sender's constraints
+ability for the data sender to influence this behavior.  A data sender's constraints
 on the acknowledgment frequency need to be taken into account to maximize
 congestion controller and loss recovery performance. This extension provides
 a mechanism for a data sender to signal its preferences and constraints.
