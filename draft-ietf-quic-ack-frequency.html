@@ -22,7 +22,7 @@ request its peer change its behavior when sending or delaying acknowledgments.
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 4.2.0
+    platformdirs 4.2.1
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.31.0
@@ -1027,11 +1027,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">QUIC Acknowledgment Frequency</td>
-<td class="right">April 2024</td>
+<td class="right">May 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Iyengar, et al.</td>
-<td class="center">Expires 1 November 2024</td>
+<td class="center">Expires 2 December 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-quic-ack-frequency-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-04-30" class="published">30 April 2024</time>
+<time datetime="2024-05-31" class="published">31 May 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-11-01">1 November 2024</time></dd>
+<dd class="expires"><time datetime="2024-12-02">2 December 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ code and issues list for this draft can be found at
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 November 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 December 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1244,9 +1244,9 @@ code and issues list for this draft can be found at
       </h2>
 <p id="section-1-1">The QUIC transport protocol recommends sending an ACK frame after receiving at
 least two ack-eliciting packets; see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2" class="relref">Section 13.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.
-However, it leaves the determination of how frequently to send acknowledgments
-in response to ack-eliciting packets to the data receiver, without any ability for
-the data sender to impact this behavior. This document specifies an extension to
+However, the data receiver determines how frequently to send acknowledgments
+in response to ack-eliciting packets, without any ability for the data sender
+to influence this behavior. This document specifies an extension to
 QUIC that enables an endpoint to request its peer change its behavior when sending or
 delaying acknowledgments.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This document defines a new transport parameter that indicates support of this
@@ -1286,7 +1286,7 @@ endpoint performance in the following ways:<a href="#section-2-2" class="pilcrow
           <p id="section-2-3.1.1">Sending UDP datagrams is very CPU intensive on some platforms. A data
 receiver can decrease its CPU usage by reducing the number of
 acknowledgement-only packets sent. Experience shows that this
-reduction can be critical for high bandwidth connections.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
+reduction can be critical for high packet rate connections.<a href="#section-2-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.2">
           <p id="section-2-3.2.1">Similarly, receiving UDP datagrams can also be CPU intensive. Reducing the
@@ -1311,7 +1311,7 @@ opportunities available to other flows sharing the same link.<a href="#section-2
 acknowledgement frequency can lead to undesirable consequences for congestion
 control and loss recovery. <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> specifies a simple delayed
 acknowledgment mechanism (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) without any
-ability for the data sender to impact this behavior.  A data sender's constraints
+ability for the data sender to influence this behavior.  A data sender's constraints
 on the acknowledgment frequency need to be taken into account to maximize
 congestion controller and loss recovery performance. This extension provides
 a mechanism for a data sender to signal its preferences and constraints.<a href="#section-2-4" class="pilcrow">¶</a></p>
@@ -1648,9 +1648,9 @@ reordering, the sequence in <a href="#ack-reordering-3" class="auto internal xre
 <p id="section-6.2.1-4">Note that in this example, the receipt of packet 9 triggers an ACK
 that reports both packets 6 and 7 as missing. However,
 the receipt of packet 10 needs to trigger another immediate ACK
-because only with the reporting of the successful receiption of
-packet 10, the sender will be able to declare packet 7 as lost
-(with a reordering threshold of 3).<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
+because the sender will be unable to declare packet 7 as lost
+(with a reordering threshold of 3) until it receives an ACK
+reporting the reception of packet 10.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
 <p id="section-6.2.1-5">If the reordering threshold is 5 and acknowledgements are only sent due to
 reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xref">Table 2</a> would occur:<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
 <span id="name-acknowledgement-behavior-wit"></span><div id="ack-reordering-5">
@@ -1756,7 +1756,7 @@ a Reordering Threshold of 2.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 an immediate acknowledgement when a packet marked with the ECN Congestion
 Experienced (CE) <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> codepoint in the IP header is received and
 the previously received packet was not marked CE. From there on, if multiple
-CE-marked packets are received in a row or only non-CE-marked packet received,
+consecutive CE-marked packets are received or only non-CE-marked packet received,
 the endpoint resumes sending acknowledgements based on the Ack-Eliciting
 Threshold or max_ack_delay. Therefore, CE-marking only triggers an immediate
 acknowledgement when there is a transition from non-CE-marked to CE-marked.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
