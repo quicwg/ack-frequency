@@ -399,6 +399,7 @@ reordering, the sequence in {{ack-reordering-3}} would occur:
 
 | Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
 | -- | -- | -- | -- | --- | --- |
+|  0 |  0 |  - |  - |   - |  No |
 |  1 |  1 |  - |  - |   - |  No |
 |  3 |  3 |  - |  - |   2 |  No |
 |  4 |  4 |  - |  - |   2 |  No |
@@ -420,6 +421,7 @@ reordering, the sequence in {{ack-reordering-5}} would occur:
 
 | Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
 | -- | -- | -- | -- | --- | --- |
+|  0 |  0 |  - |  - |   - |  No |
 |  1 |  1 |  - |  - |   - |  No |
 |  3 |  3 |  - |  - |   2 |  No |
 |  5 |  5 |  - |  - | 2,4 |  No |
