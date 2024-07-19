@@ -265,7 +265,7 @@ Requested Max Ack Delay:
   of 2^14 or greater are invalid for max_ack_delay, as specified in
   {{Section 18.2 of QUIC-TRANSPORT}}. A value smaller than the min_ack_delay
   advertised by the peer is also invalid. Receipt of an invalid value MUST be
-  treated as a connection error of type FRAME_ENCODING_ERROR.
+  treated as a connection error of type PROTOCOL_VIOLATION.
 
 Reordering Threshold:
 
