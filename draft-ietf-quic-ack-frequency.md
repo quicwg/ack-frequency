@@ -435,7 +435,7 @@ To ensure timely loss detection, a data sender can send a Reordering Threshold
 value of 1 less than the loss detection packet threshold. If the threshold is
 smaller than the packet threshold, an acknowledgement is unnecessarily sent
 before the packet can be declared lost. If the value is larger, it can cause
-unnecessary delays in loss detection. ({{Section 18.2 of QUIC-RECOVERY}})
+unnecessary delays in loss detection. ({{Section 6.1.1 of QUIC-RECOVERY}})
 recommends a default packet threshold for loss detection of 3, equivalent to
 a Reordering Threshold of 2.
 
