@@ -328,7 +328,8 @@ last acknowledgement was sent:
 - The number of received ack-eliciting packets is greater than the
   Ack-Eliciting Threshold.
 
-- max_ack_delay amount of time has passed.
+- max_ack_delay amount of time has passed and at least one ack-eliciting packet
+  has been received.
 
 An acknowledgment can be sent earlier based on the value of the
 Reordering Threshold when a gap in packet numbers is detected,
