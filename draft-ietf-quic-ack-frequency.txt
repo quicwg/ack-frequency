@@ -261,7 +261,7 @@ Table of Contents
       [QUIC-TRANSPORT].  A value smaller than the min_ack_delay
       advertised by the peer is also invalid.  Receipt of an invalid
       value MUST be treated as a connection error of type
-      FRAME_ENCODING_ERROR.
+      PROTOCOL_VIOLATION.
 
    Reordering Threshold:  A variable-length integer that indicates the
       maximum packet reordering before eliciting an immediate ACK, as
