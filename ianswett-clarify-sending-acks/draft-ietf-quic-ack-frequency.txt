@@ -317,8 +317,8 @@ Table of Contents
    Prior to receiving an ACK_FREQUENCY frame, endpoints send
    acknowledgments as specified in Section 13.2.1 of [QUIC-TRANSPORT].
 
-   On receiving an ACK_FREQUENCY frame and updating its max_ack_delay
-   and Ack-Eliciting Threshold values (Section 4), the data receiver
+   After receiving an ACK_FREQUENCY frame and the data receiver updating
+   its max_ack_delay and Ack-Eliciting Threshold values (Section 4), it
    sends an acknowledgment when one of the following conditions are met
    since the last acknowledgement was sent:
 
