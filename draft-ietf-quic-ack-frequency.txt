@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 2 December 2024                                          Google
+Expires: 21 January 2025                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                             31 May 2024
+                                                            20 July 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 December 2024.
+   This Internet-Draft will expire on 21 January 2025.
 
 Copyright Notice
 
@@ -458,7 +458,7 @@ Table of Contents
    If the threshold is smaller than the packet threshold, an
    acknowledgement is unnecessarily sent before the packet can be
    declared lost.  If the value is larger, it can cause unnecessary
-   delays in loss detection.  (Section 18.2 of [QUIC-RECOVERY])
+   delays in loss detection.  (Section 6.1.1 of [QUIC-RECOVERY])
    recommends a default packet threshold for loss detection of 3,
    equivalent to a Reordering Threshold of 2.
 
