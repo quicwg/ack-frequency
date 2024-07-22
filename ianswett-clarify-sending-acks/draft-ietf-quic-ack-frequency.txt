@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 21 January 2025                                          Google
+Expires: 23 January 2025                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            20 July 2024
+                                                            22 July 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 January 2025.
+   This Internet-Draft will expire on 23 January 2025.
 
 Copyright Notice
 
@@ -317,8 +317,8 @@ Table of Contents
    Prior to receiving an ACK_FREQUENCY frame, endpoints send
    acknowledgments as specified in Section 13.2.1 of [QUIC-TRANSPORT].
 
-   After receiving an ACK_FREQUENCY frame and the data receiver updates
-   its max_ack_delay and Ack-Eliciting Threshold values (Section 4), it
+   After receiving an ACK_FREQUENCY frame and updating its max_ack_delay
+   and Ack-Eliciting Threshold values (Section 4), the data receiver
    sends an acknowledgment when one of the following conditions are met
    since the last acknowledgement was sent:
 
