@@ -320,15 +320,16 @@ IMMEDIATE_ACK Frame {
 Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgments as
 specified in {{Section 13.2.1 of QUIC-TRANSPORT}}.
 
-On receiving an ACK_FREQUENCY frame and updating its max_ack_delay
-and Ack-Eliciting Threshold values ({{ack-frequency-frame}}), the data receiver
+After receiving an ACK_FREQUENCY frame and updating its max_ack_delay and
+Ack-Eliciting Threshold values ({{ack-frequency-frame}}), the data receiver
 sends an acknowledgment when one of the following conditions are met since the
 last acknowledgement was sent:
 
 - The number of received ack-eliciting packets is greater than the
   Ack-Eliciting Threshold.
 
-- max_ack_delay amount of time has passed.
+- max_ack_delay amount of time has passed and at least one ack-eliciting packet
+  has been received.
 
 An acknowledgment can be sent earlier based on the value of the
 Reordering Threshold when a gap in packet numbers is detected,
