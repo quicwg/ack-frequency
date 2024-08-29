@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 23 January 2025                                          Google
+Expires: 2 March 2025                                             Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                            22 July 2024
+                                                          29 August 2024
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 January 2025.
+   This Internet-Draft will expire on 2 March 2025.
 
 Copyright Notice
 
@@ -399,6 +399,8 @@ Table of Contents
    |Received|Largest|Largest| Largest  | Unreported | Send            |
    |Packet  |Unacked|Acked  | Reported | Missing    | Acknowledgement |
    +========+=======+=======+==========+============+=================+
+   |0       |0      |-      | -        | -          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
    |1       |1      |-      | -        | -          | No              |
    +--------+-------+-------+----------+------------+-----------------+
    |3       |3      |-      | -        | 2          | No              |
@@ -433,6 +435,8 @@ Table of Contents
    |Received|Largest|Largest| Largest  | Unreported | Send            |
    |Packet  |Unacked|Acked  | Reported | Missing    | Acknowledgement |
    +========+=======+=======+==========+============+=================+
+   |0       |0      |-      | -        | -          | No              |
+   +--------+-------+-------+----------+------------+-----------------+
    |1       |1      |-      | -        | -          | No              |
    +--------+-------+-------+----------+------------+-----------------+
    |3       |3      |-      | -        | 2          | No              |
