@@ -315,6 +315,8 @@ IMMEDIATE_ACK Frame {
 }
 ~~~
 
+IMMEDIATE_ACK frames do not need to be retransmitted.
+
 # Sending Acknowledgments {#sending}
 
 Prior to receiving an ACK_FREQUENCY frame, endpoints send acknowledgments as
