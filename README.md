@@ -1,6 +1,7 @@
 # QUIC Acknowledgement Frequency
 
-* [Editor's Copy](https://github.com/quicwg/ack-frequency/blob/main/draft-ietf-quic-ack-frequency.md)
+* [Editor's Copy](https://quicwg.github.io/multipath/#go.draft-ietf-quic-ack-frequency.html)
+
 ## Building the Draft
 
 Formatted text and HTML versions of the draft can be built using `make`.
