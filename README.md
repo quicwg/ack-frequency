@@ -1,6 +1,6 @@
 # QUIC Acknowledgement Frequency
 
-* [Editor's Copy](https://quicwg.github.io/multipath/#go.draft-ietf-quic-ack-frequency.html)
+* [Editor's Copy](https://quicwg.github.io/ack-frequency/#go.draft-ietf-quic-ack-frequency.html)
 
 ## Building the Draft
 
