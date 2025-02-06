@@ -453,8 +453,8 @@ the endpoint resumes sending acknowledgements based on the Ack-Eliciting
 Threshold or max_ack_delay. Therefore, CE-marking only triggers an immediate
 acknowledgement when there is a transition from non-CE-marked to CE-marked.
 
-If the Ack-Eliciting Threshold is 0, every packet is immediately
-acknowledged, no matter if marked with CE or not. If the Ack-Eliciting Threshold
+If the Ack-Eliciting Threshold is 0, every ack-eliciting packet is immediately
+acknowledged, CE marked or not. If the Ack-Eliciting Threshold
 is 1, the default behavior as specified in RFC9000 applies, which recommends to
 immediately acknowledge all packets marked with CE (see
 {{Section 13.2.1 of QUIC-TRANSPORT}}).
