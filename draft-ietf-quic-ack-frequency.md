@@ -394,7 +394,7 @@ ACK_FREQUENCY frames.
 
 ### Examples {#examples}
 
-Note that the following examples assume that packets are 
+Note that the following examples assume that packets are
 processed one-by-one in the received order as indicated below.
 
 When the reordering threshold is 1, any time a packet is received
@@ -440,7 +440,7 @@ reordering, the sequence in {{ack-reordering-5}} would occur:
 ## Setting the Reordering Threshold value {#set-threshold}
 
 To ensure timely loss detection, a data sender can send a Reordering Threshold
-value that is the same as the loss detection packet threshold. If the 
+value that is the same as the loss detection packet threshold. If the
 reordering threshold is
 smaller than the packet threshold, an acknowledgement is unnecessarily sent
 before the packet can be declared lost. If the value is larger, it can cause
