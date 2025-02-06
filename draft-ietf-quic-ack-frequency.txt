@@ -371,12 +371,13 @@ Table of Contents
 
    Largest Acked:  The Largest Acknowledged value sent in an ACK frame.
 
-   Largest Reported:  The largest packet number that could be declared
-      lost with the specified Reordering Threshold, which is Largest
-      Acked - Reordering Threshold + 1.
+   Largest Reported Missing:  The largest packet number that could be
+      declared lost with the specified Reordering Threshold, which is
+      Largest Acked - Reordering Threshold.
 
    Unreported Missing:  Packets with packet numbers between the Largest
-      Unacked and Largest Reported that have not yet been received.
+      Unacked and Largest Reported Missing that have not yet been
+      received.
 
    An endpoint that receives an ACK_FREQUENCY frame with a non-zero
    Reordering Threshold value SHOULD send an immediate ACK when the gap
@@ -391,6 +392,9 @@ Table of Contents
 
 6.2.1.  Examples
 
+   Note that the following examples assume that packets are processed
+   one-by-one in the received order as indicated below.
+
    When the reordering threshold is 1, any time a packet is received and
    there is a missing packet, an immediate acknowledgement is sent.
 
@@ -400,6 +404,7 @@ Table of Contents
    +========+=======+=======+==========+============+=================+
    |Received|Largest|Largest| Largest  | Unreported | Send            |
    |Packet  |Unacked|Acked  | Reported | Missing    | Acknowledgement |
+   |        |       |       | Missing  |            |                 |
    +========+=======+=======+==========+============+=================+
    |0       |0      |-      | -        | -          | No              |
    +--------+-------+-------+----------+------------+-----------------+
@@ -412,12 +417,12 @@ Table of Contents
    |5       |5      |-      | -        | 2          | Yes (5 - 2 >=   |
    |        |       |       |          |            | 3)              |
    +--------+-------+-------+----------+------------+-----------------+
-   |8       |8      |5      | 3        | 6,7        | No              |
+   |8       |8      |5      | 2        | 6,7        | No              |
    +--------+-------+-------+----------+------------+-----------------+
-   |9       |9      |5      | 3        | 6,7        | Yes (9 - 6 >=   |
+   |9       |9      |5      | 2        | 6,7        | Yes (9 - 6 >=   |
    |        |       |       |          |            | 3)              |
    +--------+-------+-------+----------+------------+-----------------+
-   |10      |10     |9      | 7        | 7          | Yes (10 - 7 >=  |
+   |10      |10     |9      | 6        | 7          | Yes (10 - 7 >=  |
    |        |       |       |          |            | 3)              |
    +--------+-------+-------+----------+------------+-----------------+
 
@@ -436,6 +441,7 @@ Table of Contents
    +========+=======+=======+==========+============+=================+
    |Received|Largest|Largest| Largest  | Unreported | Send            |
    |Packet  |Unacked|Acked  | Reported | Missing    | Acknowledgement |
+   |        |       |       | Missing  |            |                 |
    +========+=======+=======+==========+============+=================+
    |0       |0      |-      | -        | -          | No              |
    +--------+-------+-------+----------+------------+-----------------+
@@ -450,9 +456,9 @@ Table of Contents
    |7       |7      |-      | -        | 2,4        | Yes (7 - 2 >=   |
    |        |       |       |          |            | 5)              |
    +--------+-------+-------+----------+------------+-----------------+
-   |8       |8      |7      | 3        | 4          | No              |
+   |8       |8      |7      | 2        | 4          | No              |
    +--------+-------+-------+----------+------------+-----------------+
-   |9       |9      |7      | 3        | 4          | Yes (9 - 4 >=   |
+   |9       |9      |7      | 2        | 4          | Yes (9 - 4 >=   |
    |        |       |       |          |            | 5)              |
    +--------+-------+-------+----------+------------+-----------------+
 
@@ -461,13 +467,13 @@ Table of Contents
 6.3.  Setting the Reordering Threshold value
 
    To ensure timely loss detection, a data sender can send a Reordering
-   Threshold value of 1 less than the loss detection packet threshold.
-   If the threshold is smaller than the packet threshold, an
-   acknowledgement is unnecessarily sent before the packet can be
-   declared lost.  If the value is larger, it can cause unnecessary
-   delays in loss detection.  (Section 6.1.1 of [QUIC-RECOVERY])
-   recommends a default packet threshold for loss detection of 3,
-   equivalent to a Reordering Threshold of 2.
+   Threshold value that is the same as the loss detection packet
+   threshold.  If the reordering threshold is smaller than the packet
+   threshold, an acknowledgement is unnecessarily sent before the packet
+   can be declared lost.  If the value is larger, it can cause
+   unnecessary delays in loss detection.  (Section 6.1.1 of
+   [QUIC-RECOVERY]) recommends a default packet threshold for loss
+   detection of 3.
 
 6.4.  Expediting Explicit Congestion Notification (ECN) Signals
 
@@ -482,12 +488,18 @@ Table of Contents
    acknowledgement when there is a transition from non-CE-marked to CE-
    marked.
 
-   Doing this maintains the peer's response time to congestion events,
-   while also reducing the ACK rate compared to Section 13.2.1 of
-   [QUIC-TRANSPORT] during extreme congestion or when peers are using
-   DCTCP [RFC8257] or other congestion controllers (e.g.
-   [I-D.ietf-tsvwg-aqm-dualq-coupled]) that mark more frequently than
-   classic ECN [RFC3168].
+   If the Ack-Eliciting Threshold is 0, every ack-eliciting packet is
+   immediately acknowledged, CE marked or not.  If the Ack-Eliciting
+   Threshold is 1, the default behavior as specified in RFC9000 applies,
+   which recommends to immediately acknowledge all packets marked with
+   CE (see Section 13.2.1 of [QUIC-TRANSPORT]).
+
+   Acknowledging the first CE marked packet immediately maintains the
+   peer's response time to congestion events, while also reducing the
+   ACK rate compared to Section 13.2.1 of [QUIC-TRANSPORT] during
+   extreme congestion or when peers are using DCTCP [RFC8257] or other
+   congestion controllers (e.g. [I-D.ietf-tsvwg-aqm-dualq-coupled]) that
+   mark more frequently than classic ECN [RFC3168].
 
 6.5.  Batch Processing of Packets
 

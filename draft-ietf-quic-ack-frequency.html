@@ -1559,16 +1559,16 @@ definitions:<a href="#section-6.2-3" class="pilcrow">¶</a></p>
             <p id="section-6.2-4.4.1">The Largest Acknowledged value sent in an ACK frame.<a href="#section-6.2-4.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-4.5">Largest Reported:</dt>
+<dt id="section-6.2-4.5">Largest Reported Missing:</dt>
           <dd style="margin-left: 1.5em" id="section-6.2-4.6">
             <p id="section-6.2-4.6.1">The largest packet number that could be declared lost with the specified
-Reordering Threshold, which is Largest Acked - Reordering Threshold + 1.<a href="#section-6.2-4.6.1" class="pilcrow">¶</a></p>
+Reordering Threshold, which is Largest Acked - Reordering Threshold.<a href="#section-6.2-4.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.2-4.7">Unreported Missing:</dt>
           <dd style="margin-left: 1.5em" id="section-6.2-4.8">
             <p id="section-6.2-4.8.1">Packets with packet numbers between the Largest Unacked and Largest Reported
-that have not yet been received.<a href="#section-6.2-4.8.1" class="pilcrow">¶</a></p>
+Missing that have not yet been received.<a href="#section-6.2-4.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1586,10 +1586,12 @@ ACK_FREQUENCY frames.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
           <h4 id="name-examples">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
           </h4>
-<p id="section-6.2.1-1">When the reordering threshold is 1, any time a packet is received
-and there is a missing packet, an immediate acknowledgement is sent.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-2">If the reordering theshold is 3 and acknowledgements are only sent due to
-reordering, the sequence in <a href="#ack-reordering-3" class="auto internal xref">Table 1</a> would occur:<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-1">Note that the following examples assume that packets are
+processed one-by-one in the received order as indicated below.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">When the reordering threshold is 1, any time a packet is received
+and there is a missing packet, an immediate acknowledgement is sent.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-3">If the reordering theshold is 3 and acknowledgements are only sent due to
+reordering, the sequence in <a href="#ack-reordering-3" class="auto internal xref">Table 1</a> would occur:<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
 <span id="name-acknowledgement-behavior-wi"></span><div id="ack-reordering-3">
 <table class="center" id="table-1">
             <caption>
@@ -1601,7 +1603,7 @@ reordering, the sequence in <a href="#ack-reordering-3" class="auto internal xre
                 <th class="text-left" rowspan="1" colspan="1">Received Packet</th>
                 <th class="text-left" rowspan="1" colspan="1">Largest Unacked</th>
                 <th class="text-left" rowspan="1" colspan="1">Largest Acked</th>
-                <th class="text-left" rowspan="1" colspan="1">Largest Reported</th>
+                <th class="text-left" rowspan="1" colspan="1">Largest Reported Missing</th>
                 <th class="text-left" rowspan="1" colspan="1">Unreported Missing</th>
                 <th class="text-left" rowspan="1" colspan="1">Send Acknowledgement</th>
               </tr>
@@ -1651,7 +1653,7 @@ reordering, the sequence in <a href="#ack-reordering-3" class="auto internal xre
                 <td class="text-left" rowspan="1" colspan="1">8</td>
                 <td class="text-left" rowspan="1" colspan="1">8</td>
                 <td class="text-left" rowspan="1" colspan="1">5</td>
-                <td class="text-left" rowspan="1" colspan="1">3</td>
+                <td class="text-left" rowspan="1" colspan="1">2</td>
                 <td class="text-left" rowspan="1" colspan="1">6,7</td>
                 <td class="text-left" rowspan="1" colspan="1">No</td>
               </tr>
@@ -1659,7 +1661,7 @@ reordering, the sequence in <a href="#ack-reordering-3" class="auto internal xre
                 <td class="text-left" rowspan="1" colspan="1">9</td>
                 <td class="text-left" rowspan="1" colspan="1">9</td>
                 <td class="text-left" rowspan="1" colspan="1">5</td>
-                <td class="text-left" rowspan="1" colspan="1">3</td>
+                <td class="text-left" rowspan="1" colspan="1">2</td>
                 <td class="text-left" rowspan="1" colspan="1">6,7</td>
                 <td class="text-left" rowspan="1" colspan="1">Yes (9 - 6 &gt;= 3)</td>
               </tr>
@@ -1667,21 +1669,21 @@ reordering, the sequence in <a href="#ack-reordering-3" class="auto internal xre
                 <td class="text-left" rowspan="1" colspan="1">10</td>
                 <td class="text-left" rowspan="1" colspan="1">10</td>
                 <td class="text-left" rowspan="1" colspan="1">9</td>
-                <td class="text-left" rowspan="1" colspan="1">7</td>
+                <td class="text-left" rowspan="1" colspan="1">6</td>
                 <td class="text-left" rowspan="1" colspan="1">7</td>
                 <td class="text-left" rowspan="1" colspan="1">Yes (10 - 7 &gt;= 3)</td>
               </tr>
             </tbody>
           </table>
 </div>
-<p id="section-6.2.1-4">Note that in this example, the receipt of packet 9 triggers an ACK
+<p id="section-6.2.1-5">Note that in this example, the receipt of packet 9 triggers an ACK
 that reports both packets 6 and 7 as missing. However,
 the receipt of packet 10 needs to trigger another immediate ACK
 because the sender will be unable to declare packet 7 as lost
 (with a reordering threshold of 3) until it receives an ACK
-reporting the reception of packet 10.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-5">If the reordering threshold is 5 and acknowledgements are only sent due to
-reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xref">Table 2</a> would occur:<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
+reporting the reception of packet 10.<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-6">If the reordering threshold is 5 and acknowledgements are only sent due to
+reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xref">Table 2</a> would occur:<a href="#section-6.2.1-6" class="pilcrow">¶</a></p>
 <span id="name-acknowledgement-behavior-wit"></span><div id="ack-reordering-5">
 <table class="center" id="table-2">
             <caption>
@@ -1693,7 +1695,7 @@ reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xre
                 <th class="text-left" rowspan="1" colspan="1">Received Packet</th>
                 <th class="text-left" rowspan="1" colspan="1">Largest Unacked</th>
                 <th class="text-left" rowspan="1" colspan="1">Largest Acked</th>
-                <th class="text-left" rowspan="1" colspan="1">Largest Reported</th>
+                <th class="text-left" rowspan="1" colspan="1">Largest Reported Missing</th>
                 <th class="text-left" rowspan="1" colspan="1">Unreported Missing</th>
                 <th class="text-left" rowspan="1" colspan="1">Send Acknowledgement</th>
               </tr>
@@ -1751,7 +1753,7 @@ reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xre
                 <td class="text-left" rowspan="1" colspan="1">8</td>
                 <td class="text-left" rowspan="1" colspan="1">8</td>
                 <td class="text-left" rowspan="1" colspan="1">7</td>
-                <td class="text-left" rowspan="1" colspan="1">3</td>
+                <td class="text-left" rowspan="1" colspan="1">2</td>
                 <td class="text-left" rowspan="1" colspan="1">4</td>
                 <td class="text-left" rowspan="1" colspan="1">No</td>
               </tr>
@@ -1759,7 +1761,7 @@ reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xre
                 <td class="text-left" rowspan="1" colspan="1">9</td>
                 <td class="text-left" rowspan="1" colspan="1">9</td>
                 <td class="text-left" rowspan="1" colspan="1">7</td>
-                <td class="text-left" rowspan="1" colspan="1">3</td>
+                <td class="text-left" rowspan="1" colspan="1">2</td>
                 <td class="text-left" rowspan="1" colspan="1">4</td>
                 <td class="text-left" rowspan="1" colspan="1">Yes  (9 - 4 &gt;= 5)</td>
               </tr>
@@ -1776,12 +1778,12 @@ reordering, the sequence in <a href="#ack-reordering-5" class="auto internal xre
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-setting-the-reordering-thre" class="section-name selfRef">Setting the Reordering Threshold value</a>
         </h3>
 <p id="section-6.3-1">To ensure timely loss detection, a data sender can send a Reordering Threshold
-value of 1 less than the loss detection packet threshold. If the threshold is
+value that is the same as the loss detection packet threshold. If the
+reordering threshold is
 smaller than the packet threshold, an acknowledgement is unnecessarily sent
 before the packet can be declared lost. If the value is larger, it can cause
 unnecessary delays in loss detection. (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>)
-recommends a default packet threshold for loss detection of 3, equivalent to
-a Reordering Threshold of 2.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+recommends a default packet threshold for loss detection of 3.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="congestion">
@@ -1797,11 +1799,17 @@ consecutive CE-marked packets are received or only non-CE-marked packet received
 the endpoint resumes sending acknowledgements based on the Ack-Eliciting
 Threshold or max_ack_delay. Therefore, CE-marking only triggers an immediate
 acknowledgement when there is a transition from non-CE-marked to CE-marked.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.4-2">Doing this maintains the peer's response time to congestion events, while also
+<p id="section-6.4-2">If the Ack-Eliciting Threshold is 0, every ack-eliciting packet is immediately
+acknowledged, CE marked or not. If the Ack-Eliciting Threshold
+is 1, the default behavior as specified in RFC9000 applies, which recommends to
+immediately acknowledge all packets marked with CE (see
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>).<a href="#section-6.4-2" class="pilcrow">¶</a></p>
+<p id="section-6.4-3">Acknowledging the first CE marked packet immediately maintains
+the peer's response time to congestion events, while also
 reducing the ACK rate compared to <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> during
 extreme congestion or when peers are using DCTCP <span>[<a href="#RFC8257" class="cite xref">RFC8257</a>]</span> or other
 congestion controllers (e.g. <span>[<a href="#I-D.ietf-tsvwg-aqm-dualq-coupled" class="cite xref">I-D.ietf-tsvwg-aqm-dualq-coupled</a>]</span>) that mark
-more frequently than classic ECN <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
+more frequently than classic ECN <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="batch">
