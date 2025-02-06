@@ -398,7 +398,7 @@ and there is a missing packet, an immediate acknowledgement is sent.
 If the reordering theshold is 3 and acknowledgements are only sent due to
 reordering, the sequence in {{ack-reordering-3}} would occur:
 
-| Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
+| Received Packet| Largest Unacked| Largest Acked| Largest Reported Missing| Unreported Missing| Send Acknowledgement |
 | -- | -- | -- | -- | --- | --- |
 |  0 |  0 |  - |  - |   - |  No |
 |  1 |  1 |  - |  - |   - |  No |
@@ -420,7 +420,7 @@ reporting the reception of packet 10.
 If the reordering threshold is 5 and acknowledgements are only sent due to
 reordering, the sequence in {{ack-reordering-5}} would occur:
 
-| Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
+| Received Packet| Largest Unacked| Largest Acked| Largest Reported Missing| Unreported Missing| Send Acknowledgement |
 | -- | -- | -- | -- | --- | --- |
 |  0 |  0 |  - |  - |   - |  No |
 |  1 |  1 |  - |  - |   - |  No |
