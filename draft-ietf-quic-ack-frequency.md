@@ -394,6 +394,9 @@ ACK_FREQUENCY frames.
 
 ### Examples {#examples}
 
+Note that the following examples assume that packets are 
+processed one-by-one in the received order as indicated below.
+
 When the reordering threshold is 1, any time a packet is received
 and there is a missing packet, an immediate acknowledgement is sent.
 
