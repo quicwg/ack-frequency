@@ -373,13 +373,13 @@ Largest Unacked:
 Largest Acked:
 : The Largest Acknowledged value sent in an ACK frame.
 
-Largest Reported:
+Largest Reported Missing:
 : The largest packet number that could be declared lost with the specified
-  Reordering Threshold, which is Largest Acked - Reordering Threshold + 1.
+  Reordering Threshold, which is Largest Acked - Reordering Threshold.
 
 Unreported Missing:
 : Packets with packet numbers between the Largest Unacked and Largest Reported
-  that have not yet been received.
+  Missing that have not yet been received.
 
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK when the gap
@@ -403,16 +403,16 @@ and there is a missing packet, an immediate acknowledgement is sent.
 If the reordering theshold is 3 and acknowledgements are only sent due to
 reordering, the sequence in {{ack-reordering-3}} would occur:
 
-| Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
+| Received Packet| Largest Unacked| Largest Acked| Largest Reported Missing| Unreported Missing| Send Acknowledgement |
 | -- | -- | -- | -- | --- | --- |
 |  0 |  0 |  - |  - |   - |  No |
 |  1 |  1 |  - |  - |   - |  No |
 |  3 |  3 |  - |  - |   2 |  No |
 |  4 |  4 |  - |  - |   2 |  No |
 |  5 |  5 |  - |  - |   2 | Yes (5 - 2 >= 3) |
-|  8 |  8 |  5 |  3 | 6,7 |  No |
-|  9 |  9 |  5 |  3 | 6,7 | Yes (9 - 6 >= 3) |
-| 10 | 10 |  9 |  7 |   7 | Yes (10 - 7 >= 3) |
+|  8 |  8 |  5 |  2 | 6,7 |  No |
+|  9 |  9 |  5 |  2 | 6,7 | Yes (9 - 6 >= 3) |
+| 10 | 10 |  9 |  6 |   7 | Yes (10 - 7 >= 3) |
 {: #ack-reordering-3 title="Acknowledgement behavior with a reordering threshold of 3"}
 
 Note that in this example, the receipt of packet 9 triggers an ACK
@@ -425,7 +425,7 @@ reporting the reception of packet 10.
 If the reordering threshold is 5 and acknowledgements are only sent due to
 reordering, the sequence in {{ack-reordering-5}} would occur:
 
-| Received Packet| Largest Unacked| Largest Acked| Largest Reported| Unreported Missing| Send Acknowledgement |
+| Received Packet| Largest Unacked| Largest Acked| Largest Reported Missing| Unreported Missing| Send Acknowledgement |
 | -- | -- | -- | -- | --- | --- |
 |  0 |  0 |  - |  - |   - |  No |
 |  1 |  1 |  - |  - |   - |  No |
@@ -433,19 +433,19 @@ reordering, the sequence in {{ack-reordering-5}} would occur:
 |  5 |  5 |  - |  - | 2,4 |  No |
 |  6 |  6 |  - |  - | 2,4 |  No |
 |  7 |  7 |  - |  - | 2,4 | Yes  (7 - 2 >= 5)|
-|  8 |  8 |  7 |  3 |   4 |  No |
-|  9 |  9 |  7 |  3 |   4 | Yes  (9 - 4 >= 5)|
+|  8 |  8 |  7 |  2 |   4 |  No |
+|  9 |  9 |  7 |  2 |   4 | Yes  (9 - 4 >= 5)|
 {: #ack-reordering-5 title="Acknowledgement behavior with a reordering threshold of 5"}
 
 ## Setting the Reordering Threshold value {#set-threshold}
 
 To ensure timely loss detection, a data sender can send a Reordering Threshold
-value of 1 less than the loss detection packet threshold. If the threshold is
+value that is the same as the loss detection packet threshold. If the 
+reordering threshold is
 smaller than the packet threshold, an acknowledgement is unnecessarily sent
 before the packet can be declared lost. If the value is larger, it can cause
 unnecessary delays in loss detection. ({{Section 6.1.1 of QUIC-RECOVERY}})
-recommends a default packet threshold for loss detection of 3, equivalent to
-a Reordering Threshold of 2.
+recommends a default packet threshold for loss detection of 3.
 
 ## Expediting Explicit Congestion Notification (ECN) Signals {#congestion}
 
