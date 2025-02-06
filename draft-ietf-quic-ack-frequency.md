@@ -459,7 +459,7 @@ is 1, the default behavior as specified in RFC9000 applies, which recommends to
 immediately acknowledge all packets marked with CE (see
 {{Section 13.2.1 of QUIC-TRANSPORT}}).
 
-Always acknowledging the first marked CE packet immediately maintains
+Acknowledging the first CE marked packet immediately maintains
 the peer's response time to congestion events, while also
 reducing the ACK rate compared to {{Section 13.2.1 of QUIC-TRANSPORT}} during
 extreme congestion or when peers are using DCTCP {{?RFC8257}} or other
