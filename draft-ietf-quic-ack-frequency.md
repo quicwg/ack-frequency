@@ -371,7 +371,7 @@ Largest Unacked:
 Largest Acked:
 : The Largest Acknowledged value sent in an ACK frame.
 
-Largest Reported (Missing):
+Largest Reported Missing:
 : The largest packet number that could be declared lost with the specified
   Reordering Threshold, which is Largest Acked - Reordering Threshold.
 
