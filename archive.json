@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-09T01:40:51.317295+00:00",
+  "timestamp": "2025-02-11T01:37:13.853259+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5495,7 +5495,7 @@
       ],
       "body": "The document does not specify what should happen if a packet arrives more out of order than `Missing Packet Threshold`. An immediate ack is the most reasonable action, but it should probably be explicitly specified.\r\n\r\nSee also the quicdev Slack message: https://quicdev.slack.com/archives/CTDAH4H71/p1725959171986379",
       "createdAt": "2024-09-26T14:10:02Z",
-      "updatedAt": "2025-02-06T15:17:54Z",
+      "updatedAt": "2025-02-10T15:40:29Z",
       "closedAt": null,
       "comments": [
         {
@@ -5511,6 +5511,27 @@
           "body": "Unfortunately, I can't see the slack history anymore, but I agree with @mirjak that the current text seems to cover this.  We could say it elsewhere if it's helpful, but I'm not sure where?",
           "createdAt": "2025-02-06T15:17:53Z",
           "updatedAt": "2025-02-06T15:17:53Z"
+        },
+        {
+          "author": "michael-eriksson",
+          "authorAssociation": "NONE",
+          "body": "No, the text quoted from the draft above does not cover the case that I'm after.\n\nLet's use Table 1 of draft-10 as an example. What should happen if packet 2 is received after packet 5 has been received (but before packet 8 is received)? An ack for packet 5 has already been sent, to indicate that packet 2 is missing. Packet 2 then arrives so late that it's outside the `Reordering Threshold`.",
+          "createdAt": "2025-02-10T14:46:14Z",
+          "updatedAt": "2025-02-10T14:46:14Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This is covered in RFC9000 (and not changed):\n\n```\nIn order to assist loss detection at the sender, an endpoint SHOULD generate and send an ACK frame without delay when it receives an ack-eliciting packet either:\n\n* when the received packet has a packet number less than another ack-eliciting packet that has been received, or\n```",
+          "createdAt": "2025-02-10T15:25:37Z",
+          "updatedAt": "2025-02-10T15:25:37Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Okay, looking at the draft, this is actually not very clear. My understanding was always that we keep the behavior as specified in RFC9000 when the PN is less than an already received one and we only change the behavior in case of gaps. If so, we should maybe clarify this. @Ian can you confirm?",
+          "createdAt": "2025-02-10T15:40:27Z",
+          "updatedAt": "2025-02-10T15:40:27Z"
         }
       ]
     },
@@ -5546,7 +5567,7 @@
       ],
       "body": "The example loss detection algorithm in Appendix A of RFC 9002 assumes that packets that arrives out of order are always acknowledged immediately. Because of this, it does not include `max_ack_delay` when the [loss delay threshold is computed](https://www.rfc-editor.org/rfc/rfc9002.html#section-a.10-2).\r\n\r\nSetting the `Ack-Eliciting Threshold` field in the `ACK_FREQUENCY` frame to something else than 1 implies that some packets that arrive out of order will have delayed acknowledgments. Hence, the `max_ack_delay` should be added to the `loss_delay` variable in the algorithm above in those cases.\r\n\r\nIt would probably be valuable for implementers if this information was included in the document.\r\n\r\nSee also the quicdev Slack thread: https://quicdev.slack.com/archives/CTDAH4H71/p1725960809852329",
       "createdAt": "2024-09-26T14:35:12Z",
-      "updatedAt": "2025-02-06T15:30:14Z",
+      "updatedAt": "2025-02-10T17:33:58Z",
       "closedAt": null,
       "comments": [
         {
@@ -5562,6 +5583,48 @@
           "body": "I don't think there was ever a consideration to include max_ack_delay, partially because max_ack_delay can be quite larger compared to RTT.\n\nI'm also having a very difficult time coming up with a case we'd want to delay loss detection on the sender by adding max_ack_delay.  In cases when the ACK that indicates the missing packet is delayed by max_ack_delay, the use of max(latest_rtt, smoothed_rtt) would ensure that it isn't immediately declared lost.",
           "createdAt": "2025-02-06T15:30:12Z",
           "updatedAt": "2025-02-06T15:30:12Z"
+        },
+        {
+          "author": "michael-eriksson",
+          "authorAssociation": "NONE",
+          "body": "OK, a scenario.\n\nThe sender has configured the `Requested Max Ack Delay` to 1/4 of the RTT. Packets 100 and 101 are sent directly after each other but reordered, so 101 is received before 100. When 101 arrives, an ack is sent. 100 arrives shortly after, but no ack is sent because of the Ack Frequency configuration (`Reordering Threshold` is larger than 1). After 1/4 of the RTT, the ack delay timer expires and the ack for packet 100 is finally sent.\n\nWith the default calculation of `loss_delay`, where `max_ack_delay` is not included, packet 100 will be (falsely) declared as lost at the sender after 9/8 = 1.125 (`kTimeThreshold`) of the RTT, which is before the ack will arrive at around 5/4 = 1.25 of the RTT.",
+          "createdAt": "2025-02-10T15:12:33Z",
+          "updatedAt": "2025-02-10T15:12:33Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "packet 100 will trigger an immediate ACK because it is smaller than 101 as specified in sec 13.2.1 in RFC9000.",
+          "createdAt": "2025-02-10T15:31:00Z",
+          "updatedAt": "2025-02-10T15:31:00Z"
+        },
+        {
+          "author": "michael-eriksson",
+          "authorAssociation": "NONE",
+          "body": "Huh? What's the point with `Reordering Threshold` then?",
+          "createdAt": "2025-02-10T15:57:54Z",
+          "updatedAt": "2025-02-10T15:57:54Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "you delay the ack if you have a gap but if you receive a packet that fills a gap it still makes sense to tell the other end immediately to avoid spurious retransmissions. I guess we could optimise this further and e.g. only send a ACK if the packet fills a gap and a larger PN has already been ack'ed otherwise you wait for the usually ACK delay. Not sure if that makes a big difference but it would probably correct to do it that way.",
+          "createdAt": "2025-02-10T16:06:57Z",
+          "updatedAt": "2025-02-10T16:06:57Z"
+        },
+        {
+          "author": "michael-eriksson",
+          "authorAssociation": "NONE",
+          "body": "Quoting the draft:\n> After an ACK_FREQUENCY frame with a Reordering Threshold value other than 1 has been received, this extension delays immediate acknowledgements to reordered ack-eliciting packets and the gaps they can create.",
+          "createdAt": "2025-02-10T16:38:41Z",
+          "updatedAt": "2025-02-10T16:38:41Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, I saw this but I would interpreted this as delaying the ACK but still send an immediate ACK if the re-ordered packet is received after the ack delay or re-ordering threshold, or, to say it in other words, if a higher PN packet already triggered an ACK. However, this part seems actually not very clear.",
+          "createdAt": "2025-02-10T17:33:57Z",
+          "updatedAt": "2025-02-10T17:33:57Z"
         }
       ]
     },
