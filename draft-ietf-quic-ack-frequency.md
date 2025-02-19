@@ -356,6 +356,12 @@ packet. After an ACK_FREQUENCY frame with a Reordering Threshold value other
 than 1 has been received, this extension delays immediate acknowledgements
 to reordered ack-eliciting packets and the gaps they can create.
 
+When a packet is received that has a packet number less than another already received,
+ack-eliciting packet, this still triggers an immediate acknowledgement if the
+reordering threshold has already trigger an acknowledgement and therefore the packet
+number gap was already announced. Otherwise the normal acknowledgment
+bevavior applies based on the maximum acknowledgement delay and the ack-eliciting threshold.
+
 If the most recent ACK_FREQUENCY frame received from the peer has a Reordering
 Threshold value of 0, the endpoint SHOULD NOT send an immediate
 acknowledgment in response to packets received out of order, and instead
@@ -505,7 +511,7 @@ peer's max_ack_delay.
 
 When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
 immediate acknowledgment. This avoids delaying acknowledgements of PTO packets
-by the ack delay, reducing tail latency and allowing the sender
+by the acknowledgement delay, reducing tail latency and allowing the sender
 to exclude the peer's max_ack_delay from subsequent PTO calculations.
 
 # Determining Acknowledgment Frequency {#implementation}
@@ -573,7 +579,7 @@ the increase in congestion window and can create larger packet bursts.
 If the sender is application-limited, acknowledgments can be delayed
 unnecessarily when entering idle periods. Therefore, if no further data is
 buffered to be sent, a sender can send an IMMEDIATE_ACK frame with the last data
-packet before an idle period to avoid waiting for the ack delay.
+packet before an idle period to avoid waiting for the acknowledgement delay.
 
 If there are no inflight packets, no acknowledgments will be received for at least
 a round trip when sending resumes. The max_ack_delay and Ack-Eliciting Threshold
