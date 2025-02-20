@@ -388,6 +388,10 @@ than or equal to the Reordering Threshold value. Sending this additional ACK wil
 reset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK
 would do).
 
+When an ack-eliciting packet is received with a packet number less than
+Largest Acked, this still triggers an immediate acknowledgement in an effort to
+avoid the packet being spuriously declared lost.
+
 See {{examples}} for examples explaining this behavior. See {{set-threshold}}
 for guidance on how to choose the reordering threshold value when sending
 ACK_FREQUENCY frames.
