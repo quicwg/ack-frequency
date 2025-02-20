@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-18T01:37:29.570429+00:00",
+  "timestamp": "2025-02-20T01:38:41.061087+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -23802,6 +23802,32 @@
       "mergeCommit": {
         "oid": "cbdf6ae6b030f91d1e0a8b7a3e8b2d23a227adab"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 318,
+      "id": "PR_kwDODddxTs6Lwvek",
+      "title": "clarify that immediate ACK is sent when gap gets filled",
+      "url": "https://github.com/quicwg/ack-frequency/pull/318",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-19T14:40:13Z",
+      "updatedAt": "2025-02-19T14:45:57Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "cbdf6ae6b030f91d1e0a8b7a3e8b2d23a227adab",
+      "headRepository": "quicwg/ack-frequency",
+      "headRefName": "mirjak-patch-1",
+      "headRefOid": "eb9e827582b60f356eb2acdada9a889001e34ede",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
