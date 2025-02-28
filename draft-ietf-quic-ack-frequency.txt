@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 10 August 2025                                           Google
+Expires: 1 September 2025                                         Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         6 February 2025
+                                                        28 February 2025
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 August 2025.
+   This Internet-Draft will expire on 1 September 2025.
 
 Copyright Notice
 
@@ -385,6 +385,10 @@ Table of Contents
    Unacked is greater than or equal to the Reordering Threshold value.
    Sending this additional ACK will reset the max_ack_delay timer and
    Ack-Eliciting Threshold counter (as any ACK would do).
+
+   When an ack-eliciting packet is received with a packet number less
+   than Largest Acked, this still triggers an immediate acknowledgement
+   in an effort to avoid the packet being spuriously declared lost.
 
    See Section 6.2.1 for examples explaining this behavior.  See
    Section 6.3 for guidance on how to choose the reordering threshold
