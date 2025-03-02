@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-27T01:40:45.395136+00:00",
+  "timestamp": "2025-03-02T01:45:15.037497+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5486,7 +5486,7 @@
       "id": "I_kwDODddxTs6YCM1Q",
       "title": "Define what should happen if packets arrive outside `Missing Packet Threshold`",
       "url": "https://github.com/quicwg/ack-frequency/issues/304",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "michael-eriksson",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -5495,8 +5495,8 @@
       ],
       "body": "The document does not specify what should happen if a packet arrives more out of order than `Missing Packet Threshold`. An immediate ack is the most reasonable action, but it should probably be explicitly specified.\r\n\r\nSee also the quicdev Slack message: https://quicdev.slack.com/archives/CTDAH4H71/p1725959171986379",
       "createdAt": "2024-09-26T14:10:02Z",
-      "updatedAt": "2025-02-10T15:40:29Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-28T22:42:05Z",
+      "closedAt": "2025-02-28T22:42:05Z",
       "comments": [
         {
           "author": "mirjak",
@@ -5558,7 +5558,7 @@
       "id": "I_kwDODddxTs6YCeq3",
       "title": "Include note about loss detection update",
       "url": "https://github.com/quicwg/ack-frequency/issues/306",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "michael-eriksson",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -5567,8 +5567,8 @@
       ],
       "body": "The example loss detection algorithm in Appendix A of RFC 9002 assumes that packets that arrives out of order are always acknowledged immediately. Because of this, it does not include `max_ack_delay` when the [loss delay threshold is computed](https://www.rfc-editor.org/rfc/rfc9002.html#section-a.10-2).\r\n\r\nSetting the `Ack-Eliciting Threshold` field in the `ACK_FREQUENCY` frame to something else than 1 implies that some packets that arrive out of order will have delayed acknowledgments. Hence, the `max_ack_delay` should be added to the `loss_delay` variable in the algorithm above in those cases.\r\n\r\nIt would probably be valuable for implementers if this information was included in the document.\r\n\r\nSee also the quicdev Slack thread: https://quicdev.slack.com/archives/CTDAH4H71/p1725960809852329",
       "createdAt": "2024-09-26T14:35:12Z",
-      "updatedAt": "2025-02-10T17:33:58Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-28T22:43:24Z",
+      "closedAt": "2025-02-28T22:43:23Z",
       "comments": [
         {
           "author": "mirjak",
@@ -5625,6 +5625,13 @@
           "body": "Yes, I saw this but I would interpreted this as delaying the ACK but still send an immediate ACK if the re-ordered packet is received after the ack delay or re-ordering threshold, or, to say it in other words, if a higher PN packet already triggered an ACK. However, this part seems actually not very clear.",
           "createdAt": "2025-02-10T17:33:57Z",
           "updatedAt": "2025-02-10T17:33:57Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "closing this one also as #319 was merged",
+          "createdAt": "2025-02-28T22:43:23Z",
+          "updatedAt": "2025-02-28T22:43:23Z"
         }
       ]
     },
@@ -23810,25 +23817,33 @@
       "id": "PR_kwDODddxTs6Lwvek",
       "title": "clarify that immediate ACK is sent when gap gets filled",
       "url": "https://github.com/quicwg/ack-frequency/pull/318",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mirjak",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-19T14:40:13Z",
-      "updatedAt": "2025-02-19T14:45:57Z",
+      "updatedAt": "2025-02-28T22:42:28Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "cbdf6ae6b030f91d1e0a8b7a3e8b2d23a227adab",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "mirjak-patch-1",
       "headRefOid": "eb9e827582b60f356eb2acdada9a889001e34ede",
-      "closedAt": null,
+      "closedAt": "2025-02-28T22:42:27Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "#319 merged instead",
+          "createdAt": "2025-02-28T22:42:27Z",
+          "updatedAt": "2025-02-28T22:42:27Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -23836,26 +23851,91 @@
       "id": "PR_kwDODddxTs6L8WoQ",
       "title": "When to send an immediate ACK",
       "url": "https://github.com/quicwg/ack-frequency/pull/319",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ianswett",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Upon receipt of a previously missing packet.\r\n\r\nThis is an alternative to #318 that reuses Largest Acked.\r\n\r\nFixes #304",
       "createdAt": "2025-02-20T18:44:26Z",
-      "updatedAt": "2025-02-20T18:44:26Z",
+      "updatedAt": "2025-02-28T22:42:05Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "cbdf6ae6b030f91d1e0a8b7a3e8b2d23a227adab",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "ianswett-immediate-ack",
       "headRefOid": "53b9a146b57db16c651228f0e3ef1c3a71b7e61b",
+      "closedAt": "2025-02-28T22:42:04Z",
+      "mergedAt": "2025-02-28T22:42:04Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "1b11adea6969d1ee9cd705f012806054dc4a3463"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs6eENte",
+          "commit": {
+            "abbreviatedOid": "53b9a14"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-28T22:41:59Z",
+          "updatedAt": "2025-02-28T22:41:59Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 320,
+      "id": "PR_kwDODddxTs6NBrcC",
+      "title": "Tiniest NiT on CE ?",
+      "url": "https://github.com/quicwg/ack-frequency/pull/320",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Immediate response when CE marked or not, ought to refer to the packet being ACK'ed.",
+      "createdAt": "2025-03-01T09:50:24Z",
+      "updatedAt": "2025-03-02T01:43:33Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "1b11adea6969d1ee9cd705f012806054dc4a3463",
+      "headRepository": "gorryfair/ack-frequency",
+      "headRefName": "patch-12",
+      "headRefOid": "146c3abc14c043bac2c3a48d7af9069d49b82525",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs6eG6dY",
+          "commit": {
+            "abbreviatedOid": "146c3ab"
+          },
+          "author": "ianswett",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I think the existing text is fairly clear, but I tried to make it read easier in my suggestion.",
+          "createdAt": "2025-03-02T01:42:28Z",
+          "updatedAt": "2025-03-02T01:43:05Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Is this better?\r\n\r\n```suggestion\r\nacknowledged, whether it is CE marked or not. If the Ack-Eliciting Threshold\r\n```",
+              "createdAt": "2025-03-02T01:42:28Z",
+              "updatedAt": "2025-03-02T01:43:05Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
