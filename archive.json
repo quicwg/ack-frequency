@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-27T01:44:20.655666+00:00",
+  "timestamp": "2025-03-30T01:52:18.877369+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -23893,7 +23893,7 @@
       "id": "PR_kwDODddxTs6NBrcC",
       "title": "Tiniest NiT on CE ?",
       "url": "https://github.com/quicwg/ack-frequency/pull/320",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gorryfair",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -23902,17 +23902,19 @@
       ],
       "body": "Immediate response when CE marked or not, ought to refer to the packet being ACK'ed.",
       "createdAt": "2025-03-01T09:50:24Z",
-      "updatedAt": "2025-03-02T01:43:33Z",
+      "updatedAt": "2025-03-27T13:12:14Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "1b11adea6969d1ee9cd705f012806054dc4a3463",
       "headRepository": "gorryfair/ack-frequency",
       "headRefName": "patch-12",
-      "headRefOid": "146c3abc14c043bac2c3a48d7af9069d49b82525",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "935c9410df322a15b829a850dde6f518cd30c140",
+      "closedAt": "2025-03-27T13:12:14Z",
+      "mergedAt": "2025-03-27T13:12:14Z",
+      "mergedBy": "ianswett",
+      "mergeCommit": {
+        "oid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd"
+      },
       "comments": [],
       "reviews": [
         {
