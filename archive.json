@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-30T01:52:18.877369+00:00",
+  "timestamp": "2025-05-18T01:59:04.219854+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5862,6 +5862,22 @@
           "updatedAt": "2025-01-31T14:59:12Z"
         }
       ]
+    },
+    {
+      "number": 321,
+      "id": "I_kwDODddxTs62ylzx",
+      "title": "Sending ACKs for packets < largest_acked may not be valuable",
+      "url": "https://github.com/quicwg/ack-frequency/issues/321",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "#304 clarifies that RFC 9000 rules about ACKing packets < largest_acked still apply:\n\n> When an ack-eliciting packet is received with a packet number less than Largest Acked, this still triggers an immediate acknowledgement in an effort to avoid the packet being spuriously declared lost.\n\nTo be clear: this totally works, and in no case makes things worse than the baseline. In the \"normal\" case when packet gaps are loss, not reordering, it has no effect at all.\n\nHowever, I wonder if this rule is far less than optimal in cases with a lot of reordering, and may add little to no value in more common cases. Loss and reordering both manifest as a sudden jump in sequence number; if a reordering case, the gap packets will arrive later. The reordering_thresh field can suppress the ack of this first jump, but not the followon packets with lower numbers.\n\nFor example, Say that ack_eliciting_threshold is 1 (the default) but reordering_threshold is zero (meaning, ignore reordering). If the pattern of packet arrival is 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, then there will be 10 ACKs: one for 11, as the second packet to arrive, and then one for each of 1:9 because they are all less than largest_acked. In this case, network reordering has caused the ack rate to be roughly double what the receiver requested. Without the text in question, one would expect an ack for 11, 2, 4, 6, and 8.\n\nIn #304 , the stipulation is that acking these packets will prevent spurious retransmits. If true, that would be valuable. However:\n\n- If the sender is using RFC 9002 time-based recovery, the important thing is that the ack arrives before the timeout. IIUC, this is best ensured via requested_max_ack_delay rather than through this mechanism.\n\n- If the sender is using packet-based recovery, the additional acks don't really help. If ack_eliciting_threshold is set correctly, there won't be a retransmission until another ACK arrives. If the ACK is delayed till another packet arrives, the sender's state for the early packet won't change in the meantime.\n\nI find this hard to reason about, and am happy to be told I'm holding it wrong.\n\nalso sent as email to the list: https://mailarchive.ietf.org/arch/msg/quic/D8ivpSvNqz8ixwF-y_UgtEINYio/",
+      "createdAt": "2025-05-15T15:50:23Z",
+      "updatedAt": "2025-05-15T15:50:23Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
