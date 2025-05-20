@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-18T01:59:04.219854+00:00",
+  "timestamp": "2025-05-20T01:54:14.206106+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5875,9 +5875,17 @@
       "labels": [],
       "body": "#304 clarifies that RFC 9000 rules about ACKing packets < largest_acked still apply:\n\n> When an ack-eliciting packet is received with a packet number less than Largest Acked, this still triggers an immediate acknowledgement in an effort to avoid the packet being spuriously declared lost.\n\nTo be clear: this totally works, and in no case makes things worse than the baseline. In the \"normal\" case when packet gaps are loss, not reordering, it has no effect at all.\n\nHowever, I wonder if this rule is far less than optimal in cases with a lot of reordering, and may add little to no value in more common cases. Loss and reordering both manifest as a sudden jump in sequence number; if a reordering case, the gap packets will arrive later. The reordering_thresh field can suppress the ack of this first jump, but not the followon packets with lower numbers.\n\nFor example, Say that ack_eliciting_threshold is 1 (the default) but reordering_threshold is zero (meaning, ignore reordering). If the pattern of packet arrival is 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, then there will be 10 ACKs: one for 11, as the second packet to arrive, and then one for each of 1:9 because they are all less than largest_acked. In this case, network reordering has caused the ack rate to be roughly double what the receiver requested. Without the text in question, one would expect an ack for 11, 2, 4, 6, and 8.\n\nIn #304 , the stipulation is that acking these packets will prevent spurious retransmits. If true, that would be valuable. However:\n\n- If the sender is using RFC 9002 time-based recovery, the important thing is that the ack arrives before the timeout. IIUC, this is best ensured via requested_max_ack_delay rather than through this mechanism.\n\n- If the sender is using packet-based recovery, the additional acks don't really help. If ack_eliciting_threshold is set correctly, there won't be a retransmission until another ACK arrives. If the ACK is delayed till another packet arrives, the sender's state for the early packet won't change in the meantime.\n\nI find this hard to reason about, and am happy to be told I'm holding it wrong.\n\nalso sent as email to the list: https://mailarchive.ietf.org/arch/msg/quic/D8ivpSvNqz8ixwF-y_UgtEINYio/",
       "createdAt": "2025-05-15T15:50:23Z",
-      "updatedAt": "2025-05-15T15:50:23Z",
+      "updatedAt": "2025-05-19T22:02:45Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "body": "Actually, I'm under the impression that the [earlier comments on #304](https://github.com/quicwg/ack-frequency/issues/304#issuecomment-2616282013) from @mirjak and @ianswett were correct in pointing out that the situation is covered by the following statement: \"An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering Threshold value SHOULD send an immediate ACK when the gap between the smallest Unreported Missing packet and the Largest Unacked is greater than or equal to the Reordering Threshold value.\"\n\nConsider packet-number-based loss detection:\n\nWhen a sender advertises an ack_frequency.reordering_threshold of N, the assumption is that the sender will not declare a packet lost until the gap between the packet number (PN) of an outstanding packet and the largest PN acknowledged becomes greater than N.\n\nThis, in turn, means that the receiver does not need to acknowledge such packets immediately if the PN of the out-of-order packet falls within the gap defined by ack_frequency.reordering_threshold.\n\nOtherwise, the packet must be acknowledged immediately, but as said, we already have the text that covers this case.\n\nConsider time-based loss detection:\n\nThe idea behind time-based loss detection is that any packet can be acknowledged within a certain timeframe. It is reasonable to argue that this timeframe equals the one-way delay in each direction plus the max_ack_delay value. Under that interpretation, it is safe to delay ACKs for out-of-order packets that fall within the threshold advertised in the ACK_FREQUENCY frame.",
+          "createdAt": "2025-05-19T22:02:12Z",
+          "updatedAt": "2025-05-19T22:02:45Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -23954,6 +23962,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 322,
+      "id": "PR_kwDODddxTs6Wy0Pa",
+      "title": "do not send an immediate ack while `largest_acked - smallest_unreported` is within the threshold",
+      "url": "https://github.com/quicwg/ack-frequency/pull/322",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
+      "createdAt": "2025-05-19T22:30:35Z",
+      "updatedAt": "2025-05-20T00:54:29Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
+      "headRepository": "kazuho/ack-frequency",
+      "headRefName": "kazuho/buffer-reordering",
+      "headRefOid": "5ecddc92015873c6a52f5d50e9990eeeb7d408ab",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
