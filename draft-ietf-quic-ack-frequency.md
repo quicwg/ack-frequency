@@ -382,15 +382,17 @@ Unreported Missing:
   Missing that have not yet been received.
 
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
-Threshold value SHOULD send an immediate ACK when the gap
-between the smallest Unreported Missing packet and the Largest Unacked is greater
-than or equal to the Reordering Threshold value. Sending this additional ACK will
-reset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK
-would do).
+Threshold value SHOULD send an immediate ACK whenever it observes
+unacknowledged state that lies outside of its configured Reordering Threshold,
+i.e.:
+* when the difference between the smallest Unreported Missing packet and the
+  Largest Unacked packet becomes greater than or equal to the Reordering
+  Threshold value; or
+* when the endpoint receives an ack-eliciting packet whose packet number is
+  less than `Largest Acked - Reordering Threshold`.
 
-Conversely, when the out-of-order packet being received is within the
-Reordering Threshold, the endpoint SHOULD withhold sending an ACK until the
-delayed ACK timer expires or other thresholds reach their limits.
+Sending such an additional ACK resets the max_ack_delay timer and the
+Ack-Eliciting Threshold counter, as any ACK would.
 
 See {{examples}} for examples explaining this behavior. See {{set-threshold}}
 for guidance on how to choose the reordering threshold value when sending
