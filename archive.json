@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-22T01:53:14.063901+00:00",
+  "timestamp": "2025-05-25T02:01:47.205639+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -23989,18 +23989,26 @@
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-05-20T02:36:18Z",
+      "updatedAt": "2025-05-22T14:10:17Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
       "headRepository": "kazuho/ack-frequency",
       "headRefName": "kazuho/buffer-reordering",
-      "headRefOid": "5ecddc92015873c6a52f5d50e9990eeeb7d408ab",
+      "headRefOid": "18914eb686b82eaffee11e57268fa3a1b5b2aa5b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "body": "As pointed out by @martinduke in https://github.com/quicwg/ack-frequency/issues/321#issuecomment-2894703542 the PR was missing one aspect of the problem.\r\n\r\nI've updated the text to explain the principle then to point out what it means specifically.",
+          "createdAt": "2025-05-22T05:44:55Z",
+          "updatedAt": "2025-05-22T05:44:55Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDODddxTs6qA9b6",
@@ -24014,6 +24022,26 @@
           "createdAt": "2025-05-20T02:36:18Z",
           "updatedAt": "2025-05-20T02:36:18Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs6qja7f",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-22T14:10:17Z",
+          "updatedAt": "2025-05-22T14:10:17Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Shouldn't this be \"less than or equal to\"?\r\n\r\nIIUC, if Largest Acked is 10 and Reordering Threshold is 3, then packet 7 is at danger of being declared lost. so we should ack 7 immediately.",
+              "createdAt": "2025-05-22T14:10:17Z",
+              "updatedAt": "2025-05-22T14:10:17Z"
+            }
+          ]
         }
       ]
     }
