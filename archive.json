@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-25T02:01:47.205639+00:00",
+  "timestamp": "2025-06-24T01:57:47.765712+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5900,6 +5900,22 @@
           "updatedAt": "2025-05-20T23:57:02Z"
         }
       ]
+    },
+    {
+      "number": 323,
+      "id": "I_kwDODddxTs684KYq",
+      "title": "Trimmed Ack Ranges",
+      "url": "https://github.com/quicwg/ack-frequency/issues/323",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There is an edge case where the reordering_threshold and ack_frequency are quite large, and there is also a large number of ACK ranges. I guess this could happen where there's a large BDP and a nasty, non-bursty loss pattern.\n\nIf the ACK has to be truncated due to length, this can result in cases where received packets are not acknowledged before the ranges that contain them are truncated. This would result in a large amount of spurious loss.\n\nIt is simple enough to write code to avoid this if the ack range limit is a constant: always send an ACK if the newly arrived packet is in the lowest allowed ack range. It's a bit harder if ACK ranges are truncated dynamically (e.g. based on the size of other frames in the packet). I don't know if any QUIC implementation tries to do it dynamically.\n\nI don't think any core changes to the spec are necessary, but there might be a \"don't do that\", or something about sending the ACK anyway when in danger of truncation.",
+      "createdAt": "2025-06-23T16:55:52Z",
+      "updatedAt": "2025-06-23T16:55:52Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
