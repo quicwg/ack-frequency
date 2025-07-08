@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-26T01:56:43.909630+00:00",
+  "timestamp": "2025-07-08T01:58:16.305974+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5913,7 +5913,7 @@
       "labels": [],
       "body": "There is an edge case where the reordering_threshold and ack_frequency are quite large, and there is also a large number of ACK ranges. I guess this could happen where there's a large BDP and a nasty, non-bursty loss pattern.\n\nIf the ACK has to be truncated due to length, this can result in cases where received packets are not acknowledged before the ranges that contain them are truncated. This would result in a large amount of spurious loss.\n\nIt is simple enough to write code to avoid this if the ack range limit is a constant: always send an ACK if the newly arrived packet is in the lowest allowed ack range. It's a bit harder if ACK ranges are truncated dynamically (e.g. based on the size of other frames in the packet). I don't know if any QUIC implementation tries to do it dynamically.\n\nI don't think any core changes to the spec are necessary, but there might be a \"don't do that\", or something about sending the ACK anyway when in danger of truncation.",
       "createdAt": "2025-06-23T16:55:52Z",
-      "updatedAt": "2025-06-25T22:31:49Z",
+      "updatedAt": "2025-07-07T18:21:31Z",
       "closedAt": null,
       "comments": [
         {
@@ -5922,6 +5922,41 @@
           "body": "I believe the correct algorithm is\n```\nif ((num_ack_ranges == max_num_ack_ranges) &&\n    (largest_acked < lowest_ack_range.max())) {\n    SendAck();\n}\n```\n\nAnd it is only with the ACK_FREQUENCY frame that one can possibly end up in this state.\n\nAs I said, if max_num_ack_ranges is very dynamic I'm not sure how to handle things.",
           "createdAt": "2025-06-25T22:31:49Z",
           "updatedAt": "2025-06-25T22:31:49Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Why is it only with the ACK-FREQUENCY frame that this can happen? the ACK-Frequency frames provides guidance but the decision is taken by the ACK sender and an ACK sender could already today choice a low ACK frequency. ",
+          "createdAt": "2025-07-07T15:49:32Z",
+          "updatedAt": "2025-07-07T15:49:32Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Under RFC9000 behavior, a new ACK range implies missing packets, which SHOULD trigger a new ACK. That makes it impossible for a received packet to never be ACKed unless the maximum number of ACK ranges is 1, unless the sender is violating the SHOULD, in which case, they were warned.\n\nThis draft changes what an ACK sender SHOULD do. An ACK sender needs to be cognizant of how its ACK range limit (which is not communicated) interacts with the peer's ACK_FREQUENCY frame.",
+          "createdAt": "2025-07-07T17:21:14Z",
+          "updatedAt": "2025-07-07T17:21:14Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think rfc9000 states that very packet needs be ack\u2019ed eventually. This requirement doesn\u2019t change. If your choice of ack range/frequency requires you to sent additional acks, that\u2019s just the way it is, independent of the fact if the other ends tells you its preferences about ack frequency.",
+          "createdAt": "2025-07-07T18:05:28Z",
+          "updatedAt": "2025-07-07T18:05:28Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That seems like a very subtle thing for people implementing ACK_FREQUENCY to figure out.",
+          "createdAt": "2025-07-07T18:14:03Z",
+          "updatedAt": "2025-07-07T18:14:03Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Okay, that\u2019s a different issue and maybe something we can clarify. ",
+          "createdAt": "2025-07-07T18:21:31Z",
+          "updatedAt": "2025-07-07T18:21:31Z"
         }
       ]
     },
@@ -5930,16 +5965,31 @@
       "id": "I_kwDODddxTs69WsC3",
       "title": "Losing the first packet in a PN space",
       "url": "https://github.com/quicwg/ack-frequency/issues/324",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Say a sender starts with PN 0 in the 1-RTT space, then sends an ACK_FREQUENCY frame with a high ack_eliciting_threshold in PN 1. But PN 0 is lost.\n\nAccording to the logic in RFC 9000, 13.2.1, packet 0 is not considered \"missing\" by the receiver in the sense that PN 1 will not trigger an ACK for creating a gap. It follows that no value of reordering_threshold will trigger an ACK for any consecutive packet greater than zero. If ack_eliciting_threshold is high, there could be quite a bit of delay in reporting the loss to the sender.\n\nI'm reluctant to say that there should be normative change, but this one of a bunch of not-obvious dynamics to picking high thresholds that maybe should be mentioned.\n\n",
       "createdAt": "2025-06-25T20:15:18Z",
-      "updatedAt": "2025-06-25T20:15:18Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-07-07T17:29:01Z",
+      "closedAt": "2025-07-07T17:29:01Z",
+      "comments": [
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Sounds like an initialisation problem if I understood you correctly. But isn't that the same in RFC9002. If you loose PN0, you don ack PN 1 immediately but by default would likely ack PN 2?",
+          "createdAt": "2025-07-07T15:52:25Z",
+          "updatedAt": "2025-07-07T15:52:25Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've thought about this a bit more and it's not a big deal. Closing.",
+          "createdAt": "2025-07-07T17:29:01Z",
+          "updatedAt": "2025-07-07T17:29:01Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -24029,7 +24079,7 @@
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-05-22T14:10:17Z",
+      "updatedAt": "2025-07-07T17:22:09Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
@@ -24047,6 +24097,20 @@
           "body": "As pointed out by @martinduke in https://github.com/quicwg/ack-frequency/issues/321#issuecomment-2894703542 the PR was missing one aspect of the problem.\r\n\r\nI've updated the text to explain the principle then to point out what it means specifically.",
           "createdAt": "2025-05-22T05:44:55Z",
           "updatedAt": "2025-05-22T05:44:55Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I don't this this is reverting #319 because it don't think was clear if this implied by the previous text. Also it doesn't help to make any assumption about what may be implied if it is not specified clearly.\r\n\r\nI'd be okay with this change but I'd say it add a new consideration that wasn't therefore and maybe something we should discuss rather than slipping it in last minutes after WGLC without any awareness given this is a protocol change from my point of view.",
+          "createdAt": "2025-07-07T15:46:07Z",
+          "updatedAt": "2025-07-07T15:46:07Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree with @mirjak  that this worth bringing up in Madrid.",
+          "createdAt": "2025-07-07T17:22:09Z",
+          "updatedAt": "2025-07-07T17:22:09Z"
         }
       ],
       "reviews": [
