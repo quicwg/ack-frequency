@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-08T01:58:16.305974+00:00",
+  "timestamp": "2025-07-15T02:06:37.628421+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5988,6 +5988,30 @@
           "body": "I've thought about this a bit more and it's not a big deal. Closing.",
           "createdAt": "2025-07-07T17:29:01Z",
           "updatedAt": "2025-07-07T17:29:01Z"
+        }
+      ]
+    },
+    {
+      "number": 325,
+      "id": "I_kwDODddxTs7AWNRz",
+      "title": "shorter transport parameter",
+      "url": "https://github.com/quicwg/ack-frequency/issues/325",
+      "state": "CLOSED",
+      "author": "marten-seemann",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The transport parameter currently uses an 8-byte varint. Given that this extension will likely be widely supported, it would be nice to choose a smaller value.",
+      "createdAt": "2025-07-14T01:04:59Z",
+      "updatedAt": "2025-07-14T01:19:43Z",
+      "closedAt": "2025-07-14T01:19:43Z",
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Section 10.1 already states:\n> When this document is approved, IANA is requested to assign a\n   permanent allocation of a codepoint in the 0-63 range to replace the\n   provisional codepoint described above.",
+          "createdAt": "2025-07-14T01:19:43Z",
+          "updatedAt": "2025-07-14T01:19:43Z"
         }
       ]
     }
@@ -24146,6 +24170,59 @@
               "updatedAt": "2025-05-22T14:10:17Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 326,
+      "id": "PR_kwDODddxTs6etsTp",
+      "title": "clarify transport parameters enables receiving the frames",
+      "url": "https://github.com/quicwg/ack-frequency/pull/326",
+      "state": "OPEN",
+      "author": "marten-seemann",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I think this was intended, but we can make it more explicit. This is how DATAGRAM and RESET_STREAM_AT interpret their respective transport parameter as well.",
+      "createdAt": "2025-07-14T01:42:19Z",
+      "updatedAt": "2025-07-14T11:26:02Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
+      "headRepository": "marten-seemann/ack-frequency",
+      "headRefName": "clarify-transport-parameter-meaning",
+      "headRefOid": "884224a49ce0a52b8e0c2b59b7db5745abfbe1f7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs6zwDXI",
+          "commit": {
+            "abbreviatedOid": "884224a"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-14T10:17:31Z",
+          "updatedAt": "2025-07-14T10:17:31Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs6zxCIh",
+          "commit": {
+            "abbreviatedOid": "884224a"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-14T11:26:02Z",
+          "updatedAt": "2025-07-14T11:26:02Z",
+          "comments": []
         }
       ]
     }
