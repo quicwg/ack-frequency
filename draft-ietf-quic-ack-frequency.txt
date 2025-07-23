@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 28 September 2025                                        Google
+Expires: 24 January 2026                                          Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                           27 March 2025
+                                                            23 July 2025
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 September 2025.
+   This Internet-Draft will expire on 24 January 2026.
 
 Copyright Notice
 
@@ -174,9 +174,9 @@ Table of Contents
    delaying and sending ACK frames.  These frames are the ACK_FREQUENCY
    frame (see Section 4) and the IMMEDIATE_ACK frame (see Section 5).
 
-   Endpoints advertise their support of the extension described in this
-   document by sending the following transport parameter (Section 7.2 of
-   [QUIC-TRANSPORT]):
+   Endpoints advertise their support for receiving ACK_FREQUENCY and
+   IMMEDIATE_ACK frames as described in this document by sending the
+   following transport parameter (Section 7.2 of [QUIC-TRANSPORT]):
 
    min_ack_delay (0xff04de1b):  A variable-length integer representing
       the minimum amount of time, in microseconds, that the endpoint
