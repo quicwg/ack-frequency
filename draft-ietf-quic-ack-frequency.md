@@ -180,8 +180,9 @@ ACK frames. These frames are the ACK_FREQUENCY frame
 (see {{ack-frequency-frame}}) and the IMMEDIATE_ACK frame
 (see {{immediate-ack-frame}}).
 
-Endpoints advertise their support of the extension described in this document by
-sending the following transport parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
+Endpoints advertise their support for receiving ACK_FREQUENCY and IMMEDIATE_ACK
+frames as described in this document by sending the following transport
+parameter ({{Section 7.2 of QUIC-TRANSPORT}}):
 
 min_ack_delay (0xff04de1b):
 
