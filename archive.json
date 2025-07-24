@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-15T02:06:37.628421+00:00",
+  "timestamp": "2025-07-24T02:04:39.670318+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5872,10 +5872,12 @@
       "author": "martinduke",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "needs-discussion"
+      ],
       "body": "#304 clarifies that RFC 9000 rules about ACKing packets < largest_acked still apply:\n\n> When an ack-eliciting packet is received with a packet number less than Largest Acked, this still triggers an immediate acknowledgement in an effort to avoid the packet being spuriously declared lost.\n\nTo be clear: this totally works, and in no case makes things worse than the baseline. In the \"normal\" case when packet gaps are loss, not reordering, it has no effect at all.\n\nHowever, I wonder if this rule is far less than optimal in cases with a lot of reordering, and may add little to no value in more common cases. Loss and reordering both manifest as a sudden jump in sequence number; if a reordering case, the gap packets will arrive later. The reordering_thresh field can suppress the ack of this first jump, but not the followon packets with lower numbers.\n\nFor example, Say that ack_eliciting_threshold is 1 (the default) but reordering_threshold is zero (meaning, ignore reordering). If the pattern of packet arrival is 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, then there will be 10 ACKs: one for 11, as the second packet to arrive, and then one for each of 1:9 because they are all less than largest_acked. In this case, network reordering has caused the ack rate to be roughly double what the receiver requested. Without the text in question, one would expect an ack for 11, 2, 4, 6, and 8.\n\nIn #304 , the stipulation is that acking these packets will prevent spurious retransmits. If true, that would be valuable. However:\n\n- If the sender is using RFC 9002 time-based recovery, the important thing is that the ack arrives before the timeout. IIUC, this is best ensured via requested_max_ack_delay rather than through this mechanism.\n\n- If the sender is using packet-based recovery, the additional acks don't really help. If ack_eliciting_threshold is set correctly, there won't be a retransmission until another ACK arrives. If the ACK is delayed till another packet arrives, the sender's state for the early packet won't change in the meantime.\n\nI find this hard to reason about, and am happy to be told I'm holding it wrong.\n\nalso sent as email to the list: https://mailarchive.ietf.org/arch/msg/quic/D8ivpSvNqz8ixwF-y_UgtEINYio/",
       "createdAt": "2025-05-15T15:50:23Z",
-      "updatedAt": "2025-05-20T23:57:03Z",
+      "updatedAt": "2025-07-23T16:51:58Z",
       "closedAt": null,
       "comments": [
         {
@@ -5910,10 +5912,12 @@
       "author": "martinduke",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "needs-pr"
+      ],
       "body": "There is an edge case where the reordering_threshold and ack_frequency are quite large, and there is also a large number of ACK ranges. I guess this could happen where there's a large BDP and a nasty, non-bursty loss pattern.\n\nIf the ACK has to be truncated due to length, this can result in cases where received packets are not acknowledged before the ranges that contain them are truncated. This would result in a large amount of spurious loss.\n\nIt is simple enough to write code to avoid this if the ack range limit is a constant: always send an ACK if the newly arrived packet is in the lowest allowed ack range. It's a bit harder if ACK ranges are truncated dynamically (e.g. based on the size of other frames in the packet). I don't know if any QUIC implementation tries to do it dynamically.\n\nI don't think any core changes to the spec are necessary, but there might be a \"don't do that\", or something about sending the ACK anyway when in danger of truncation.",
       "createdAt": "2025-06-23T16:55:52Z",
-      "updatedAt": "2025-07-07T18:21:31Z",
+      "updatedAt": "2025-07-23T16:51:47Z",
       "closedAt": null,
       "comments": [
         {
@@ -24178,24 +24182,26 @@
       "id": "PR_kwDODddxTs6etsTp",
       "title": "clarify transport parameters enables receiving the frames",
       "url": "https://github.com/quicwg/ack-frequency/pull/326",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "marten-seemann",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "I think this was intended, but we can make it more explicit. This is how DATAGRAM and RESET_STREAM_AT interpret their respective transport parameter as well.",
       "createdAt": "2025-07-14T01:42:19Z",
-      "updatedAt": "2025-07-14T11:26:02Z",
+      "updatedAt": "2025-07-23T16:48:45Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
       "headRepository": "marten-seemann/ack-frequency",
       "headRefName": "clarify-transport-parameter-meaning",
       "headRefOid": "884224a49ce0a52b8e0c2b59b7db5745abfbe1f7",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-07-23T16:48:45Z",
+      "mergedAt": "2025-07-23T16:48:45Z",
+      "mergedBy": "ianswett",
+      "mergeCommit": {
+        "oid": "6661c696d769cd3bb3a1763a63c61d4905a320db"
+      },
       "comments": [],
       "reviews": [
         {
@@ -24222,6 +24228,19 @@
           "body": "",
           "createdAt": "2025-07-14T11:26:02Z",
           "updatedAt": "2025-07-14T11:26:02Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs61sRZY",
+          "commit": {
+            "abbreviatedOid": "884224a"
+          },
+          "author": "ianswett",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-23T16:48:36Z",
+          "updatedAt": "2025-07-23T16:48:36Z",
           "comments": []
         }
       ]
