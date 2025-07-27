@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-24T02:04:39.670318+00:00",
+  "timestamp": "2025-07-27T02:20:14.352819+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -6018,6 +6018,22 @@
           "updatedAt": "2025-07-14T01:19:43Z"
         }
       ]
+    },
+    {
+      "number": 327,
+      "id": "I_kwDODddxTs7ChLU4",
+      "title": "Can we check that ACK Frequency is robust to loss?",
+      "url": "https://github.com/quicwg/ack-frequency/issues/327",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'd like to be sure that the advicde in the ACK Frequency I-D is not fargile to disruption of the return path - and this might depened on how often a receiver ACKs, how much it trims the ACK range info and whether some level of packet loss is tolerable for the sender to receive a full enough picture that CC isn't disrupted.\n\nRFC9000 is quite robust to occassional ACK loss. It's one thing to eliminate useless ACKs, maybe though more thought is needed if a reduced rate results in a sender becoming unaware of patterns of loss on the forward direction, especially when there is also some non-zero loss on the return direction.\n\nThis may in someway be related in some way to \"Trimmed Ack Ranges #323\".\n",
+      "createdAt": "2025-07-25T14:46:45Z",
+      "updatedAt": "2025-07-25T14:46:45Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -24107,7 +24123,7 @@
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-07-07T17:22:09Z",
+      "updatedAt": "2025-07-24T14:19:05Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
@@ -24139,6 +24155,13 @@
           "body": "I agree with @mirjak  that this worth bringing up in Madrid.",
           "createdAt": "2025-07-07T17:22:09Z",
           "updatedAt": "2025-07-07T17:22:09Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "body": "@mirjak \r\n> I don't this this is reverting #319 \r\n\r\nThis is correct. The initial version of this pull request did, but it no longer does.",
+          "createdAt": "2025-07-24T13:11:29Z",
+          "updatedAt": "2025-07-24T13:11:29Z"
         }
       ],
       "reviews": [
@@ -24172,6 +24195,26 @@
               "body": "Shouldn't this be \"less than or equal to\"?\r\n\r\nIIUC, if Largest Acked is 10 and Reordering Threshold is 3, then packet 7 is at danger of being declared lost. so we should ack 7 immediately.",
               "createdAt": "2025-05-22T14:10:17Z",
               "updatedAt": "2025-05-22T14:10:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs616BoK",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-24T14:19:05Z",
+          "updatedAt": "2025-07-24T14:19:05Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Yes, can we align this better with the original language (which we fixed I think multiple times)",
+              "createdAt": "2025-07-24T14:19:05Z",
+              "updatedAt": "2025-07-24T14:19:05Z"
             }
           ]
         }
