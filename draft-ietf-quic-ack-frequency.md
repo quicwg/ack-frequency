@@ -344,7 +344,7 @@ The requirement that all packets have to be acknowleged at least once,
 as stated in {{Section 13.2.1 of QUIC-TRANSPORT}} is not affected by this
 extension. However, as discussed in {{Section 13.2.4}} this does not
 guarantee that every acknowledgment is seen by the sender before it is no
-longer included in the ACK frame. Therefore when a larger ack delay is used, 
+longer included in the ACK frame. Therefore when a larger ack delay is used,
 the effect of lost or re-ordered packets with ACK frames must be considered
 carefully when triming the ACK range.
 
