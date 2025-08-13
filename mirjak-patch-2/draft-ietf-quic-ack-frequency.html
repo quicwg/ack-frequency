@@ -1519,13 +1519,13 @@ see <a href="#out-of-order" class="auto internal xref">Section 6.2</a>.<a href="
 <p id="section-6-5"><a href="#congestion" class="auto internal xref">Section 6.4</a> and <a href="#batch" class="auto internal xref">Section 6.5</a> describe exceptions to this strategy.<a href="#section-6-5" class="pilcrow">¶</a></p>
 <p id="section-6-6">The requirement that all packets have to be acknowleged at least once,
 as stated in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> is not affected by this
-extension. With large values for the Ack-Eliciting Threshold or the Reordering Threshold
-an ACK frame might accumlate multiple ACK ranges before it gets sent.
+extension. With large values for the Ack-Eliciting Threshold or the Reordering Threshold,
+implementations might accumulate multiple new ACK ranges before sending an ACK.
 As such, implementations have to take more care to not truncate ACK ranges
 before they were sent at least once in an ACK frame.
 Further, as discussed in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.4" class="relref">Section 13.2.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> this does not
 guarantee that every acknowledgment is seen by the sender before it is no
-longer included in the ACK frame. Therefore when ACK frames are sent more sparsely,
+longer included in the ACK frame. Therefore, when ACK frames are sent less often,
 the effect of lost or re-ordered packets with ACK frames needs to be considered
 more carefully when triming the ACK range.<a href="#section-6-6" class="pilcrow">¶</a></p>
 <div id="response-to-long-idle-periods">
