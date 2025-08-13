@@ -342,13 +342,13 @@ see {{out-of-order}}.
 
 The requirement that all packets have to be acknowleged at least once,
 as stated in {{Section 13.2.1 of QUIC-TRANSPORT}} is not affected by this
-extension. With large values for the Ack-Eliciting Threshold or the Reordering Threshold
-an ACK frame might accumlate multiple ACK ranges before it gets sent.
+extension. With large values for the Ack-Eliciting Threshold or the Reordering Threshold,
+implementations might accumulate multiple new ACK ranges before sending an ACK.
 As such, implementations have to take more care to not truncate ACK ranges
 before they were sent at least once in an ACK frame.
 Further, as discussed in {{Section 13.2.4 of QUIC-TRANSPORT}} this does not
 guarantee that every acknowledgment is seen by the sender before it is no
-longer included in the ACK frame. Therefore when ACK frames are sent more sparsely,
+longer included in the ACK frame. Therefore, when ACK frames are sent less often,
 the effect of lost or re-ordered packets with ACK frames needs to be considered
 more carefully when triming the ACK range.
 
