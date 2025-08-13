@@ -384,7 +384,7 @@ Unreported Missing:
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK whenever it receives an ack-eliciting, out-of order packet
 whose packet number is outside the reordering window of the peer, i.e. when
-* the gap between the smallest Unreported Missing packet and the
+* the difference between the smallest Unreported Missing packet and the
   Largest Unacked packet is greater than or equal to the Reordering
   Threshold value; or
 * the received packet number is less than or equal to `Largest Acked - Reordering Threshold`.
