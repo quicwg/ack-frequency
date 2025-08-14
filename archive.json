@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-12T01:56:03.675312+00:00",
+  "timestamp": "2025-08-14T01:58:31.857478+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5873,11 +5873,12 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
-        "needs-discussion"
+        "design",
+        "has-pr"
       ],
       "body": "#304 clarifies that RFC 9000 rules about ACKing packets < largest_acked still apply:\n\n> When an ack-eliciting packet is received with a packet number less than Largest Acked, this still triggers an immediate acknowledgement in an effort to avoid the packet being spuriously declared lost.\n\nTo be clear: this totally works, and in no case makes things worse than the baseline. In the \"normal\" case when packet gaps are loss, not reordering, it has no effect at all.\n\nHowever, I wonder if this rule is far less than optimal in cases with a lot of reordering, and may add little to no value in more common cases. Loss and reordering both manifest as a sudden jump in sequence number; if a reordering case, the gap packets will arrive later. The reordering_thresh field can suppress the ack of this first jump, but not the followon packets with lower numbers.\n\nFor example, Say that ack_eliciting_threshold is 1 (the default) but reordering_threshold is zero (meaning, ignore reordering). If the pattern of packet arrival is 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, then there will be 10 ACKs: one for 11, as the second packet to arrive, and then one for each of 1:9 because they are all less than largest_acked. In this case, network reordering has caused the ack rate to be roughly double what the receiver requested. Without the text in question, one would expect an ack for 11, 2, 4, 6, and 8.\n\nIn #304 , the stipulation is that acking these packets will prevent spurious retransmits. If true, that would be valuable. However:\n\n- If the sender is using RFC 9002 time-based recovery, the important thing is that the ack arrives before the timeout. IIUC, this is best ensured via requested_max_ack_delay rather than through this mechanism.\n\n- If the sender is using packet-based recovery, the additional acks don't really help. If ack_eliciting_threshold is set correctly, there won't be a retransmission until another ACK arrives. If the ACK is delayed till another packet arrives, the sender's state for the early packet won't change in the meantime.\n\nI find this hard to reason about, and am happy to be told I'm holding it wrong.\n\nalso sent as email to the list: https://mailarchive.ietf.org/arch/msg/quic/D8ivpSvNqz8ixwF-y_UgtEINYio/",
       "createdAt": "2025-05-15T15:50:23Z",
-      "updatedAt": "2025-08-12T01:17:11Z",
+      "updatedAt": "2025-08-12T17:05:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -5907,6 +5908,13 @@
           "body": "I've started implementing this draft, and I've spent some time thinking about this. I agree with @kazuho's  point:\n\n> Any change happening outside of the reordering window should be shared immediately by sending ACKs.\n\nConsider that the text prior to #319 says:\u2028\n\n> Largest Reported Missing: The largest packet number that could be declared lost with the specified Reordering Threshold, which is Largest Acked - Reordering Threshold.\n\nMy understanding of this text means that we cannot declare packet numbers greater than Largest Acked - Reordering threshold as lost. If they are not declared as lost, then there's no point in sending an immediate ack upon receiving them.\n\nWe should only send an immediate ack to assist with loss detection *if* we would classify that packet as lost.\n\u2028\nAs an example:\n\n\u2028Given:\nReordering Threshold = 2\nAck-Eliciting Threshold = 2\n\nThe case with reordering, but no immediate ack due to reordering:\n\n| Packet Number | Should Send Ack | Notes                                   |\n|---------------|-----------------|-----------------------------------------|\n| 0             | 0               |                                         |\n| 1             | 0               |                                         |\n| 3             | 1               | Ack because we've seen 3 packets        |\n| 2             | 0               | No ack because 2 was never considered lost |\n| 4             | 0               |                                         |\n| 5             | 1               | Ack because we've seen 3 more packets   |\u2028\u2028\n\nHere's another example where we do declare a packet as lost and send another ack after receiving it:\n\n| Packet Number | Should Send Ack | Notes                                      |\n|---------------|-----------------|--------------------------------------------|\n| 0             | 0               |                                            |\n| 1             | 0               |                                            |\n| 3             | 1               | Ack because we've seen 3 packets           |\n| 4             | 1               | Ack because 2 is now declared lost         |\n| 2             | 1               | Ack because 2 was received (change outside the reordering window) |\n| 5             | 0               |                                            |\n\n\nThis isn't counter to what is defined in RFC 9000:\n \n```\n\u2028In order to assist loss detection at the sender, an endpoint SHOULD generate and send an ACK frame without delay when it receives an ack-eliciting packet either:\n\n * when the received packet has a packet number less than another ack-eliciting packet that has been received, or\n```\n\nThat is just the case when reordering threshold is equal to 1. Which is to say every reordering results in an ack.\n\n\u2028I think we should revert #319, and I think the ack frequency draft text should be clearer. Here's a suggestion:\n\n\u2028\u2028OLD:\n\n```\n\u2028Largest Unacked:\n: The largest packet number among all received ack-eliciting packets.\n\nLargest Acked:\n: The Largest Acknowledged value sent in an ACK frame.\n\nLargest Reported Missing:\n: The largest packet number that could be declared lost with the specified\n  Reordering Threshold, which is Largest Acked - Reordering Threshold.\n\nUnreported Missing:\n: Packets with packet numbers between the Largest Unacked and Largest Reported\n  Missing that have not yet been received.\n\nAn endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering\nThreshold value SHOULD send an immediate ACK when the gap\nbetween the smallest Unreported Missing packet and the Largest Unacked is greater\nthan or equal to the Reordering Threshold value. Sending this additional ACK will\nreset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK\nwould do).\n```\n\n\u2028\u2028NEW:\u2028\n\n```\n\u2028Largest Packet Number Seen:\n: The largest packet number among all received ack-eliciting packets.\n\nReordering Window:\n: The packet numbers in between the Largest Packet Number Seen and the Largest\n  Packet Number Seen - Reordering Threshold.\n\nAn endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering\nThreshold value SHOULD send an immediate ACK when there are changes outside the\nReordering Window. These changes include a packet number that can now be\ndeclared missing due to receiving a new Largest Packet Number Seen, or a\nacknowledging a previously declared missing packet.\n```\n\nI like phrasing it in terms of the reordering window, which is relative to the largest packet number seen.\u2028\n\n---\n\n\u2028\u2028To come back to @martinduke original example, I think the correct thing would be to ack every other packet due to the ack eliciting threshold, but no acks due to reordering as the reordering window is essentially infinite with reordering threshold set to 0.",
           "createdAt": "2025-08-12T01:17:11Z",
           "updatedAt": "2025-08-12T01:17:11Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As discussed at IETF-123, we decided to include this. PR #322 proposed this change and is ready to merge after more editorial review!",
+          "createdAt": "2025-08-12T17:05:09Z",
+          "updatedAt": "2025-08-12T17:05:09Z"
         }
       ]
     },
@@ -5924,7 +5932,7 @@
       ],
       "body": "There is an edge case where the reordering_threshold and ack_frequency are quite large, and there is also a large number of ACK ranges. I guess this could happen where there's a large BDP and a nasty, non-bursty loss pattern.\n\nIf the ACK has to be truncated due to length, this can result in cases where received packets are not acknowledged before the ranges that contain them are truncated. This would result in a large amount of spurious loss.\n\nIt is simple enough to write code to avoid this if the ack range limit is a constant: always send an ACK if the newly arrived packet is in the lowest allowed ack range. It's a bit harder if ACK ranges are truncated dynamically (e.g. based on the size of other frames in the packet). I don't know if any QUIC implementation tries to do it dynamically.\n\nI don't think any core changes to the spec are necessary, but there might be a \"don't do that\", or something about sending the ACK anyway when in danger of truncation.",
       "createdAt": "2025-06-23T16:55:52Z",
-      "updatedAt": "2025-07-23T16:51:47Z",
+      "updatedAt": "2025-08-12T17:32:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -5968,6 +5976,13 @@
           "body": "Okay, that\u2019s a different issue and maybe something we can clarify. ",
           "createdAt": "2025-07-07T18:21:31Z",
           "updatedAt": "2025-07-07T18:21:31Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I proposed PR #328 for issue #327 but I believe this might also address this issue...? Please check @martinduke !",
+          "createdAt": "2025-08-12T17:32:18Z",
+          "updatedAt": "2025-08-12T17:32:18Z"
         }
       ]
     },
@@ -6038,9 +6053,24 @@
       "labels": [],
       "body": "I'd like to be sure that the advicde in the ACK Frequency I-D is not fargile to disruption of the return path - and this might depened on how often a receiver ACKs, how much it trims the ACK range info and whether some level of packet loss is tolerable for the sender to receive a full enough picture that CC isn't disrupted.\n\nRFC9000 is quite robust to occassional ACK loss. It's one thing to eliminate useless ACKs, maybe though more thought is needed if a reduced rate results in a sender becoming unaware of patterns of loss on the forward direction, especially when there is also some non-zero loss on the return direction.\n\nThis may in someway be related in some way to \"Trimmed Ack Ranges #323\".\n",
       "createdAt": "2025-07-25T14:46:45Z",
-      "updatedAt": "2025-07-25T14:46:45Z",
+      "updatedAt": "2025-08-12T17:31:41Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think this issue is related to #323 and similar as I said there I think this is already addressed by RFC9000:\n\nSection 13.2.1 of RFC9000 state the requirement that every packet must be acknowledge (at least once):\n> Every packet SHOULD be acknowledged at least once, and ack-eliciting packets MUST be acknowledged at least once within the maximum delay an endpoint communicated using the max_ack_delay transport parameter; \n\nAnd in Section 13.2.4. on ACK ranges, it is stated an endpoint can detect if a packet containing an ACK frame was lost or received as as such can trim the ACK range based on this. Section 13.2.4. says\n> When a packet containing an ACK frame is acknowledged, the receiver can stop acknowledging packets less than or equal to the Largest Acknowledged field in the sent ACK frame.\n\nHowever it is also noted in the same section that the mechanism does not guarantee that every ack is seen by the sender:\n> In cases with ACK frame loss and reordering, this approach does not guarantee that every acknowledgment is seen by the sender before it is no longer included in the ACK frame. Packets could be received out of order, and all subsequent ACK frames containing them could be lost. In this case, the loss recovery algorithm could cause spurious retransmissions, but the sender will continue making forward progress.\n\nAs such I think we can maybe add a note that a) the requirement to ack all packets is still true and needs to be considered, and b) a lower ack frequency could cause more spurious retransmissions if ACKs get lost and this needs to be considered as well when trimming the ACK range in an ACK frame.\n",
+          "createdAt": "2025-08-12T17:21:25Z",
+          "updatedAt": "2025-08-12T17:21:25Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "PR #328 proposed some text. Please have a look if this addresses this issue sufficiently!",
+          "createdAt": "2025-08-12T17:31:41Z",
+          "updatedAt": "2025-08-12T17:31:41Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -24130,13 +24160,13 @@
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-07-24T14:19:05Z",
+      "updatedAt": "2025-08-13T18:25:05Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
       "headRepository": "kazuho/ack-frequency",
       "headRefName": "kazuho/buffer-reordering",
-      "headRefOid": "18914eb686b82eaffee11e57268fa3a1b5b2aa5b",
+      "headRefOid": "f16d07e0ded690eabdc9003de380e0fa78e3aacb",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -24224,6 +24254,192 @@
               "updatedAt": "2025-07-24T14:19:05Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65RalP",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "MarcoPolo",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T02:27:47Z",
+          "updatedAt": "2025-08-12T02:35:41Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "agreed. I think this should be less than or equal to. Consider the case where Reordering Threshold = 1, largest ack is 4, then we should ack on receiving packet 3, which is consistent with RFC 9000.",
+              "createdAt": "2025-08-12T02:27:47Z",
+              "updatedAt": "2025-08-12T02:35:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65e9un",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T17:02:56Z",
+          "updatedAt": "2025-08-12T17:02:56Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\nThreshold value SHOULD send an immediate ACK whenever it receives an ack-eliciting, out-of order packet\r\nwhose packet number is outside the reordering window of the peer, i.e. when\r\n* the gap between the smallest Unreported Missing packet and the\r\n  Largest Unacked packet is greater than or equal to the Reordering\r\n  Threshold value; or\r\n* the received packet number is less than or equal to `Largest Acked - Reordering Threshold`.\r\n\r\nThe first condition triggers an ACK as soon as the reordering threshold is reached and\r\na packet can be declared lost at the sender. The second condition addresses packets that have been\r\nreceived later, out of order and are already spuriously declared lost by the sender. This enables the sender\r\nto detect spurious retransmissions and revert the congestion control status accordingly.\r\n```",
+              "createdAt": "2025-08-12T17:02:56Z",
+              "updatedAt": "2025-08-12T17:02:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65fYkJ",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T17:37:47Z",
+          "updatedAt": "2025-08-12T17:37:47Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "@kazuho @MarcoPolo @MarcoPolo please check if my proposed text below works for you!",
+              "createdAt": "2025-08-12T17:37:47Z",
+              "updatedAt": "2025-08-12T17:37:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65gRd6",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "MarcoPolo",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T18:40:33Z",
+          "updatedAt": "2025-08-12T18:40:33Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Is there ambiguity in this sentence?\r\n\r\n> the gap between the smallest Unreported Missing packet and the\r\n  Largest Unacked packet is greater than or equal to the Reordering\r\n  Threshold value\r\n  \r\nImagine the reordering threshold is 1, and the smallest unreported missing is 2, and largest unacked is 3. I would expect the gap between 2 and 3 to be 0 (no gap), but we should send an ack in this case. I think using \"difference\" as the current PR suggests is clearer.\r\n\r\nI understand that the current draft-11 uses that \"gap\" text.\r\n\r\n",
+              "createdAt": "2025-08-12T18:40:33Z",
+              "updatedAt": "2025-08-12T18:40:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65gocT",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T19:00:35Z",
+          "updatedAt": "2025-08-12T19:00:35Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Yes, gap is in the current draft and if we want to change this this might be a separate issue because we would at least need to check if we use this same wording in other places in the draft.",
+              "createdAt": "2025-08-12T19:00:35Z",
+              "updatedAt": "2025-08-12T19:00:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65jV7Z",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "MarcoPolo",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T22:20:18Z",
+          "updatedAt": "2025-08-12T22:20:18Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I think it may just be my misunderstanding. The adjusted text is fine by me.",
+              "createdAt": "2025-08-12T22:20:18Z",
+              "updatedAt": "2025-08-12T22:20:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65mWJw",
+          "commit": {
+            "abbreviatedOid": "18914eb"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-13T03:41:24Z",
+          "updatedAt": "2025-08-13T03:41:25Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "@martinduke @mirjak Thank you! Marking this comment as resolved, as we adopt @mirjak's proposed text below.",
+              "createdAt": "2025-08-13T03:41:24Z",
+              "updatedAt": "2025-08-13T03:41:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65mXGM",
+          "commit": {
+            "abbreviatedOid": "7b7fb5f"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-13T03:44:57Z",
+          "updatedAt": "2025-08-13T03:45:13Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\n* the difference between the smallest Unreported Missing packet and the\r\n```\r\n\r\nAs to @MarcoPolo's point, I think we can actually change \"gap\" to \"difference\" in this pull request and call it a day.\r\n\r\nThe word \"gap\" is used three times in the current draft, but this is the only case where the word is used as a synonym of \"difference.\" The other two cases use the word to indicate a hole in the packet numbers being received, which is consistent with [how the word is used in RFC 9000](https://datatracker.ietf.org/doc/html/rfc9000#section-19.3.1-5.2.1).",
+              "createdAt": "2025-08-13T03:44:57Z",
+              "updatedAt": "2025-08-13T03:46:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65vmQY",
+          "commit": {
+            "abbreviatedOid": "f16d07e"
+          },
+          "author": "MarcoPolo",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-13T14:19:15Z",
+          "updatedAt": "2025-08-13T14:19:15Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs65zM55",
+          "commit": {
+            "abbreviatedOid": "f16d07e"
+          },
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-13T18:25:05Z",
+          "updatedAt": "2025-08-13T18:25:05Z",
+          "comments": []
         }
       ]
     },
@@ -24291,6 +24507,212 @@
           "body": "",
           "createdAt": "2025-07-23T16:48:36Z",
           "updatedAt": "2025-07-23T16:48:36Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 328,
+      "id": "PR_kwDODddxTs6jUURo",
+      "title": "text on ACK ranges",
+      "url": "https://github.com/quicwg/ack-frequency/pull/328",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "fixes #327 and #323",
+      "createdAt": "2025-08-12T17:31:08Z",
+      "updatedAt": "2025-08-13T18:22:11Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "6661c696d769cd3bb3a1763a63c61d4905a320db",
+      "headRepository": "quicwg/ack-frequency",
+      "headRefName": "mirjak-patch-2",
+      "headRefOid": "1764ff9f85a07884c3caf47b3af4ca351ba8e905",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs65fXPZ",
+          "commit": {
+            "abbreviatedOid": "65dbcea"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T17:36:03Z",
+          "updatedAt": "2025-08-12T17:36:04Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\nlonger included in the ACK frame. Therefore when a larger ack delay is used,\r\n```",
+              "createdAt": "2025-08-12T17:36:03Z",
+              "updatedAt": "2025-08-12T17:36:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65fdC4",
+          "commit": {
+            "abbreviatedOid": "bd7992d"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T17:44:12Z",
+          "updatedAt": "2025-08-12T17:44:12Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nextension. However, as discussed in {{Section 13.2.4 of QUIC-TRANSPORT}} this does not\r\n```",
+              "createdAt": "2025-08-12T17:44:12Z",
+              "updatedAt": "2025-08-12T17:44:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65f-oj",
+          "commit": {
+            "abbreviatedOid": "c37eee5"
+          },
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-08-12T18:20:58Z",
+          "updatedAt": "2025-08-12T18:21:06Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "```suggestion\r\nextension. Unlike {{QUIC-TRANSPORT}}, however, large values for\r\nreordering_threshold and ack_eliciting threshold can prevent an\r\nACK frame from being sent although there are multiple ACK ranges.\r\nImplementations need to be certain to send an ACK before any\r\nunsent ACK range is truncated.\r\n```",
+              "createdAt": "2025-08-12T18:20:59Z",
+              "updatedAt": "2025-08-12T18:21:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65gFOD",
+          "commit": {
+            "abbreviatedOid": "c37eee5"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T18:26:59Z",
+          "updatedAt": "2025-08-12T18:27:00Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "This is a different point now than I was trying to make. Yes you proposed text now addresses your issue @martinduke but I was trying to address @gorryfair's issue with this text. I thought the first sentence to note at all ACK have to be ack'ed at least once addresses your issue sufficiently @martinduke without necessarily giving more details...?\r\n\r\nAlso the wording \"prevent an ACK frame from being sent although there are multiple ACK ranges\" doesn't make necessarily sense to me because just having an ACK range or multiple never has been a trigger to sent an ACK.",
+              "createdAt": "2025-08-12T18:26:59Z",
+              "updatedAt": "2025-08-12T18:27:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65gLCg",
+          "commit": {
+            "abbreviatedOid": "c37eee5"
+          },
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T18:34:04Z",
+          "updatedAt": "2025-08-12T18:34:04Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "Ok, my text can be added separately to fix my issue.\r\n\r\nHaving an ACK range has been a trigger in RFC9000, because any OOO packet is an ACK trigger.  That's why an ACK_FREQUENCY implementer probably has to write new code for this case. I'm open to different wording, but the reason I'm energized about this issue is because this is, in fact, new code subtly required by this draft.",
+              "createdAt": "2025-08-12T18:34:04Z",
+              "updatedAt": "2025-08-12T18:34:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65gj28",
+          "commit": {
+            "abbreviatedOid": "c37eee5"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T18:56:07Z",
+          "updatedAt": "2025-08-12T18:56:07Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "Okay, then let's try to add a separate note. Do you want to make another proposal, or should I try to adapt your text?",
+              "createdAt": "2025-08-12T18:56:07Z",
+              "updatedAt": "2025-08-12T18:56:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65hUHf",
+          "commit": {
+            "abbreviatedOid": "c37eee5"
+          },
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T19:44:41Z",
+          "updatedAt": "2025-08-12T19:44:41Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "Maybe try to adapt it. I'm not sure what part of the paragraph is for Gorry and what is for me.",
+              "createdAt": "2025-08-12T19:44:41Z",
+              "updatedAt": "2025-08-12T19:44:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65thNX",
+          "commit": {
+            "abbreviatedOid": "8abcb18"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Looks good! Below suggestions are purely editorial from someone not so fluent in English.",
+          "createdAt": "2025-08-13T12:19:04Z",
+          "updatedAt": "2025-08-13T12:21:28Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nextension. With large values for the Ack-Eliciting Threshold or the Reordering Threshold,\r\nimplementations might accumulate multiple new ACK ranges before sending an ACK.\r\n```",
+              "createdAt": "2025-08-13T12:19:04Z",
+              "updatedAt": "2025-08-13T12:21:28Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\nlonger included in the ACK frame. Therefore, when ACK frames are sent less often,\r\n```",
+              "createdAt": "2025-08-13T12:20:20Z",
+              "updatedAt": "2025-08-13T12:21:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs65zK6f",
+          "commit": {
+            "abbreviatedOid": "1764ff9"
+          },
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-13T18:22:11Z",
+          "updatedAt": "2025-08-13T18:22:11Z",
           "comments": []
         }
       ]
