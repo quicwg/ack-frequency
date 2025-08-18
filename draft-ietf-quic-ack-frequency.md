@@ -248,7 +248,7 @@ Sequence Number:
 Ack-Eliciting Threshold:
 
 : A variable-length integer representing the maximum number of ack-eliciting
-  packets the recipient of this frame receives before sending an acknowledgment.
+  packets the recipient of this frame receives without sending an acknowledgment.
   A receiving endpoint SHOULD send at least one ACK frame after receiving more
   than this many ack-eliciting packets. A value of 0 results in
   a receiver immediately acknowledging every ack-eliciting packet. By default, an
