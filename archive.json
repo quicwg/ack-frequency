@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-21T01:49:24.874837+00:00",
+  "timestamp": "2025-09-02T01:48:42.742168+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -24797,6 +24797,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 331,
+      "id": "PR_kwDODddxTs6mWJ7S",
+      "title": "add unit for clarity",
+      "url": "https://github.com/quicwg/ack-frequency/pull/331",
+      "state": "OPEN",
+      "author": "MarcoPolo",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Adding milliseconds here makes it clear that the values above 2^14 _milliseconds_ are invalid. The distinction helps because the field is in microseconds, but the limit and reference are in milliseconds.",
+      "createdAt": "2025-09-01T22:22:10Z",
+      "updatedAt": "2025-09-01T22:22:10Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
+      "headRepository": "MarcoPolo/ack-frequency",
+      "headRefName": "add-unit",
+      "headRefOid": "3633ade9183f4a21cdaa08e3d2dc7bb57dea8233",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
