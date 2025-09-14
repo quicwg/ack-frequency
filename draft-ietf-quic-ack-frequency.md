@@ -382,17 +382,19 @@ Unreported Missing:
   Missing that have not yet been received.
 
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
-Threshold value SHOULD send an immediate ACK whenever it receives an ack-eliciting, out-of order packet
-whose packet number is outside the reordering window of the peer, i.e. when
+Threshold value SHOULD send an immediate ACK whenever it receives an ack-eliciting,
+out-of order packet whose packet number is outside the reordering window of the peer,
+i.e. when
 * the difference between the smallest Unreported Missing packet and the
   Largest Unacked packet is greater than or equal to the Reordering
   Threshold value; or
 * the received packet number is less than or equal to `Largest Acked - Reordering Threshold`.
 
 The first condition triggers an ACK as soon as the reordering threshold is reached and
-a packet can be declared lost at the sender. The second condition addresses packets that have been
-received later, out of order and are already spuriously declared lost by the sender. This enables the sender
-to detect spurious retransmissions and revert the congestion control status accordingly.
+a packet can be declared lost at the sender. The second condition addresses packets
+that have been received later, out of order and are already spuriously declared lost
+by the sender. This enables the sender to detect spurious retransmissions and revert
+the congestion control status accordingly.
 
 Sending such an additional ACK resets the max_ack_delay timer and the
 Ack-Eliciting Threshold counter, as any ACK would.
