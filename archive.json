@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-02T01:48:42.742168+00:00",
+  "timestamp": "2025-09-16T01:42:18.795295+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -24186,13 +24186,13 @@
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-08-13T18:25:05Z",
+      "updatedAt": "2025-09-14T21:25:57Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
       "headRepository": "kazuho/ack-frequency",
       "headRefName": "kazuho/buffer-reordering",
-      "headRefOid": "f16d07e0ded690eabdc9003de380e0fa78e3aacb",
+      "headRefOid": "0ed4566a5164fa4f4939adcf2dcb88186325c02a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -24466,6 +24466,26 @@
           "createdAt": "2025-08-13T18:25:05Z",
           "updatedAt": "2025-08-13T18:25:05Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs7AEvKH",
+          "commit": {
+            "abbreviatedOid": "0ed4566"
+          },
+          "author": "ianswett",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Based on the text, I think we're in a good spot, but I suggested SHOULD to avoid this causing a huge number of unnecessary immediate acknowledgements.",
+          "createdAt": "2025-09-14T21:24:59Z",
+          "updatedAt": "2025-09-14T21:25:57Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\r\nAck-Eliciting Threshold counter, as any ACK would.\r\n\r\nIn order to avoid unnecessary immediate acknowledgements, implementations SHOULD implement adaptive packet threshold loss detection and communicate the increased Reordering Threshold value to the receiver.\r\n```",
+              "createdAt": "2025-09-14T21:24:59Z",
+              "updatedAt": "2025-09-14T21:25:57Z"
+            }
+          ]
         }
       ]
     },
@@ -24549,7 +24569,7 @@
       "labels": [],
       "body": "fixes #327 and #323",
       "createdAt": "2025-08-12T17:31:08Z",
-      "updatedAt": "2025-08-13T18:22:11Z",
+      "updatedAt": "2025-09-15T06:57:26Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "6661c696d769cd3bb3a1763a63c61d4905a320db",
@@ -24740,6 +24760,72 @@
           "createdAt": "2025-08-13T18:22:11Z",
           "updatedAt": "2025-08-13T18:22:11Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs7AEpLi",
+          "commit": {
+            "abbreviatedOid": "1764ff9"
+          },
+          "author": "ianswett",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I suggested some rewording, thanks for the PR.",
+          "createdAt": "2025-09-14T20:56:35Z",
+          "updatedAt": "2025-09-14T21:12:12Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nAll packets still have to be acknowledged at least once with this extension,\r\nas stated in {{Section 13.2.1 of QUIC-TRANSPORT}}. With large values for\r\nAck-Eliciting Threshold or the Reordering Threshold,\r\n```",
+              "createdAt": "2025-09-14T20:56:35Z",
+              "updatedAt": "2025-09-14T21:12:12Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\nAs such, implementations have to take more care to avoid truncating ACK ranges\r\nbefore they are sent at least once. As discussed in {{Section 13.2.4 of QUIC-TRANSPORT}}\r\nthis does not guarantee that every acknowledgment is seen by the sender.\r\n```",
+              "createdAt": "2025-09-14T21:11:33Z",
+              "updatedAt": "2025-09-14T21:12:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7AHVbl",
+          "commit": {
+            "abbreviatedOid": "c37eee5"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T06:55:39Z",
+          "updatedAt": "2025-09-15T06:55:39Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "We seem to be missing the robustness point that with a larger ack delay is used,\r\nthe effect of lost or re-ordered packets with ACK frames needs to be thought through or this becomes prone to loss on the return path.",
+              "createdAt": "2025-09-15T06:55:39Z",
+              "updatedAt": "2025-09-15T06:55:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7AHWoW",
+          "commit": {
+            "abbreviatedOid": "1764ff9"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T06:57:26Z",
+          "updatedAt": "2025-09-15T06:57:26Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Still missing the robustness decisions?",
+              "createdAt": "2025-09-15T06:57:26Z",
+              "updatedAt": "2025-09-15T06:57:26Z"
+            }
+          ]
         }
       ]
     },
@@ -24807,10 +24893,12 @@
       "author": "MarcoPolo",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "editorial"
+      ],
       "body": "Adding milliseconds here makes it clear that the values above 2^14 _milliseconds_ are invalid. The distinction helps because the field is in microseconds, but the limit and reference are in milliseconds.",
       "createdAt": "2025-09-01T22:22:10Z",
-      "updatedAt": "2025-09-01T22:22:10Z",
+      "updatedAt": "2025-09-14T20:53:22Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
@@ -24822,7 +24910,21 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs7AEozE",
+          "commit": {
+            "abbreviatedOid": "3633ade"
+          },
+          "author": "ianswett",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-09-14T20:52:12Z",
+          "updatedAt": "2025-09-14T20:52:12Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
