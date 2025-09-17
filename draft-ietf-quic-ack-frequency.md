@@ -442,16 +442,6 @@ reordering, the sequence in {{ack-reordering-5}} would occur:
 |  9 |  9 |  7 |  2 |   4 | Yes  (9 - 4 >= 5)|
 {: #ack-reordering-5 title="Acknowledgement behavior with a reordering threshold of 5"}
 
-## Setting the Reordering Threshold value {#set-threshold}
-
-To ensure timely loss detection, a data sender can send a Reordering Threshold
-value that is the same as the loss detection packet threshold. If the
-reordering threshold is
-smaller than the packet threshold, an acknowledgement is unnecessarily sent
-before the packet can be declared lost. If the value is larger, it can cause
-unnecessary delays in loss detection. ({{Section 6.1.1 of QUIC-RECOVERY}})
-recommends a default packet threshold for loss detection of 3.
-
 ## Expediting Explicit Congestion Notification (ECN) Signals {#congestion}
 
 If the Ack-Eliciting Threshold is larger than 1, an endpoint SHOULD send
@@ -632,6 +622,15 @@ this changes the pattern of acknowledgments received after migration.
 Therefore, an endpoint that has sent an ACK_FREQUENCY frame earlier in the
 connection ought to send a new ACK_FREQUENCY frame upon confirmation of
 connection migration with updated information, e.g. to consider the new RTT estimate.
+
+# Setting the Reordering Threshold Value {#set-threshold}
+
+To ensure timely loss detection, a data sender can send a Reordering Threshold
+value that is the same as the loss detection packet threshold. If the
+reordering threshold is smaller than the packet threshold, an acknowledgement is
+unnecessarily sent before the packet can be declared lost. If the value is
+larger, it can cause unnecessary delays in loss detection
+({{Section 6.1.1 of QUIC-RECOVERY}}).
 
 # Security Considerations
 
