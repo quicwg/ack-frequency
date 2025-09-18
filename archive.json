@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-16T01:42:18.795295+00:00",
+  "timestamp": "2025-09-18T01:42:26.472819+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -6097,6 +6097,22 @@
           "updatedAt": "2025-08-18T09:01:52Z"
         }
       ]
+    },
+    {
+      "number": 332,
+      "id": "I_kwDODddxTs7MGTuw",
+      "title": "Section 6.3 is not about \"Sending Acknowledgments\"",
+      "url": "https://github.com/quicwg/ack-frequency/issues/332",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 6 is titled \"Sending Acknowledgments\" that sounds like it specifies the behavior of the receiver. However, Section 6.3 is an exception. Titled \"Setting the Reordering Threshold value,\" the sub-section talks about the responsibility of the sender.\n\nIt think Section 6.3 should either:\n* become a section of its own next to Section 7 (Computation of the Probe Timeout Period) and Section 8 (Determining Acknowledgment Frequency), or\n* become a sub-section of Section 4 (ACK_FREQUENCY frame).",
+      "createdAt": "2025-09-17T01:16:51Z",
+      "updatedAt": "2025-09-17T01:16:51Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -24186,7 +24202,7 @@
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-09-14T21:25:57Z",
+      "updatedAt": "2025-09-17T01:20:10Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
@@ -24484,6 +24500,26 @@
               "body": "```suggestion\r\nAck-Eliciting Threshold counter, as any ACK would.\r\n\r\nIn order to avoid unnecessary immediate acknowledgements, implementations SHOULD implement adaptive packet threshold loss detection and communicate the increased Reordering Threshold value to the receiver.\r\n```",
               "createdAt": "2025-09-14T21:24:59Z",
               "updatedAt": "2025-09-14T21:25:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7Aps61",
+          "commit": {
+            "abbreviatedOid": "0ed4566"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-17T01:20:10Z",
+          "updatedAt": "2025-09-17T01:20:10Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "I agree with the intent but I'm not sure if this is the correct place. IMO the added text should go to section 6.3 (Setting the Reordering Threshold Value) but I'm concerned section 6.3 itself is oddly placed (#332, #333).",
+              "createdAt": "2025-09-17T01:20:10Z",
+              "updatedAt": "2025-09-17T01:59:29Z"
             }
           ]
         }
@@ -24898,7 +24934,7 @@
       ],
       "body": "Adding milliseconds here makes it clear that the values above 2^14 _milliseconds_ are invalid. The distinction helps because the field is in microseconds, but the limit and reference are in milliseconds.",
       "createdAt": "2025-09-01T22:22:10Z",
-      "updatedAt": "2025-09-14T20:53:22Z",
+      "updatedAt": "2025-09-17T01:17:14Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
@@ -24923,6 +24959,66 @@
           "createdAt": "2025-09-14T20:52:12Z",
           "updatedAt": "2025-09-14T20:52:12Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs7AprRI",
+          "commit": {
+            "abbreviatedOid": "3633ade"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-09-17T01:17:14Z",
+          "updatedAt": "2025-09-17T01:17:14Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 333,
+      "id": "PR_kwDODddxTs6o9-aZ",
+      "title": "Move section 6.3 out",
+      "url": "https://github.com/quicwg/ack-frequency/pull/333",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Moves section 6.3 (Setting the Reordering Threshold Value) out of section 6 (Sending Acknowledgments) that talks about the behavior of the receiver, and places it alongside other sections that talks about the sender behavior.\r\n\r\ncloses #332.",
+      "createdAt": "2025-09-17T01:56:06Z",
+      "updatedAt": "2025-09-17T01:58:39Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
+      "headRepository": "kazuho/ack-frequency",
+      "headRefName": "kazuho/section6-3",
+      "headRefOid": "dabdccb67b0fa8400af7639d819b9c784969553d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs7Ap7u5",
+          "commit": {
+            "abbreviatedOid": "dabdccb"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-17T01:58:39Z",
+          "updatedAt": "2025-09-17T01:58:39Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "```suggestion\r\n\r\nIn order to avoid unnecessary immediate acknowledgements, senders SHOULD implement adaptive packet threshold loss detection and communicate the increased Reordering Threshold value to the receiver.\r\n\r\n```\r\n\r\n@ianswett I've borrowed the text from https://github.com/quicwg/ack-frequency/pull/322#discussion_r2347587598; WDYT?",
+              "createdAt": "2025-09-17T01:58:39Z",
+              "updatedAt": "2025-09-17T01:58:39Z"
+            }
+          ]
         }
       ]
     }
