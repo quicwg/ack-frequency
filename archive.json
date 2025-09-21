@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-18T01:42:26.472819+00:00",
+  "timestamp": "2025-09-21T01:52:29.388285+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -24987,7 +24987,7 @@
       "labels": [],
       "body": "Moves section 6.3 (Setting the Reordering Threshold Value) out of section 6 (Sending Acknowledgments) that talks about the behavior of the receiver, and places it alongside other sections that talks about the sender behavior.\r\n\r\ncloses #332.",
       "createdAt": "2025-09-17T01:56:06Z",
-      "updatedAt": "2025-09-17T01:58:39Z",
+      "updatedAt": "2025-09-18T02:11:05Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
@@ -25019,6 +25019,19 @@
               "updatedAt": "2025-09-17T01:58:39Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7A8GrT",
+          "commit": {
+            "abbreviatedOid": "dabdccb"
+          },
+          "author": "MarcoPolo",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "Agreed that this spot makes more sense, and I prefer this spot over placing this in section 4 (as mentioned in #332).",
+          "createdAt": "2025-09-18T02:11:05Z",
+          "updatedAt": "2025-09-18T02:11:05Z",
+          "comments": []
         }
       ]
     }
