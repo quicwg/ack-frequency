@@ -340,9 +340,9 @@ see {{out-of-order}}.
 
 {{congestion}} and {{batch}} describe exceptions to this strategy.
 
-The requirement that all packets have to be acknowleged at least once,
-as stated in {{Section 13.2.1 of QUIC-TRANSPORT}} is not affected by this
-extension. With large values for the Ack-Eliciting Threshold or the Reordering Threshold,
+All packets still have to be acknowledged at least once with this extension,
+as stated in {{Section 13.2.1 of QUIC-TRANSPORT}}. With large values for
+Ack-Eliciting Threshold or the Reordering Threshold,
 implementations might accumulate multiple new ACK ranges before sending an ACK.
 As such, implementations have to take more care to not truncate ACK ranges
 before they were sent at least once in an ACK frame.
