@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-21T01:52:29.388285+00:00",
+  "timestamp": "2025-10-02T01:42:28.771483+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -24202,7 +24202,7 @@
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-09-17T01:20:10Z",
+      "updatedAt": "2025-10-01T13:55:31Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
@@ -24303,7 +24303,7 @@
             "abbreviatedOid": "18914eb"
           },
           "author": "MarcoPolo",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2025-08-12T02:27:47Z",
@@ -24363,7 +24363,7 @@
             "abbreviatedOid": "18914eb"
           },
           "author": "MarcoPolo",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2025-08-12T18:40:33Z",
@@ -24403,7 +24403,7 @@
             "abbreviatedOid": "18914eb"
           },
           "author": "MarcoPolo",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2025-08-12T22:20:18Z",
@@ -24463,7 +24463,7 @@
             "abbreviatedOid": "f16d07e"
           },
           "author": "MarcoPolo",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "APPROVED",
           "body": "",
           "createdAt": "2025-08-13T14:19:15Z",
@@ -24520,6 +24520,26 @@
               "body": "I agree with the intent but I'm not sure if this is the correct place. IMO the added text should go to section 6.3 (Setting the Reordering Threshold Value) but I'm concerned section 6.3 itself is oddly placed (#332, #333).",
               "createdAt": "2025-09-17T01:20:10Z",
               "updatedAt": "2025-09-17T01:59:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7EDqmB",
+          "commit": {
+            "abbreviatedOid": "0ed4566"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-01T13:55:30Z",
+          "updatedAt": "2025-10-01T13:55:31Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "I agree that it doesn't belong here. probably the (moved) section 6.3. is the right place but maybe it would be clear to just open a separate PR after #333 was merged.",
+              "createdAt": "2025-10-01T13:55:30Z",
+              "updatedAt": "2025-10-01T13:55:31Z"
             }
           ]
         }
@@ -24605,13 +24625,13 @@
       "labels": [],
       "body": "fixes #327 and #323",
       "createdAt": "2025-08-12T17:31:08Z",
-      "updatedAt": "2025-09-15T06:57:26Z",
+      "updatedAt": "2025-10-01T13:59:54Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "6661c696d769cd3bb3a1763a63c61d4905a320db",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "mirjak-patch-2",
-      "headRefOid": "1764ff9f85a07884c3caf47b3af4ca351ba8e905",
+      "headRefOid": "42c0d6a0d4a8b0b330b8975ff121abd819955a75",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -24862,6 +24882,26 @@
               "updatedAt": "2025-09-15T06:57:26Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7EDwSJ",
+          "commit": {
+            "abbreviatedOid": "1764ff9"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-01T13:59:37Z",
+          "updatedAt": "2025-10-01T13:59:37Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "@ianswett why did you remove the last sentence? can we re-add that?",
+              "createdAt": "2025-10-01T13:59:37Z",
+              "updatedAt": "2025-10-01T13:59:37Z"
+            }
+          ]
         }
       ]
     },
@@ -24925,26 +24965,28 @@
       "id": "PR_kwDODddxTs6mWJ7S",
       "title": "add unit for clarity",
       "url": "https://github.com/quicwg/ack-frequency/pull/331",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "MarcoPolo",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [
         "editorial"
       ],
       "body": "Adding milliseconds here makes it clear that the values above 2^14 _milliseconds_ are invalid. The distinction helps because the field is in microseconds, but the limit and reference are in milliseconds.",
       "createdAt": "2025-09-01T22:22:10Z",
-      "updatedAt": "2025-09-17T01:17:14Z",
+      "updatedAt": "2025-09-30T13:45:55Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
       "headRepository": "MarcoPolo/ack-frequency",
       "headRefName": "add-unit",
       "headRefOid": "3633ade9183f4a21cdaa08e3d2dc7bb57dea8233",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-09-30T13:45:55Z",
+      "mergedAt": "2025-09-30T13:45:55Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "ddae9b5936814d4b32e8d830538259545c4b87a8"
+      },
       "comments": [],
       "reviews": [
         {
@@ -24987,7 +25029,7 @@
       "labels": [],
       "body": "Moves section 6.3 (Setting the Reordering Threshold Value) out of section 6 (Sending Acknowledgments) that talks about the behavior of the receiver, and places it alongside other sections that talks about the sender behavior.\r\n\r\ncloses #332.",
       "createdAt": "2025-09-17T01:56:06Z",
-      "updatedAt": "2025-09-18T02:11:05Z",
+      "updatedAt": "2025-10-01T13:56:23Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
@@ -25026,11 +25068,44 @@
             "abbreviatedOid": "dabdccb"
           },
           "author": "MarcoPolo",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "APPROVED",
           "body": "Agreed that this spot makes more sense, and I prefer this spot over placing this in section 4 (as mentioned in #332).",
           "createdAt": "2025-09-18T02:11:05Z",
           "updatedAt": "2025-09-18T02:11:05Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs7EDrlJ",
+          "commit": {
+            "abbreviatedOid": "dabdccb"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-01T13:56:13Z",
+          "updatedAt": "2025-10-01T13:56:13Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "I'd prefer this merge this PR first and then have a separate PR for this addition.",
+              "createdAt": "2025-10-01T13:56:13Z",
+              "updatedAt": "2025-10-01T13:56:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7EDrxo",
+          "commit": {
+            "abbreviatedOid": "dabdccb"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-01T13:56:23Z",
+          "updatedAt": "2025-10-01T13:56:23Z",
           "comments": []
         }
       ]
