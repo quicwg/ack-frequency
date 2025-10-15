@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 3 April 2026                                             Google
+Expires: 18 April 2026                                            Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                       30 September 2025
+                                                         15 October 2025
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 April 2026.
+   This Internet-Draft will expire on 18 April 2026.
 
 Copyright Notice
 
@@ -73,9 +73,8 @@ Table of Contents
      6.1.  Response to long idle periods
      6.2.  Response to Out-of-Order Packets
        6.2.1.  Examples
-     6.3.  Setting the Reordering Threshold value
-     6.4.  Expediting Explicit Congestion Notification (ECN) Signals
-     6.5.  Batch Processing of Packets
+     6.3.  Expediting Explicit Congestion Notification (ECN) Signals
+     6.4.  Batch Processing of Packets
    7.  Computation of Probe Timeout Period
    8.  Determining Acknowledgment Frequency
      8.1.  Congestion Control
@@ -83,13 +82,14 @@ Table of Contents
      8.2.  Burst Mitigation
      8.3.  Loss Detection and Timers
      8.4.  Connection Migration
-   9.  Security Considerations
-   10. IANA Considerations
-     10.1.  QUIC Transport Parameter
-     10.2.  QUIC Frame Types
-   11. References
-     11.1.  Normative References
-     11.2.  Informative References
+   9.  Setting the Reordering Threshold Value
+   10. Security Considerations
+   11. IANA Considerations
+     11.1.  QUIC Transport Parameter
+     11.2.  QUIC Frame Types
+   12. References
+     12.1.  Normative References
+     12.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -334,7 +334,7 @@ Table of Contents
    Reordering Threshold when a gap in packet numbers is detected, see
    Section 6.2.
 
-   Section 6.4 and Section 6.5 describe exceptions to this strategy.
+   Section 6.3 and Section 6.4 describe exceptions to this strategy.
 
 6.1.  Response to long idle periods
 
@@ -391,7 +391,7 @@ Table of Contents
    in an effort to avoid the packet being spuriously declared lost.
 
    See Section 6.2.1 for examples explaining this behavior.  See
-   Section 6.3 for guidance on how to choose the reordering threshold
+   Section 9 for guidance on how to choose the reordering threshold
    value when sending ACK_FREQUENCY frames.
 
 6.2.1.  Examples
@@ -468,18 +468,7 @@ Table of Contents
 
     Table 2: Acknowledgement behavior with a reordering threshold of 5
 
-6.3.  Setting the Reordering Threshold value
-
-   To ensure timely loss detection, a data sender can send a Reordering
-   Threshold value that is the same as the loss detection packet
-   threshold.  If the reordering threshold is smaller than the packet
-   threshold, an acknowledgement is unnecessarily sent before the packet
-   can be declared lost.  If the value is larger, it can cause
-   unnecessary delays in loss detection.  (Section 6.1.1 of
-   [QUIC-RECOVERY]) recommends a default packet threshold for loss
-   detection of 3.
-
-6.4.  Expediting Explicit Congestion Notification (ECN) Signals
+6.3.  Expediting Explicit Congestion Notification (ECN) Signals
 
    If the Ack-Eliciting Threshold is larger than 1, an endpoint SHOULD
    send an immediate acknowledgement when a packet marked with the ECN
@@ -505,7 +494,7 @@ Table of Contents
    congestion controllers (e.g. [I-D.ietf-tsvwg-aqm-dualq-coupled]) that
    mark more frequently than classic ECN [RFC3168].
 
-6.5.  Batch Processing of Packets
+6.4.  Batch Processing of Packets
 
    To avoid sending multiple acknowledgments in rapid succession, an
    endpoint can process all packets in a batch before determining
@@ -678,7 +667,17 @@ Table of Contents
    confirmation of connection migration with updated information, e.g.
    to consider the new RTT estimate.
 
-9.  Security Considerations
+9.  Setting the Reordering Threshold Value
+
+   To ensure timely loss detection, a data sender can send a Reordering
+   Threshold value that is the same as the loss detection packet
+   threshold.  If the reordering threshold is smaller than the packet
+   threshold, an acknowledgement is unnecessarily sent before the packet
+   can be declared lost.  If the value is larger, it can cause
+   unnecessary delays in loss detection (Section 6.1.1 of
+   [QUIC-RECOVERY]).
+
+10.  Security Considerations
 
    An improperly configured or malicious data sender could request a
    data receiver to acknowledge more frequently than its available
@@ -700,7 +699,7 @@ Table of Contents
    frequently than the receiver considers safe based on its resource
    constraints.
 
-10.  IANA Considerations
+11.  IANA Considerations
 
    This document defines a new transport parameter to advertise support
    of the extension described in this document and two new frame types
@@ -708,7 +707,7 @@ Table of Contents
    under https://www.iana.org/assignments/quic/quic.xhtml
    (https://www.iana.org/assignments/quic/quic.xhtml).
 
-10.1.  QUIC Transport Parameter
+11.1.  QUIC Transport Parameter
 
    The following entry in Table 3 has been requested to be provisionally
    added to the "QUIC Transport Parameters" registry under the "QUIC
@@ -727,7 +726,7 @@ Table of Contents
    permanent allocation of a codepoint in the 0-63 range to replace the
    provisional codepoint described above.
 
-10.2.  QUIC Frame Types
+11.2.  QUIC Frame Types
 
    The following frame types have requested to be provisionally added to
    the "QUIC Frame Types" registry under the "QUIC Protocol" heading.
@@ -747,9 +746,9 @@ Table of Contents
    registration to a permanent allocation of these frame types with the
    values described above.
 
-11.  References
+12.  References
 
-11.1.  Normative References
+12.1.  Normative References
 
    [QUIC-TRANSPORT]
               Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
@@ -771,7 +770,7 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-11.2.  Informative References
+12.2.  Informative References
 
    [Cus22]    Custura, A., Jones, T., Secchi, R., and G. Fairhurst,
               "Reducing the acknowledgement frequency in IETF QUIC",
