@@ -347,9 +347,8 @@ implementations might accumulate multiple new ACK ranges before sending an ACK.
 As such, implementations have to take more care to avoid truncating ACK ranges
 before they are sent at least once. As discussed in {{Section 13.2.4 of QUIC-TRANSPORT}}
 this does not guarantee that every acknowledgment is seen by the sender.
-Therefore, when ACK frames are sent less often,
-the effect of lost or re-ordered packets with ACK frames needs to be considered
-more carefully when triming the ACK range.
+Therefore, when ACK frames are sent less often, the effect of lost or re-ordered packets
+with ACK frames needs to be considered more carefully when trimming the ACK range.
 
 
 ## Response to long idle periods
