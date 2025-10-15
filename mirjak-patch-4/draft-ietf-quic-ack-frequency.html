@@ -1574,17 +1574,23 @@ Missing that have not yet been received.<a href="#section-6.2-4.8.1" class="pilc
         <dd class="break"></dd>
 </dl>
 <p id="section-6.2-5">An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
-Threshold value SHOULD send an immediate ACK when the gap
-between the smallest Unreported Missing packet and the Largest Unacked is greater
-than or equal to the Reordering Threshold value. Sending this additional ACK will
-reset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK
-would do).<a href="#section-6.2-5" class="pilcrow">¶</a></p>
-<p id="section-6.2-6">When an ack-eliciting packet is received with a packet number less than
-Largest Acked, this still triggers an immediate acknowledgement in an effort to
-avoid the packet being spuriously declared lost.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
-<p id="section-6.2-7">See <a href="#examples" class="auto internal xref">Section 6.2.1</a> for examples explaining this behavior. See <a href="#set-threshold" class="auto internal xref">Section 9</a>
+Threshold value SHOULD send an immediate ACK whenever it receives an ack-eliciting,
+out-of order packet whose packet number is outside the reordering window of the peer,
+i.e. when
+* the difference between the smallest Unreported Missing packet and the
+  Largest Unacked packet is greater than or equal to the Reordering
+  Threshold value; or
+* the received packet number is less than or equal to <code>Largest Acked - Reordering Threshold</code>.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2-6">The first condition triggers an ACK as soon as the reordering threshold is reached and
+a packet can be declared lost at the sender. The second condition addresses packets
+that have been received later, out of order and are already spuriously declared lost
+by the sender. This enables the sender to detect spurious retransmissions and revert
+the congestion control status accordingly.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
+<p id="section-6.2-7">Sending such an additional ACK resets the max_ack_delay timer and the
+Ack-Eliciting Threshold counter, as any ACK would.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
+<p id="section-6.2-8">See <a href="#examples" class="auto internal xref">Section 6.2.1</a> for examples explaining this behavior. See <a href="#set-threshold" class="auto internal xref">Section 9</a>
 for guidance on how to choose the reordering threshold value when sending
-ACK_FREQUENCY frames.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
+ACK_FREQUENCY frames.<a href="#section-6.2-8" class="pilcrow">¶</a></p>
 <div id="examples">
 <section id="section-6.2.1">
           <h4 id="name-examples">
@@ -1841,7 +1847,7 @@ Therefore, if Reordering Threshold is set to 0, the PTO MUST be larger than the
 peer's max_ack_delay.<a href="#section-7-4" class="pilcrow">¶</a></p>
 <p id="section-7-5">When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
 immediate acknowledgment. This avoids delaying acknowledgements of PTO packets
-by the ack delay, reducing tail latency and allowing the sender
+by the acknowledgment delay, reducing tail latency and allowing the sender
 to exclude the peer's max_ack_delay from subsequent PTO calculations.<a href="#section-7-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1911,7 +1917,7 @@ the increase in congestion window and can create larger packet bursts.<a href="#
 <p id="section-8.1.1-2">If the sender is application-limited, acknowledgments can be delayed
 unnecessarily when entering idle periods. Therefore, if no further data is
 buffered to be sent, a sender can send an IMMEDIATE_ACK frame with the last data
-packet before an idle period to avoid waiting for the ack delay.<a href="#section-8.1.1-2" class="pilcrow">¶</a></p>
+packet before an idle period to avoid waiting for the acknowledgment delay.<a href="#section-8.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1.1-3">If there are no inflight packets, no acknowledgments will be received for at least
 a round trip when sending resumes. The max_ack_delay and Ack-Eliciting Threshold
 values used by the receiver can further delay acknowledgments.  In this case, the
@@ -1987,9 +1993,6 @@ reordering threshold is smaller than the packet threshold, an acknowledgement is
 unnecessarily sent before the packet can be declared lost. If the value is
 larger, it can cause unnecessary delays in loss detection
 (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.1.1" class="relref">Section 6.1.1</a> of [<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>).<a href="#section-9-1" class="pilcrow">¶</a></p>
-<p id="section-9-2">In order to avoid unnecessary immediate acknowledgements, senders SHOULD
-implement adaptive packet threshold loss detection and communicate the
-increased Reordering Threshold value to the receiver.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
@@ -2169,9 +2172,12 @@ a permanent allocation of these frame types with the values described above.<a h
       </h2>
 <p id="appendix-A-1">The following people directly contributed key ideas that shaped this draft:
 Bob Briscoe, Kazuho Oku, Marten Seemann.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2">Thanks for the in-depth reviews by Lucas Pardue, Martin Thomson,
-Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst and
-Ingemar Johansson.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Thanks for the reviews by Lucas Pardue, Martin Thomson,
+Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst,
+Ingemar Johansson, Christina Huitema, Michael Eriksson, Martin Duke,
+Nick Banks, Gaurav Singh, Mike Bishop, Neal Cardwell, Rui Paulo,
+Joseph Beshay, Alexis La Goutte, Vidhi Goel, Dmitri Tikhonov,
+Marco Munizaga and Matt Joras.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">

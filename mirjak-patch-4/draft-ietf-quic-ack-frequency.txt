@@ -380,15 +380,23 @@ Table of Contents
       received.
 
    An endpoint that receives an ACK_FREQUENCY frame with a non-zero
-   Reordering Threshold value SHOULD send an immediate ACK when the gap
+   Reordering Threshold value SHOULD send an immediate ACK whenever it
+   receives an ack-eliciting, out-of order packet whose packet number is
+   outside the reordering window of the peer, i.e. when * the difference
    between the smallest Unreported Missing packet and the Largest
-   Unacked is greater than or equal to the Reordering Threshold value.
-   Sending this additional ACK will reset the max_ack_delay timer and
-   Ack-Eliciting Threshold counter (as any ACK would do).
+   Unacked packet is greater than or equal to the Reordering Threshold
+   value; or * the received packet number is less than or equal to
+   Largest Acked - Reordering Threshold.
 
-   When an ack-eliciting packet is received with a packet number less
-   than Largest Acked, this still triggers an immediate acknowledgement
-   in an effort to avoid the packet being spuriously declared lost.
+   The first condition triggers an ACK as soon as the reordering
+   threshold is reached and a packet can be declared lost at the sender.
+   The second condition addresses packets that have been received later,
+   out of order and are already spuriously declared lost by the sender.
+   This enables the sender to detect spurious retransmissions and revert
+   the congestion control status accordingly.
+
+   Sending such an additional ACK resets the max_ack_delay timer and the
+   Ack-Eliciting Threshold counter, as any ACK would.
 
    See Section 6.2.1 for examples explaining this behavior.  See
    Section 9 for guidance on how to choose the reordering threshold
@@ -532,9 +540,9 @@ Table of Contents
 
    When sending PTO packets, one can include an IMMEDIATE_ACK frame to
    elicit an immediate acknowledgment.  This avoids delaying
-   acknowledgements of PTO packets by the ack delay, reducing tail
-   latency and allowing the sender to exclude the peer's max_ack_delay
-   from subsequent PTO calculations.
+   acknowledgements of PTO packets by the acknowledgment delay, reducing
+   tail latency and allowing the sender to exclude the peer's
+   max_ack_delay from subsequent PTO calculations.
 
 8.  Determining Acknowledgment Frequency
 
@@ -607,7 +615,7 @@ Table of Contents
    unnecessarily when entering idle periods.  Therefore, if no further
    data is buffered to be sent, a sender can send an IMMEDIATE_ACK frame
    with the last data packet before an idle period to avoid waiting for
-   the ack delay.
+   the acknowledgment delay.
 
    If there are no inflight packets, no acknowledgments will be received
    for at least a round trip when sending resumes.  The max_ack_delay
@@ -676,10 +684,6 @@ Table of Contents
    can be declared lost.  If the value is larger, it can cause
    unnecessary delays in loss detection (Section 6.1.1 of
    [QUIC-RECOVERY]).
-
-   In order to avoid unnecessary immediate acknowledgements, senders
-   SHOULD implement adaptive packet threshold loss detection and
-   communicate the increased Reordering Threshold value to the receiver.
 
 10.  Security Considerations
 
@@ -809,9 +813,12 @@ Acknowledgments
    The following people directly contributed key ideas that shaped this
    draft: Bob Briscoe, Kazuho Oku, Marten Seemann.
 
-   Thanks for the in-depth reviews by Lucas Pardue, Martin Thomson,
-   Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst and
-   Ingemar Johansson.
+   Thanks for the reviews by Lucas Pardue, Martin Thomson, Magnus
+   Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst, Ingemar
+   Johansson, Christina Huitema, Michael Eriksson, Martin Duke, Nick
+   Banks, Gaurav Singh, Mike Bishop, Neal Cardwell, Rui Paulo, Joseph
+   Beshay, Alexis La Goutte, Vidhi Goel, Dmitri Tikhonov, Marco Munizaga
+   and Matt Joras.
 
 Authors' Addresses
 
