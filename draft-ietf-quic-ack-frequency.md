@@ -703,6 +703,6 @@ Thanks for the reviews by Lucas Pardue, Martin Thomson,
 Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst,
 Ingemar Johansson, Christina Huitema, Michael Eriksson, Martin Duke,
 Nick Banks, Gaurav Singh, Mike Bishop, Neal Cardwell, Rui Paulo,
-Joseph Beshay, Alexis La Goutte, Vidhi Goel, Dmitri Tikhonov, 
+Joseph Beshay, Alexis La Goutte, Vidhi Goel, Dmitri Tikhonov,
 Marco Munizaga and Matt Joras.
 
