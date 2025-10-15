@@ -507,7 +507,7 @@ peer's max_ack_delay.
 
 When sending PTO packets, one can include an IMMEDIATE_ACK frame to elicit an
 immediate acknowledgment. This avoids delaying acknowledgements of PTO packets
-by the ack delay, reducing tail latency and allowing the sender
+by the acknowledgment delay, reducing tail latency and allowing the sender
 to exclude the peer's max_ack_delay from subsequent PTO calculations.
 
 # Determining Acknowledgment Frequency {#implementation}
@@ -575,7 +575,7 @@ the increase in congestion window and can create larger packet bursts.
 If the sender is application-limited, acknowledgments can be delayed
 unnecessarily when entering idle periods. Therefore, if no further data is
 buffered to be sent, a sender can send an IMMEDIATE_ACK frame with the last data
-packet before an idle period to avoid waiting for the ack delay.
+packet before an idle period to avoid waiting for the acknowledgment delay.
 
 If there are no inflight packets, no acknowledgments will be received for at least
 a round trip when sending resumes. The max_ack_delay and Ack-Eliciting Threshold
