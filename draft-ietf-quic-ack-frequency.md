@@ -632,6 +632,10 @@ unnecessarily sent before the packet can be declared lost. If the value is
 larger, it can cause unnecessary delays in loss detection
 ({{Section 6.1.1 of QUIC-RECOVERY}}).
 
+In order to avoid unnecessary immediate acknowledgements, senders SHOULD
+implement adaptive packet threshold loss detection and communicate the
+increased Reordering Threshold value to the receiver.
+
 # Security Considerations
 
 An improperly configured or malicious data sender could request a
