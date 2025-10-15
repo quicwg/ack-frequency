@@ -346,7 +346,7 @@ Table of Contents
    guarantee that every acknowledgment is seen by the sender.
    Therefore, when ACK frames are sent less often, the effect of lost or
    re-ordered packets with ACK frames needs to be considered more
-   carefully when triming the ACK range.
+   carefully when trimming the ACK range.
 
 6.1.  Response to long idle periods
 
