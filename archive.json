@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-02T01:42:28.771483+00:00",
+  "timestamp": "2025-10-16T01:46:50.745762+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5868,7 +5868,7 @@
       "id": "I_kwDODddxTs62ylzx",
       "title": "Sending ACKs for packets < largest_acked may not be valuable",
       "url": "https://github.com/quicwg/ack-frequency/issues/321",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -5878,8 +5878,8 @@
       ],
       "body": "#304 clarifies that RFC 9000 rules about ACKing packets < largest_acked still apply:\n\n> When an ack-eliciting packet is received with a packet number less than Largest Acked, this still triggers an immediate acknowledgement in an effort to avoid the packet being spuriously declared lost.\n\nTo be clear: this totally works, and in no case makes things worse than the baseline. In the \"normal\" case when packet gaps are loss, not reordering, it has no effect at all.\n\nHowever, I wonder if this rule is far less than optimal in cases with a lot of reordering, and may add little to no value in more common cases. Loss and reordering both manifest as a sudden jump in sequence number; if a reordering case, the gap packets will arrive later. The reordering_thresh field can suppress the ack of this first jump, but not the followon packets with lower numbers.\n\nFor example, Say that ack_eliciting_threshold is 1 (the default) but reordering_threshold is zero (meaning, ignore reordering). If the pattern of packet arrival is 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, then there will be 10 ACKs: one for 11, as the second packet to arrive, and then one for each of 1:9 because they are all less than largest_acked. In this case, network reordering has caused the ack rate to be roughly double what the receiver requested. Without the text in question, one would expect an ack for 11, 2, 4, 6, and 8.\n\nIn #304 , the stipulation is that acking these packets will prevent spurious retransmits. If true, that would be valuable. However:\n\n- If the sender is using RFC 9002 time-based recovery, the important thing is that the ack arrives before the timeout. IIUC, this is best ensured via requested_max_ack_delay rather than through this mechanism.\n\n- If the sender is using packet-based recovery, the additional acks don't really help. If ack_eliciting_threshold is set correctly, there won't be a retransmission until another ACK arrives. If the ACK is delayed till another packet arrives, the sender's state for the early packet won't change in the meantime.\n\nI find this hard to reason about, and am happy to be told I'm holding it wrong.\n\nalso sent as email to the list: https://mailarchive.ietf.org/arch/msg/quic/D8ivpSvNqz8ixwF-y_UgtEINYio/",
       "createdAt": "2025-05-15T15:50:23Z",
-      "updatedAt": "2025-08-12T17:05:21Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-15T10:02:51Z",
+      "closedAt": "2025-10-15T10:02:51Z",
       "comments": [
         {
           "author": "kazuho",
@@ -5904,7 +5904,7 @@
         },
         {
           "author": "MarcoPolo",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "I've started implementing this draft, and I've spent some time thinking about this. I agree with @kazuho's  point:\n\n> Any change happening outside of the reordering window should be shared immediately by sending ACKs.\n\nConsider that the text prior to #319 says:\u2028\n\n> Largest Reported Missing: The largest packet number that could be declared lost with the specified Reordering Threshold, which is Largest Acked - Reordering Threshold.\n\nMy understanding of this text means that we cannot declare packet numbers greater than Largest Acked - Reordering threshold as lost. If they are not declared as lost, then there's no point in sending an immediate ack upon receiving them.\n\nWe should only send an immediate ack to assist with loss detection *if* we would classify that packet as lost.\n\u2028\nAs an example:\n\n\u2028Given:\nReordering Threshold = 2\nAck-Eliciting Threshold = 2\n\nThe case with reordering, but no immediate ack due to reordering:\n\n| Packet Number | Should Send Ack | Notes                                   |\n|---------------|-----------------|-----------------------------------------|\n| 0             | 0               |                                         |\n| 1             | 0               |                                         |\n| 3             | 1               | Ack because we've seen 3 packets        |\n| 2             | 0               | No ack because 2 was never considered lost |\n| 4             | 0               |                                         |\n| 5             | 1               | Ack because we've seen 3 more packets   |\u2028\u2028\n\nHere's another example where we do declare a packet as lost and send another ack after receiving it:\n\n| Packet Number | Should Send Ack | Notes                                      |\n|---------------|-----------------|--------------------------------------------|\n| 0             | 0               |                                            |\n| 1             | 0               |                                            |\n| 3             | 1               | Ack because we've seen 3 packets           |\n| 4             | 1               | Ack because 2 is now declared lost         |\n| 2             | 1               | Ack because 2 was received (change outside the reordering window) |\n| 5             | 0               |                                            |\n\n\nThis isn't counter to what is defined in RFC 9000:\n \n```\n\u2028In order to assist loss detection at the sender, an endpoint SHOULD generate and send an ACK frame without delay when it receives an ack-eliciting packet either:\n\n * when the received packet has a packet number less than another ack-eliciting packet that has been received, or\n```\n\nThat is just the case when reordering threshold is equal to 1. Which is to say every reordering results in an ack.\n\n\u2028I think we should revert #319, and I think the ack frequency draft text should be clearer. Here's a suggestion:\n\n\u2028\u2028OLD:\n\n```\n\u2028Largest Unacked:\n: The largest packet number among all received ack-eliciting packets.\n\nLargest Acked:\n: The Largest Acknowledged value sent in an ACK frame.\n\nLargest Reported Missing:\n: The largest packet number that could be declared lost with the specified\n  Reordering Threshold, which is Largest Acked - Reordering Threshold.\n\nUnreported Missing:\n: Packets with packet numbers between the Largest Unacked and Largest Reported\n  Missing that have not yet been received.\n\nAn endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering\nThreshold value SHOULD send an immediate ACK when the gap\nbetween the smallest Unreported Missing packet and the Largest Unacked is greater\nthan or equal to the Reordering Threshold value. Sending this additional ACK will\nreset the max_ack_delay timer and Ack-Eliciting Threshold counter (as any ACK\nwould do).\n```\n\n\u2028\u2028NEW:\u2028\n\n```\n\u2028Largest Packet Number Seen:\n: The largest packet number among all received ack-eliciting packets.\n\nReordering Window:\n: The packet numbers in between the Largest Packet Number Seen and the Largest\n  Packet Number Seen - Reordering Threshold.\n\nAn endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering\nThreshold value SHOULD send an immediate ACK when there are changes outside the\nReordering Window. These changes include a packet number that can now be\ndeclared missing due to receiving a new Largest Packet Number Seen, or a\nacknowledging a previously declared missing packet.\n```\n\nI like phrasing it in terms of the reordering window, which is relative to the largest packet number seen.\u2028\n\n---\n\n\u2028\u2028To come back to @martinduke original example, I think the correct thing would be to ack every other packet due to the ack eliciting threshold, but no acks due to reordering as the reordering window is essentially infinite with reordering threshold set to 0.",
           "createdAt": "2025-08-12T01:17:11Z",
           "updatedAt": "2025-08-12T01:17:11Z"
@@ -6103,15 +6103,15 @@
       "id": "I_kwDODddxTs7MGTuw",
       "title": "Section 6.3 is not about \"Sending Acknowledgments\"",
       "url": "https://github.com/quicwg/ack-frequency/issues/332",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Section 6 is titled \"Sending Acknowledgments\" that sounds like it specifies the behavior of the receiver. However, Section 6.3 is an exception. Titled \"Setting the Reordering Threshold value,\" the sub-section talks about the responsibility of the sender.\n\nIt think Section 6.3 should either:\n* become a section of its own next to Section 7 (Computation of the Probe Timeout Period) and Section 8 (Determining Acknowledgment Frequency), or\n* become a sub-section of Section 4 (ACK_FREQUENCY frame).",
       "createdAt": "2025-09-17T01:16:51Z",
-      "updatedAt": "2025-09-17T01:16:51Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-15T09:44:36Z",
+      "closedAt": "2025-10-15T09:44:36Z",
       "comments": []
     }
   ],
@@ -24195,24 +24195,26 @@
       "id": "PR_kwDODddxTs6Wy0Pa",
       "title": "do not send an immediate ack while `largest_acked - smallest_unreported` is within the threshold",
       "url": "https://github.com/quicwg/ack-frequency/pull/322",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kazuho",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Reverts #319 and clarifies what I think has been implied by the paragraph right above.\r\n\r\nCloses #321.",
       "createdAt": "2025-05-19T22:30:35Z",
-      "updatedAt": "2025-10-01T13:55:31Z",
+      "updatedAt": "2025-10-15T10:02:50Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "4834d265b6b4e0a06491e0f01b497a3c57d772fd",
       "headRepository": "kazuho/ack-frequency",
       "headRefName": "kazuho/buffer-reordering",
       "headRefOid": "0ed4566a5164fa4f4939adcf2dcb88186325c02a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-15T10:02:50Z",
+      "mergedAt": "2025-10-15T10:02:50Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "7f96b96a5766fa5d56cf3eb77e349e22a248a345"
+      },
       "comments": [
         {
           "author": "kazuho",
@@ -24542,6 +24544,26 @@
               "updatedAt": "2025-10-01T13:55:31Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7HDKBO",
+          "commit": {
+            "abbreviatedOid": "0ed4566"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T10:00:10Z",
+          "updatedAt": "2025-10-15T10:00:11Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "I added this text in #334 ",
+              "createdAt": "2025-10-15T10:00:11Z",
+              "updatedAt": "2025-10-15T10:00:11Z"
+            }
+          ]
         }
       ]
     },
@@ -24625,13 +24647,13 @@
       "labels": [],
       "body": "fixes #327 and #323",
       "createdAt": "2025-08-12T17:31:08Z",
-      "updatedAt": "2025-10-01T13:59:54Z",
+      "updatedAt": "2025-10-15T09:58:30Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "6661c696d769cd3bb3a1763a63c61d4905a320db",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "mirjak-patch-2",
-      "headRefOid": "42c0d6a0d4a8b0b330b8975ff121abd819955a75",
+      "headRefOid": "c81a7ec91c1ed343e01a873688d015b078cb99b0",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -24902,6 +24924,46 @@
               "updatedAt": "2025-10-01T13:59:37Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7HDGmD",
+          "commit": {
+            "abbreviatedOid": "42c0d6a"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T09:56:42Z",
+          "updatedAt": "2025-10-15T09:56:43Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\nAs such, implementations have to take more care to avoid truncating ACK ranges\r\nbefore they are sent at least once. As discussed in {{Section 13.2.4 of QUIC-TRANSPORT}}\r\nthis does not guarantee that every acknowledgment is seen by the sender.\r\nTherefore, when ACK frames are sent less often,\r\n```",
+              "createdAt": "2025-10-15T09:56:43Z",
+              "updatedAt": "2025-10-15T09:57:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7HDH1F",
+          "commit": {
+            "abbreviatedOid": "2bfe00b"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T09:57:57Z",
+          "updatedAt": "2025-10-15T09:57:57Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\nTherefore, when ACK frames are sent less often, the effect of lost or re-ordered packets\r\nwith ACK frames needs to be considered more carefully when trimming the ACK range.\r\n```",
+              "createdAt": "2025-10-15T09:57:57Z",
+              "updatedAt": "2025-10-15T09:57:58Z"
+            }
+          ]
         }
       ]
     },
@@ -24917,7 +24979,7 @@
       "labels": [],
       "body": "fixes #329",
       "createdAt": "2025-08-18T09:00:50Z",
-      "updatedAt": "2025-08-20T11:13:20Z",
+      "updatedAt": "2025-10-15T10:06:33Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "6661c696d769cd3bb3a1763a63c61d4905a320db",
@@ -25022,24 +25084,26 @@
       "id": "PR_kwDODddxTs6o9-aZ",
       "title": "Move section 6.3 out",
       "url": "https://github.com/quicwg/ack-frequency/pull/333",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kazuho",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Moves section 6.3 (Setting the Reordering Threshold Value) out of section 6 (Sending Acknowledgments) that talks about the behavior of the receiver, and places it alongside other sections that talks about the sender behavior.\r\n\r\ncloses #332.",
       "createdAt": "2025-09-17T01:56:06Z",
-      "updatedAt": "2025-10-01T13:56:23Z",
+      "updatedAt": "2025-10-15T09:59:09Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "54a824829891b9cc274fffa37fee26f2e2e6b986",
       "headRepository": "kazuho/ack-frequency",
       "headRefName": "kazuho/section6-3",
       "headRefOid": "dabdccb67b0fa8400af7639d819b9c784969553d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-15T09:44:35Z",
+      "mergedAt": "2025-10-15T09:44:35Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "012096c5332ee7750f39a4fe086c5840ac060b90"
+      },
       "comments": [],
       "reviews": [
         {
@@ -25107,6 +25171,143 @@
           "createdAt": "2025-10-01T13:56:23Z",
           "updatedAt": "2025-10-01T13:56:23Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs7HDJAx",
+          "commit": {
+            "abbreviatedOid": "dabdccb"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T09:59:08Z",
+          "updatedAt": "2025-10-15T09:59:09Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "I created PR #334 to add this text",
+              "createdAt": "2025-10-15T09:59:09Z",
+              "updatedAt": "2025-10-15T09:59:09Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 334,
+      "id": "PR_kwDODddxTs6t2AQS",
+      "title": " SHOULD implement adaptive packet threshold loss detection",
+      "url": "https://github.com/quicwg/ack-frequency/pull/334",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-15T09:53:37Z",
+      "updatedAt": "2025-10-15T10:00:49Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "012096c5332ee7750f39a4fe086c5840ac060b90",
+      "headRepository": "quicwg/ack-frequency",
+      "headRefName": "mirjak-patch-4-1",
+      "headRefOid": "735772f36613c121d9de95184d641039f190b2a1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs7HDKvN",
+          "commit": {
+            "abbreviatedOid": "735772f"
+          },
+          "author": "kazuho",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-15T10:00:49Z",
+          "updatedAt": "2025-10-15T10:00:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 335,
+      "id": "PR_kwDODddxTs6t2NWQ",
+      "title": "s/ack delay/acknowledgment delay/",
+      "url": "https://github.com/quicwg/ack-frequency/pull/335",
+      "state": "MERGED",
+      "author": "mirjak",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "fix wording",
+      "createdAt": "2025-10-15T10:09:53Z",
+      "updatedAt": "2025-10-15T10:11:31Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "7f96b96a5766fa5d56cf3eb77e349e22a248a345",
+      "headRepository": "quicwg/ack-frequency",
+      "headRefName": "mirjak-patch-3",
+      "headRefOid": "d07b5bbb25d6225bced6f00d53fb131eaddc3aa9",
+      "closedAt": "2025-10-15T10:11:31Z",
+      "mergedAt": "2025-10-15T10:11:31Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "97f8fc2a5f841e5708df65004d2c3ca54d6153c3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 336,
+      "id": "PR_kwDODddxTs6t2oPp",
+      "title": "update ack sec",
+      "url": "https://github.com/quicwg/ack-frequency/pull/336",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This list includes all people that opened an issue or PR.",
+      "createdAt": "2025-10-15T10:39:14Z",
+      "updatedAt": "2025-10-15T10:40:54Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "97f8fc2a5f841e5708df65004d2c3ca54d6153c3",
+      "headRepository": "quicwg/ack-frequency",
+      "headRefName": "mirjak-patch-4",
+      "headRefOid": "9f005eea3ba5a7414cbe12677fb06df93670be13",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs7HEBBC",
+          "commit": {
+            "abbreviatedOid": "bcacb4d"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T10:40:45Z",
+          "updatedAt": "2025-10-15T10:40:46Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\r\nJoseph Beshay, Alexis La Goutte, Vidhi Goel, Dmitri Tikhonov,\r\n```",
+              "createdAt": "2025-10-15T10:40:45Z",
+              "updatedAt": "2025-10-15T10:40:46Z"
+            }
+          ]
         }
       ]
     }
