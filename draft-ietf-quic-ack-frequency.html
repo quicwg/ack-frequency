@@ -1516,6 +1516,15 @@ has been received.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
 Reordering Threshold when a gap in packet numbers is detected,
 see <a href="#out-of-order" class="auto internal xref">Section 6.2</a>.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5"><a href="#congestion" class="auto internal xref">Section 6.3</a> and <a href="#batch" class="auto internal xref">Section 6.4</a> describe exceptions to this strategy.<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-6-6">All packets still have to be acknowledged at least once with this extension,
+as stated in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.1" class="relref">Section 13.2.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>. With large values for
+Ack-Eliciting Threshold or the Reordering Threshold,
+implementations might accumulate multiple new ACK ranges before sending an ACK.
+As such, implementations have to take more care to avoid truncating ACK ranges
+before they are sent at least once. As discussed in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.4" class="relref">Section 13.2.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>
+this does not guarantee that every acknowledgment is seen by the sender.
+Therefore, when ACK frames are sent less often, the effect of lost or re-ordered packets
+with ACK frames needs to be considered more carefully when trimming the ACK range.<a href="#section-6-6" class="pilcrow">¶</a></p>
 <div id="response-to-long-idle-periods">
 <section id="section-6.1">
         <h3 id="name-response-to-long-idle-perio">
