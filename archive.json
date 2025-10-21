@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-16T01:46:50.745762+00:00",
+  "timestamp": "2025-10-21T01:48:54.954136+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -5923,7 +5923,7 @@
       "id": "I_kwDODddxTs684KYq",
       "title": "Trimmed Ack Ranges",
       "url": "https://github.com/quicwg/ack-frequency/issues/323",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -5932,8 +5932,8 @@
       ],
       "body": "There is an edge case where the reordering_threshold and ack_frequency are quite large, and there is also a large number of ACK ranges. I guess this could happen where there's a large BDP and a nasty, non-bursty loss pattern.\n\nIf the ACK has to be truncated due to length, this can result in cases where received packets are not acknowledged before the ranges that contain them are truncated. This would result in a large amount of spurious loss.\n\nIt is simple enough to write code to avoid this if the ack range limit is a constant: always send an ACK if the newly arrived packet is in the lowest allowed ack range. It's a bit harder if ACK ranges are truncated dynamically (e.g. based on the size of other frames in the packet). I don't know if any QUIC implementation tries to do it dynamically.\n\nI don't think any core changes to the spec are necessary, but there might be a \"don't do that\", or something about sending the ACK anyway when in danger of truncation.",
       "createdAt": "2025-06-23T16:55:52Z",
-      "updatedAt": "2025-08-20T11:13:47Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-20T15:40:19Z",
+      "closedAt": "2025-10-20T15:40:19Z",
       "comments": [
         {
           "author": "martinduke",
@@ -5983,6 +5983,13 @@
           "body": "I proposed PR #328 for issue #327 but I believe this might also address this issue...? Please check @martinduke !",
           "createdAt": "2025-08-12T17:32:18Z",
           "updatedAt": "2025-08-12T17:32:18Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "PR #328 merged.",
+          "createdAt": "2025-10-20T15:40:19Z",
+          "updatedAt": "2025-10-20T15:40:19Z"
         }
       ]
     },
@@ -6046,7 +6053,7 @@
       "id": "I_kwDODddxTs7ChLU4",
       "title": "Can we check that ACK Frequency is robust to loss?",
       "url": "https://github.com/quicwg/ack-frequency/issues/327",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -6055,8 +6062,8 @@
       ],
       "body": "I'd like to be sure that the advicde in the ACK Frequency I-D is not fargile to disruption of the return path - and this might depened on how often a receiver ACKs, how much it trims the ACK range info and whether some level of packet loss is tolerable for the sender to receive a full enough picture that CC isn't disrupted.\n\nRFC9000 is quite robust to occassional ACK loss. It's one thing to eliminate useless ACKs, maybe though more thought is needed if a reduced rate results in a sender becoming unaware of patterns of loss on the forward direction, especially when there is also some non-zero loss on the return direction.\n\nThis may in someway be related in some way to \"Trimmed Ack Ranges #323\".\n",
       "createdAt": "2025-07-25T14:46:45Z",
-      "updatedAt": "2025-08-20T11:13:56Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-20T15:39:15Z",
+      "closedAt": "2025-10-20T15:39:15Z",
       "comments": [
         {
           "author": "mirjak",
@@ -24640,25 +24647,35 @@
       "id": "PR_kwDODddxTs6jUURo",
       "title": "text on ACK ranges",
       "url": "https://github.com/quicwg/ack-frequency/pull/328",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mirjak",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "fixes #327 and #323",
       "createdAt": "2025-08-12T17:31:08Z",
-      "updatedAt": "2025-10-15T09:58:30Z",
+      "updatedAt": "2025-10-20T15:39:14Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "6661c696d769cd3bb3a1763a63c61d4905a320db",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "mirjak-patch-2",
       "headRefOid": "c81a7ec91c1ed343e01a873688d015b078cb99b0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2025-10-20T15:39:14Z",
+      "mergedAt": "2025-10-20T15:39:14Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "782b104646e585da76ddd5dd017054d14bab000c"
+      },
+      "comments": [
+        {
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I merging this now. If there a problem with the last sentence please submit another PR.",
+          "createdAt": "2025-10-20T15:38:49Z",
+          "updatedAt": "2025-10-20T15:38:49Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDODddxTs65fXPZ",
@@ -25199,24 +25216,26 @@
       "id": "PR_kwDODddxTs6t2AQS",
       "title": " SHOULD implement adaptive packet threshold loss detection",
       "url": "https://github.com/quicwg/ack-frequency/pull/334",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mirjak",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-10-15T09:53:37Z",
-      "updatedAt": "2025-10-15T10:00:49Z",
+      "updatedAt": "2025-10-20T15:38:00Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "012096c5332ee7750f39a4fe086c5840ac060b90",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "mirjak-patch-4-1",
       "headRefOid": "735772f36613c121d9de95184d641039f190b2a1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-20T15:38:00Z",
+      "mergedAt": "2025-10-20T15:38:00Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "0fa83fdb9ea0dda8dd3b026cbe0150ee2e9f6c2a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -25269,24 +25288,26 @@
       "id": "PR_kwDODddxTs6t2oPp",
       "title": "update ack sec",
       "url": "https://github.com/quicwg/ack-frequency/pull/336",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mirjak",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This list includes all people that opened an issue or PR.",
       "createdAt": "2025-10-15T10:39:14Z",
-      "updatedAt": "2025-10-15T10:40:54Z",
+      "updatedAt": "2025-10-20T15:37:26Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "97f8fc2a5f841e5708df65004d2c3ca54d6153c3",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "mirjak-patch-4",
       "headRefOid": "9f005eea3ba5a7414cbe12677fb06df93670be13",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-20T15:37:26Z",
+      "mergedAt": "2025-10-20T15:37:26Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "b2708daaf1cbd525d58d5c62c14619189d377b18"
+      },
       "comments": [],
       "reviews": [
         {
