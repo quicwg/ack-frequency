@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 23 April 2026                                            Google
+Expires: 26 April 2026                                            Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         20 October 2025
+                                                         23 October 2025
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2026.
+   This Internet-Draft will expire on 26 April 2026.
 
 Copyright Notice
 
@@ -831,7 +831,7 @@ Acknowledgments
 
    Thanks for the reviews by Lucas Pardue, Martin Thomson, Magnus
    Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst, Ingemar
-   Johansson, Christina Huitema, Michael Eriksson, Martin Duke, Nick
+   Johansson, Christian Huitema, Michael Eriksson, Martin Duke, Nick
    Banks, Gaurav Singh, Mike Bishop, Neal Cardwell, Rui Paulo, Joseph
    Beshay, Alexis La Goutte, Vidhi Goel, Dmitri Tikhonov, Marco Munizaga
    and Matt Joras.
