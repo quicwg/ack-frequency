@@ -341,14 +341,15 @@ see {{out-of-order}}.
 {{congestion}} and {{batch}} describe exceptions to this strategy.
 
 All packets still have to be acknowledged at least once with this extension,
-as stated in {{Section 13.2.1 of QUIC-TRANSPORT}}. With large values for
-Ack-Eliciting Threshold or the Reordering Threshold,
-implementations might accumulate multiple new ACK ranges before sending an ACK.
-As such, implementations have to take more care to avoid truncating ACK ranges
-before they are sent at least once. As discussed in {{Section 13.2.4 of QUIC-TRANSPORT}}
+as stated in {{Section 13.2.1 of QUIC-TRANSPORT}}. With larger values for
+Ack-Eliciting Threshold or the Reordering Threshold, implementations are more
+likely to accumulate multiple new ACK ranges before sending an ACK. As such,
+implementations have to take more care to avoid truncating ACK ranges before
+they are sent at least once. As discussed in {{Section 13.2.3 of QUIC-TRANSPORT}},
 this does not guarantee that every acknowledgment is seen by the sender.
-Therefore, when ACK frames are sent less often, the effect of lost or re-ordered packets
-with ACK frames needs to be considered more carefully when trimming the ACK range.
+When ACK frames are sent less often, receivers can either wait until an ACK is
+acknowledged {{Section 13.2.4 of QUIC-TRANSPORT}} before trimming ranges or
+be more conservative when trimming ACK ranges.
 
 
 ## Response to long idle periods
