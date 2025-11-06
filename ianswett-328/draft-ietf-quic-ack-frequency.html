@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Iyengar, et al.</td>
-<td class="center">Expires 8 May 2026</td>
+<td class="center">Expires 10 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-quic-ack-frequency-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-04" class="published">4 November 2025</time>
+<time datetime="2025-11-06" class="published">6 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-08">8 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-10">10 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1121,7 +1121,7 @@ code and issues list for this draft can be found at
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 10 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1525,7 +1525,7 @@ they are sent at least once. As discussed in <span><a href="https://rfc-editor.o
 this does not guarantee that every acknowledgment is seen by the sender.
 When ACK frames are sent less often, receivers can either wait until an ACK is
 acknowledged <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2.4" class="relref">Section 13.2.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> before trimming ranges or
-be more conservative when trimming ACK ranges.<a href="#section-6-6" class="pilcrow">¶</a></p>
+be more conservative when trimming ACK ranges to accommodate for the lost of ACK frames.<a href="#section-6-6" class="pilcrow">¶</a></p>
 <div id="response-to-long-idle-periods">
 <section id="section-6.1">
         <h3 id="name-response-to-long-idle-perio">

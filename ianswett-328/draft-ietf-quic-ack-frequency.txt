@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 8 May 2026                                               Google
+Expires: 10 May 2026                                              Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         4 November 2025
+                                                         6 November 2025
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 May 2026.
+   This Internet-Draft will expire on 10 May 2026.
 
 Copyright Notice
 
@@ -346,7 +346,8 @@ Table of Contents
    does not guarantee that every acknowledgment is seen by the sender.
    When ACK frames are sent less often, receivers can either wait until
    an ACK is acknowledged Section 13.2.4 of [QUIC-TRANSPORT] before
-   trimming ranges or be more conservative when trimming ACK ranges.
+   trimming ranges or be more conservative when trimming ACK ranges to
+   accommodate for the lost of ACK frames.
 
 6.1.  Response to long idle periods
 
