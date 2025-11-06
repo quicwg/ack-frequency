@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-21T01:48:54.954136+00:00",
+  "timestamp": "2025-11-06T01:52:58.893500+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -25331,6 +25331,34 @@
           ]
         }
       ]
+    },
+    {
+      "number": 337,
+      "id": "PR_kwDODddxTs6xg3e6",
+      "title": "Editorial suggestions on #328",
+      "url": "https://github.com/quicwg/ack-frequency/pull/337",
+      "state": "OPEN",
+      "author": "ianswett",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Some minor suggestions on #328",
+      "createdAt": "2025-11-04T22:48:06Z",
+      "updatedAt": "2025-11-04T22:48:06Z",
+      "baseRepository": "quicwg/ack-frequency",
+      "baseRefName": "main",
+      "baseRefOid": "6466050d1de1beb72402c10267111f3fd839330e",
+      "headRepository": "quicwg/ack-frequency",
+      "headRefName": "ianswett-328",
+      "headRefOid": "7291d75a06343bc66787f3e4cc600bda8dbaed7c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
