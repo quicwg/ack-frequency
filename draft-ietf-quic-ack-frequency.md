@@ -349,7 +349,8 @@ they are sent at least once. As discussed in {{Section 13.2.3 of QUIC-TRANSPORT}
 this does not guarantee that every acknowledgment is seen by the sender.
 When ACK frames are sent less often, receivers can either wait until an ACK is
 acknowledged {{Section 13.2.4 of QUIC-TRANSPORT}} before trimming ranges or
-be more conservative when trimming ACK ranges to accommodate for the lost of ACK frames.
+be more conservative when trimming ACK ranges to accommodate for the possible
+loss of ACK frames.
 
 
 ## Response to long idle periods
