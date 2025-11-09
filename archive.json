@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-06T01:52:58.893500+00:00",
+  "timestamp": "2025-11-09T01:55:29.687862+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -25337,7 +25337,7 @@
       "id": "PR_kwDODddxTs6xg3e6",
       "title": "Editorial suggestions on #328",
       "url": "https://github.com/quicwg/ack-frequency/pull/337",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ianswett",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -25346,19 +25346,95 @@
       ],
       "body": "Some minor suggestions on #328",
       "createdAt": "2025-11-04T22:48:06Z",
-      "updatedAt": "2025-11-04T22:48:06Z",
+      "updatedAt": "2025-11-06T23:27:48Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "6466050d1de1beb72402c10267111f3fd839330e",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "ianswett-328",
-      "headRefOid": "7291d75a06343bc66787f3e4cc600bda8dbaed7c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "d80646a2c398d011695b1693007f4b51c72f26eb",
+      "closedAt": "2025-11-06T23:27:48Z",
+      "mergedAt": "2025-11-06T23:27:48Z",
+      "mergedBy": "mirjak",
+      "mergeCommit": {
+        "oid": "9d5e094ac3125bbcf77d31b1a8e98f279401ad49"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDODddxTs7Mf0KX",
+          "commit": {
+            "abbreviatedOid": "7291d75"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-06T23:07:56Z",
+          "updatedAt": "2025-11-06T23:07:56Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "@ianswett just a small proposal. Would this make it more clear or not?\r\n```suggestion\r\nbe more conservative when trimming ACK ranges to accommodate for the lost of ACK frames.\r\n```",
+              "createdAt": "2025-11-06T23:07:56Z",
+              "updatedAt": "2025-11-06T23:07:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7Mf4KX",
+          "commit": {
+            "abbreviatedOid": "d0000e6"
+          },
+          "author": "ianswett",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-06T23:12:06Z",
+          "updatedAt": "2025-11-06T23:12:06Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\nbe more conservative when trimming ACK ranges to accommodate for the possible\r\nloss of ACK frames.\r\n```",
+              "createdAt": "2025-11-06T23:12:06Z",
+              "updatedAt": "2025-11-06T23:12:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7Mf48u",
+          "commit": {
+            "abbreviatedOid": "7291d75"
+          },
+          "author": "ianswett",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-06T23:12:40Z",
+          "updatedAt": "2025-11-06T23:12:41Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "I merged it and then made a small tweak, but yes, I think it's helpful.",
+              "createdAt": "2025-11-06T23:12:41Z",
+              "updatedAt": "2025-11-06T23:12:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDODddxTs7MgGIu",
+          "commit": {
+            "abbreviatedOid": "d80646a"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-06T23:27:05Z",
+          "updatedAt": "2025-11-06T23:27:05Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
