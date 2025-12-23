@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-09T01:55:29.687862+00:00",
+  "timestamp": "2025-12-23T02:00:43.745335+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -6119,6 +6119,22 @@
       "createdAt": "2025-09-17T01:16:51Z",
       "updatedAt": "2025-10-15T09:44:36Z",
       "closedAt": "2025-10-15T09:44:36Z",
+      "comments": []
+    },
+    {
+      "number": 338,
+      "id": "I_kwDODddxTs7ftwo_",
+      "title": "Editorial nit: Clarify reordering threshold equality in Section 4",
+      "url": "https://github.com/quicwg/ack-frequency/issues/338",
+      "state": "OPEN",
+      "author": "Vaisman",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 6.2 defines the reordering threshold using an inclusive inequality \"less than or equal to\n   Largest Acked - Reordering Threshold\", implying that reaching the threshold exactly should triggers an ACK.\n\nSection 4 (Overview) describes the threshold as the \"maximum packet reordering before eliciting an immediate ACK\",\nwhich could be interpreted as a strict inequality.\n\nAligning the wording in Section 4 with the precise definition in Section 6.2 would avoid ambiguity for implementers.",
+      "createdAt": "2025-12-22T10:49:39Z",
+      "updatedAt": "2025-12-22T10:49:39Z",
+      "closedAt": null,
       "comments": []
     }
   ],
