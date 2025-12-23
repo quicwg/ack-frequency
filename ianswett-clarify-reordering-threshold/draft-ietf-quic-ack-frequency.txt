@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 18 April 2026                                            Google
+Expires: 26 June 2026                                             Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         15 October 2025
+                                                        23 December 2025
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 April 2026.
+   This Internet-Draft will expire on 26 June 2026.
 
 Copyright Notice
 
@@ -264,7 +264,7 @@ Table of Contents
       PROTOCOL_VIOLATION.
 
    Reordering Threshold:  A variable-length integer that indicates the
-      maximum packet reordering before eliciting an immediate ACK, as
+      minimum packet reordering to trigger an immediate ACK, as
       specified in Section 6.2.  If no ACK_FREQUENCY frames have been
       received, the data receiver immediately acknowledges any
       subsequent packets that are received out-of-order, as specified in
@@ -336,6 +336,19 @@ Table of Contents
 
    Section 6.3 and Section 6.4 describe exceptions to this strategy.
 
+   All packets still have to be acknowledged at least once with this
+   extension, as stated in Section 13.2.1 of [QUIC-TRANSPORT].  With
+   larger values for Ack-Eliciting Threshold or the Reordering
+   Threshold, implementations are more likely to accumulate multiple new
+   ACK ranges before sending an ACK.  As such, implementations have to
+   take more care to avoid truncating ACK ranges before they are sent at
+   least once.  As discussed in Section 13.2.3 of [QUIC-TRANSPORT], this
+   does not guarantee that every acknowledgment is seen by the sender.
+   When ACK frames are sent less often, receivers can either wait until
+   an ACK is acknowledged Section 13.2.4 of [QUIC-TRANSPORT] before
+   trimming ranges or be more conservative when trimming ACK ranges to
+   accommodate for the possible loss of ACK frames.
+
 6.1.  Response to long idle periods
 
    It is important to receive timely feedback after long idle periods,
@@ -380,15 +393,26 @@ Table of Contents
       received.
 
    An endpoint that receives an ACK_FREQUENCY frame with a non-zero
-   Reordering Threshold value SHOULD send an immediate ACK when the gap
-   between the smallest Unreported Missing packet and the Largest
-   Unacked is greater than or equal to the Reordering Threshold value.
-   Sending this additional ACK will reset the max_ack_delay timer and
-   Ack-Eliciting Threshold counter (as any ACK would do).
+   Reordering Threshold value SHOULD send an immediate ACK whenever it
+   receives an ack-eliciting, out-of order packet whose packet number is
+   outside the reordering window of the peer, i.e. when:
 
-   When an ack-eliciting packet is received with a packet number less
-   than Largest Acked, this still triggers an immediate acknowledgement
-   in an effort to avoid the packet being spuriously declared lost.
+   *  The difference between the smallest Unreported Missing packet and
+      the Largest Unacked packet is greater than or equal to the
+      Reordering Threshold value; or
+
+   *  The received packet number is less than or equal to Largest Acked
+      - Reordering Threshold.
+
+   The first condition triggers an ACK as soon as the reordering
+   threshold is reached and a packet can be declared lost at the sender.
+   The second condition addresses packets that have been received later,
+   out of order and are already spuriously declared lost by the sender.
+   This enables the sender to detect spurious retransmissions and revert
+   the congestion control status accordingly.
+
+   Sending such an additional ACK resets the max_ack_delay timer and the
+   Ack-Eliciting Threshold counter, as any ACK would.
 
    See Section 6.2.1 for examples explaining this behavior.  See
    Section 9 for guidance on how to choose the reordering threshold
@@ -532,9 +556,9 @@ Table of Contents
 
    When sending PTO packets, one can include an IMMEDIATE_ACK frame to
    elicit an immediate acknowledgment.  This avoids delaying
-   acknowledgements of PTO packets by the ack delay, reducing tail
-   latency and allowing the sender to exclude the peer's max_ack_delay
-   from subsequent PTO calculations.
+   acknowledgements of PTO packets by the acknowledgment delay, reducing
+   tail latency and allowing the sender to exclude the peer's
+   max_ack_delay from subsequent PTO calculations.
 
 8.  Determining Acknowledgment Frequency
 
@@ -607,7 +631,7 @@ Table of Contents
    unnecessarily when entering idle periods.  Therefore, if no further
    data is buffered to be sent, a sender can send an IMMEDIATE_ACK frame
    with the last data packet before an idle period to avoid waiting for
-   the ack delay.
+   the acknowledgment delay.
 
    If there are no inflight packets, no acknowledgments will be received
    for at least a round trip when sending resumes.  The max_ack_delay
@@ -809,9 +833,12 @@ Acknowledgments
    The following people directly contributed key ideas that shaped this
    draft: Bob Briscoe, Kazuho Oku, Marten Seemann.
 
-   Thanks for the in-depth reviews by Lucas Pardue, Martin Thomson,
-   Magnus Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst and
-   Ingemar Johansson.
+   Thanks for the reviews by Lucas Pardue, Martin Thomson, Magnus
+   Westerlund, Kazuho Oku, Marten Seemann, Gorry Fairhurst, Ingemar
+   Johansson, Christian Huitema, Michael Eriksson, Martin Duke, Nick
+   Banks, Gaurav Singh, Mike Bishop, Neal Cardwell, Rui Paulo, Joseph
+   Beshay, Alexis La Goutte, Vidhi Goel, Dmitri Tikhonov, Marco Munizaga
+   and Matt Joras.
 
 Authors' Addresses
 
