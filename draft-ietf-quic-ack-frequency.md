@@ -270,8 +270,8 @@ Requested Max Ack Delay:
 
 Reordering Threshold:
 
-: A variable-length integer that indicates the maximum packet
-  reordering before eliciting an immediate ACK, as specified in {{out-of-order}}.
+: A variable-length integer that indicates the minimum packet reordering to trigger
+  an immediate ACK, as specified in {{out-of-order}}.
   If no ACK_FREQUENCY frames have been received, the data receiver immediately
   acknowledges any subsequent packets that are received out-of-order, as specified
   in {{Section 13.2 of QUIC-TRANSPORT}}, corresponding to a default value of 1.
@@ -398,11 +398,12 @@ Unreported Missing:
 An endpoint that receives an ACK_FREQUENCY frame with a non-zero Reordering
 Threshold value SHOULD send an immediate ACK whenever it receives an ack-eliciting,
 out-of order packet whose packet number is outside the reordering window of the peer,
-i.e. when
-* the difference between the smallest Unreported Missing packet and the
+i.e. when:
+
+- The difference between the smallest Unreported Missing packet and the
   Largest Unacked packet is greater than or equal to the Reordering
   Threshold value; or
-* the received packet number is less than or equal to `Largest Acked - Reordering Threshold`.
+- The received packet number is less than or equal to `Largest Acked - Reordering Threshold`.
 
 The first condition triggers an ACK as soon as the reordering threshold is reached and
 a packet can be declared lost at the sender. The second condition addresses packets
