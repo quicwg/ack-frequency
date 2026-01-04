@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 10 May 2026                                              Google
+Expires: 8 July 2026                                              Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                         6 November 2025
+                                                          4 January 2026
 
 
                      QUIC Acknowledgment Frequency
@@ -45,11 +45,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 May 2026.
+   This Internet-Draft will expire on 8 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -264,7 +264,7 @@ Table of Contents
       PROTOCOL_VIOLATION.
 
    Reordering Threshold:  A variable-length integer that indicates the
-      maximum packet reordering before eliciting an immediate ACK, as
+      minimum packet reordering to trigger an immediate ACK, as
       specified in Section 6.2.  If no ACK_FREQUENCY frames have been
       received, the data receiver immediately acknowledges any
       subsequent packets that are received out-of-order, as specified in
@@ -395,11 +395,14 @@ Table of Contents
    An endpoint that receives an ACK_FREQUENCY frame with a non-zero
    Reordering Threshold value SHOULD send an immediate ACK whenever it
    receives an ack-eliciting, out-of order packet whose packet number is
-   outside the reordering window of the peer, i.e. when * the difference
-   between the smallest Unreported Missing packet and the Largest
-   Unacked packet is greater than or equal to the Reordering Threshold
-   value; or * the received packet number is less than or equal to
-   Largest Acked - Reordering Threshold.
+   outside the reordering window of the peer, when:
+
+   *  The difference between the smallest Unreported Missing packet and
+      the Largest Unacked packet is greater than or equal to the
+      Reordering Threshold value; or
+
+   *  The received packet number is less than or equal to Largest Acked
+      - Reordering Threshold.
 
    The first condition triggers an ACK as soon as the reordering
    threshold is reached and a packet can be declared lost at the sender.
