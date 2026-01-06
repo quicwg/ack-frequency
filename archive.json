@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-28T02:11:41.922026+00:00",
+  "timestamp": "2026-01-06T02:03:17.722240+00:00",
   "repo": "quicwg/ack-frequency",
   "labels": [
     {
@@ -6126,7 +6126,7 @@
       "id": "I_kwDODddxTs7ftwo_",
       "title": "Editorial nit: Clarify reordering threshold equality in Section 4",
       "url": "https://github.com/quicwg/ack-frequency/issues/338",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "Vaisman",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -6135,8 +6135,8 @@
       ],
       "body": "Section 6.2 defines the reordering threshold using an inclusive inequality \"less than or equal to\n   Largest Acked - Reordering Threshold\", implying that reaching the threshold exactly should triggers an ACK.\n\nSection 4 (Overview) describes the threshold as the \"maximum packet reordering before eliciting an immediate ACK\",\nwhich could be interpreted as a strict inequality.\n\nAligning the wording in Section 4 with the precise definition in Section 6.2 would avoid ambiguity for implementers.",
       "createdAt": "2025-12-22T10:49:39Z",
-      "updatedAt": "2025-12-23T12:15:08Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-04T21:42:31Z",
+      "closedAt": "2026-01-04T21:42:31Z",
       "comments": [
         {
           "author": "ianswett",
@@ -25467,24 +25467,26 @@
       "id": "PR_kwDODddxTs66UhLl",
       "title": "Clarify Reordering Threshold",
       "url": "https://github.com/quicwg/ack-frequency/pull/339",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ianswett",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Also fixed the bulleted list formatting in that section.\r\n\r\nFixes #338",
       "createdAt": "2025-12-23T12:23:19Z",
-      "updatedAt": "2025-12-25T04:17:04Z",
+      "updatedAt": "2026-01-04T21:42:30Z",
       "baseRepository": "quicwg/ack-frequency",
       "baseRefName": "main",
       "baseRefOid": "9d5e094ac3125bbcf77d31b1a8e98f279401ad49",
       "headRepository": "quicwg/ack-frequency",
       "headRefName": "ianswett-clarify-reordering-threshold",
       "headRefOid": "6762565f4b7915128684a5db3b024185b184fb77",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-01-04T21:42:30Z",
+      "mergedAt": "2026-01-04T21:42:30Z",
+      "mergedBy": "ianswett",
+      "mergeCommit": {
+        "oid": "147fe24a04a92e4b6e5b4cc9c5477c73e4134dd0"
+      },
       "comments": [],
       "reviews": [
         {
@@ -25498,6 +25500,19 @@
           "body": "",
           "createdAt": "2025-12-23T15:38:52Z",
           "updatedAt": "2025-12-23T15:38:52Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDODddxTs7YE1Yq",
+          "commit": {
+            "abbreviatedOid": "6762565"
+          },
+          "author": "mirjak",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-04T19:44:16Z",
+          "updatedAt": "2026-01-04T19:44:16Z",
           "comments": []
         }
       ]
